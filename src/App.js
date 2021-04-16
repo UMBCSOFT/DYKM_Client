@@ -1,8 +1,13 @@
 import logo from './logo.svg';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css'
-
+import About from './about'
+import howtoplay from './howtoplay';
+import creategame from './creategame';
+import joingame from './joingame';
+import {Route, Link} from 'react-router-dom'
 import {Container, Row, Col, Button, Alert, Nav, Badge} from 'react-bootstrap'
+//import React from 'react';
 
 
 function App() {
@@ -14,10 +19,10 @@ function App() {
           <Nav.Link href="/home">Home</Nav.Link>
         </Nav.Item>
         <Nav.Item>
-          <Nav.Link eventKey="link-1">How To Play</Nav.Link>
+          <Nav.Link href="/howtoplay">How To Play</Nav.Link>
         </Nav.Item>
         <Nav.Item>
-          <Nav.Link eventKey="link-2">About</Nav.Link>
+          <Nav.Link href="/about">About</Nav.Link>
         </Nav.Item>
         <Nav.Item>
           <Nav.Link eventKey="disabled" disabled>
@@ -40,14 +45,11 @@ function App() {
         </div>
  
         <div className="mb-2">
-          <Button variant="primary" size="lg" block> Create Game </Button>{' '}
+          <Button href="/creategame" variant="primary" size="lg" block> Create Game </Button>{' '}
         </div>
         <div className="mb-2">
-          <Button variant="primary" size="lg" block> Join Game </Button>{' '}
-        </div>
-
-
-
+          <Button href="/joingame" variant="primary" size="lg" block> Join Game </Button>{' '}
+        </div> 
 
         <p>
           <h6>Team SOFT</h6>
