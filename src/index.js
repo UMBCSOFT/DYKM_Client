@@ -25,13 +25,11 @@ import joingame from './joingame';
 if (typeof window !== 'undefined') {
     ReactDOM.render(
         <BrowserRouter>
-            <Route path="/" component={App}>
-                <Route exact path="/home" component={App} />
-                <Route path="/about" component={About} />
-                <Route path="/howtoplay" component={howtoplay} />
-                <Route path="/creategame" component={creategame} />
-                <Route path="/joingame" component={joingame} />
-            </Route>
+            <Route exact path="/" component={App} />
+            <Route path="/about" component={About} />
+            <Route path="/howtoplay" component={howtoplay} />
+            <Route path="/creategame" component={creategame} />
+            <Route path="/joingame" component={joingame} />
         </BrowserRouter>,
         document.getElementById('root')
     );
