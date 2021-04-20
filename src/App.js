@@ -1,12 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css'
-import About from './about'
-import howtoplay from './howtoplay';
-import creategame from './creategame';
-import joingame from './joingame';
-import {Route, Link} from 'react-router-dom'
-import {Container, Row, Col, Button, Alert, Nav, Badge} from 'react-bootstrap'
+import {Button, Nav} from 'react-bootstrap'
 //import React from 'react';
 
 

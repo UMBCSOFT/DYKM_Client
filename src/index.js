@@ -4,11 +4,11 @@ import './index.css';
 import App from './App';
 
 import reportWebVitals from './reportWebVitals';
-import {BrowserRouter, Route, Switch} from 'react-router-dom'
+import {BrowserRouter, Route} from 'react-router-dom'
 
 import About from './about';
 import howtoplay from './howtoplay';
-import creategame from './creategame';
+import CreateGamePage from './creategame';
 import joingame from './joingame';
 
 // const rootElement = document.getElementById("root");
@@ -28,7 +28,7 @@ if (typeof window !== 'undefined') {
             <Route exact path="/" component={App} />
             <Route path="/about" component={About} />
             <Route path="/howtoplay" component={howtoplay} />
-            <Route path="/creategame" component={creategame} />
+            <Route path="/creategame" component={CreateGamePage} />
             <Route path="/joingame" component={joingame} />
         </BrowserRouter>,
         document.getElementById('root')
