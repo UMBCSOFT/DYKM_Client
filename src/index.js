@@ -9,7 +9,7 @@ import {BrowserRouter, Route} from 'react-router-dom'
 import About from './about';
 import howtoplay from './howtoplay';
 import CreateGamePage from './creategame';
-import joingame from './joingame';
+import JoinGamePage from "./joingame";
 
 // const rootElement = document.getElementById("root");
 //     ReactDOM.render(
@@ -29,7 +29,7 @@ if (typeof window !== 'undefined') {
             <Route path="/about" component={About} />
             <Route path="/howtoplay" component={howtoplay} />
             <Route path="/creategame" component={CreateGamePage} />
-            <Route path="/joingame" component={joingame} />
+            <Route path="/joingame" component={JoinGamePage} />
         </BrowserRouter>,
         document.getElementById('root')
     );

@@ -2,7 +2,6 @@
 import 'bootstrap/dist/css/bootstrap.min.css'
 import {Button, Nav, Form} from 'react-bootstrap'
 import React from 'react';
-import WebSocket from 'ws';
 
 class CreateGamePage extends React.Component {
 
@@ -12,6 +11,7 @@ class CreateGamePage extends React.Component {
         super(props);
         this.CreateRoom = this.CreateRoom.bind(this);
         this.handleNameChange = this.handleNameChange.bind(this);
+        this.socket = undefined;
         this.state = {
             roomCode: "No Room Code",
             name: ""
@@ -27,6 +27,23 @@ class CreateGamePage extends React.Component {
         };
     };
 
+    HTTPOnReadyStateChangeHandler(Http, id, username) {
+        if (Http.readyState === this.REQ_STATES.DONE) {
+            if(Http.status === 200) {
+                console.log("Connecting to websocket.")
+                if (username) {
+                    this.ConnectToWebsocket(Http.responseText, id, username);
+                }
+                else {
+                    this.ConnectToWebsocket(Http.responseText, id);
+                }
+            }
+            else {
+                console.log("ERROR ".concat(Http.status, ": ") + Http.responseText);
+            }
+        }
+    }
+
     JoinRoom(id_) {
         let id;
         if (id_) {
@@ -36,30 +53,14 @@ class CreateGamePage extends React.Component {
             id = this.state.roomCode;
         }
 
-        const Http = new XMLHttpRequest();
+        const httpRequest = new XMLHttpRequest();
         const url = "http://localhost:".concat(this.PORT, "/room/get/", id);
         const username = this.state.name;
 
         console.log("Joining room with url: ".concat('\n', url));
-        Http.onreadystatechange = () => {
-            if (this.readyState === this.REQ_STATES.DONE) {
-                if(Http.status === 200) {
-                    console.log("Connecting to websocket.")
-                    if (username) {
-                        this.ConnectToWebsocket(Http.responseText, id, username);
-                    }
-                    else {
-                        this.ConnectToWebsocket(Http.responseText, id);
-                    }
-                }
-                else {
-                    console.log("ERROR ".concat(this.status, ": ") + Http.responseText);
-                }
-            }
-        };
-        Http.open("GET", url);
-        Http.send();
-
+        httpRequest.onreadystatechange = () => this.HTTPOnReadyStateChangeHandler(httpRequest, id, username)
+        httpRequest.open("GET", url);
+        httpRequest.send();
         console.log("Sent GET to url: ".concat(url));
     };
 
@@ -80,7 +81,7 @@ class CreateGamePage extends React.Component {
         else {
             console.log("state: " + this.readyState.toString());
         }
-    }
+    };
 
     CreateRoom() {
         console.log("CreateRoom()");
@@ -95,38 +96,43 @@ class CreateGamePage extends React.Component {
     }
 
     SetUserName(socket) {
-        const userName = document.getElementById("UserNameField").value;
-
-        if (userName.length > 0) {
-            socket.send("CHANGENICK ".concat(userName));
+        if (this.state.name.length > 0) {
+            socket.send("CHANGENICK ".concat(this.state.name));
         }
     }
 
-    ConnectToWebsocket(url, id, username_ = "") {
-        if(window.socket !== undefined) {
-            window.socket.close();
+    RespondToHeartbeats(e) {
+        console.log(`[message] Data received from server: ${e.data}`);
+        // Respond to heartbeats
+        if(e.data === "PING") {
+            this.socket.send("PONG");
+            console.log("Received PING. Replying with PONG");
+        }
+        if(e.data === "PONG ACK") {
+            console.log("Received PONG acknowledgement");
+        }
+
+        if(e.data.toString().startsWith("WELCOME ")) {
+            this.SetUserName(this.socket);
+        }
+    };
+
+    OnOpenWebsocket(id_) {
+        console.log("[open] Connection established");
+        console.log(`Attempting to join room ${id_}`);
+        this.socket.send("JOIN " + id_);
+    }
+
+    ConnectToWebsocket(url, id_, username_ = "") {
+        if(this.socket !== undefined) {
+            this.socket.close();
         }
         //<input id="WebsocketValue" type="text" value="ws://localhost:4567"/>
-        window.socket = new WebSocket(url);
+        this.socket = new WebSocket(url);
 
-        window.socket.onmessage = (e) => {
-            console.log(`[message] Data received from server: ${e.data}`);
+        this.socket.onmessage = (e) => this.RespondToHeartbeats(e);
 
-            // Respond to heartbeats
-            if(e.data === "PING") {
-                window.socket.send("PONG");
-                console.log("Received PING. Replying with PONG");
-            }
-            if(e.data === "PONG ACK") {
-                console.log("Received PONG acknowledgement");
-            }
-
-            if(e.data.toString().startsWith("WELCOME ")) {
-                this.SetUserName(window.socket);
-            }
-        };
-
-        window.socket.onclose = function(event) {
+        this.socket.onclose = function(event) {
             if (event.wasClean) {
                 console.log(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
             } else {
@@ -136,15 +142,11 @@ class CreateGamePage extends React.Component {
             }
         };
 
-        window.socket.onerror = function(error) {
+        this.socket.onerror = function(error) {
             console.log(`[error] ${error.message}`);
         };
 
-        window.socket.onopen = function(e) {
-            console.log("[open] Connection established");
-            console.log(`Attempting to join room ${id}`);
-            window.socket.send("JOIN " + id);
-        };
+        this.socket.onopen = () => this.OnOpenWebsocket(id_)
     }
 
     handleNameChange(e) {
@@ -176,7 +178,6 @@ class CreateGamePage extends React.Component {
                     <div className= "mb-2">
                         <h1>CREATE GAME</h1>
                         <div>
-
                             <Form.Group controlId="nickname">
                                 <Form.Label>Nickname</Form.Label>
                                 <input type="text" placeholder="Enter a nickname!" value={this.state.name} onChange={this.handleNameChange}/>
