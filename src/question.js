@@ -58,7 +58,7 @@ function question(){
                     <br />
 
                     
-                    <Button href= "/" variant="primary" type="submit">
+                    <Button href= "/questionmatch" variant="primary" type="submit">
                     Submit your answer!
                 </Button>
                    

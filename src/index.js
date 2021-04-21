@@ -13,6 +13,7 @@ import joingame from './joingame';
 import hostwaitingroom from './hostwaitingroom';
 import waitingroom from './waitingroom';
 import question from './question';
+import questionmatch from './questionmatch';
 
 // const rootElement = document.getElementById("root");
 //     ReactDOM.render(
@@ -36,6 +37,7 @@ if (typeof window !== 'undefined') {
             <Route path="/hostwaitingroom" component={hostwaitingroom} />
             <Route path="/waitingroom" component={waitingroom} />
             <Route path="/question" component={question} />
+            <Route path="/questionmatch" component={questionmatch} />
 
         </BrowserRouter>,
         document.getElementById('root')
