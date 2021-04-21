@@ -7,9 +7,9 @@ import {Route, Link} from 'react-router-dom'
 import {Container, Row, Col, Button, Alert, Nav, Badge, Form} from 'react-bootstrap'
 import React from 'react';
 
-function joingame(){
+function hostwaitingroom(){
     return (
-        <div className="joingame">
+        <div className="hostwaitingroom">
     
         <Nav variant="pills">
             <Nav.Item>
@@ -28,31 +28,34 @@ function joingame(){
             </Nav.Item>
           </Nav>
     
-        <header className="App-header">
+          <header className="App-header">
           <container>
             <div className= "mb-2">
-              <h1>JOIN A GAME</h1>
-              <Form>
-                <Form.Group controlId="nickname">
-                    <Form.Label>Nickname</Form.Label>
-                    <Form.Control type="name" placeholder="Enter a nickname!" />
-                </Form.Group>
-
-                <Form.Group controlId="secretcode">
-                    <Form.Label>Secret Code</Form.Label>
-                    <Form.Control type="name" placeholder="Enter the secret code!" />
-                </Form.Group>
-
-                <Button href= "/waitingroom" variant="primary" type="submit">
-                    Enter Room
-                </Button>
-            </Form>
+              <h1>Your Game</h1>
+              <h5>
+                Your game was created successfully! Share the following ✨ secret code ✨
+                with your friends so they can join in on the fun!
+              </h5>
             </div>
-          </container>
+          
+            <div className= "code">
+              <h1>Secret Code: 123456</h1>
+            </div>
+
+            <div className= "players">
+              <h1>Waiting for players to join...</h1>
+              <h5>* as players join, their names will show up here * </h5>
+            </div>
+
+            <Button href= "/" type="submit" >Start The Game!</Button>
+
+
+            </container>
+            
         </header>
         </div>
       );
     }
 
-export default joingame;
+export default hostwaitingroom;
 

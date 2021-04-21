@@ -185,7 +185,7 @@ function creategame(){
                                 </ListGroup.Item>
                             </ListGroup>
                             </Col>
-                            <Col sm="auto">
+                            <Col sm={8}>
                             <Tab.Content>
                                 <Tab.Pane eventKey="#link1">
                                 Official question pack - see if you <i>really</i> know your friends!
@@ -232,11 +232,10 @@ function creategame(){
                     </fieldset>
 
 
-                    
 
                     <Form.Group as={Row}>
                         <Col sm={{ span: 10, offset: 2 }}>
-                        <Button href= "/waitingroom" type="submit" onClick={CreateRoom()}>Create the game!</Button>
+                        <Button href= "/hostwaitingroom" type="submit" onClick={CreateRoom()}>Create the game!</Button>
                         </Col>
                     </Form.Group>
                     </Form>

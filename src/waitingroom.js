@@ -28,27 +28,18 @@ function waitingroom(){
             </Nav.Item>
           </Nav>
     
-        <header className="App-header">
+          <header className="App-header">
           <container>
-            <div className= "mb-2">
-              <h1>JOIN A GAME</h1>
-              <Form>
-                <Form.Group controlId="nickname">
-                    <Form.Label>Nickname</Form.Label>
-                    <Form.Control type="name" placeholder="Enter a nickname!" />
-                </Form.Group>
-
-                <Form.Group controlId="secretcode">
-                    <Form.Label>Secret Code</Form.Label>
-                    <Form.Control type="name" placeholder="Enter the secret code!" />
-                </Form.Group>
-
-                <Button variant="primary" type="submit">
-                    Enter Room
-                </Button>
-            </Form>
+            <div className= "players">
+              <h1>Waiting for more players to join...</h1>
+              <h5>* as players join, their names will show up here * </h5>
             </div>
-          </container>
+
+           
+
+
+            </container>
+            
         </header>
         </div>
       );

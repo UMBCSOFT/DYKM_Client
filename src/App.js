@@ -55,11 +55,11 @@ function App() {
           <h6>Team SOFT</h6>
           <a
           className="App-link"
-          href="https://reactjs.org"
+          href="https://github.com/UMBCSOFT"
           target="_blank"
           rel="noopener noreferrer"
         >
-          <h6>Learn React</h6>
+          <h6>Repo for this project</h6>
         </a>
         </p>
         </container>

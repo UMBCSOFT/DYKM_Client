@@ -10,6 +10,8 @@ import About from './about';
 import howtoplay from './howtoplay';
 import creategame from './creategame';
 import joingame from './joingame';
+import hostwaitingroom from './hostwaitingroom';
+import waitingroom from './waitingroom';
 
 // const rootElement = document.getElementById("root");
 //     ReactDOM.render(
@@ -30,6 +32,8 @@ if (typeof window !== 'undefined') {
             <Route path="/howtoplay" component={howtoplay} />
             <Route path="/creategame" component={creategame} />
             <Route path="/joingame" component={joingame} />
+            <Route path="/hostwaitingroom" component={hostwaitingroom} />
+            <Route path="/waitingroom" component={waitingroom} />
         </BrowserRouter>,
         document.getElementById('root')
     );
