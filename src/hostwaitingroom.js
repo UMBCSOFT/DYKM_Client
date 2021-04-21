@@ -47,7 +47,7 @@ function hostwaitingroom(){
               <h5>* as players join, their names will show up here * </h5>
             </div>
 
-            <Button href= "/" type="submit" >Start The Game!</Button>
+            <Button href= "/question" type="submit" >Start The Game!</Button>
 
 
             </container>

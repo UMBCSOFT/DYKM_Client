@@ -34,10 +34,6 @@ function waitingroom(){
               <h1>Waiting for more players to join...</h1>
               <h5>* as players join, their names will show up here * </h5>
             </div>
-
-           
-
-
             </container>
             
         </header>
