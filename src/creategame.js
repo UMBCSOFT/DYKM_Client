@@ -4,9 +4,10 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import About from './about'
 import howtoplay from './howtoplay';
 import {Route, Link} from 'react-router-dom'
-import {Container, Row, Col, Button, Alert, Nav, Badge} from 'react-bootstrap'
+import {Container, Row, Col, Button, Alert, Nav, Badge, Form, Tab} from 'react-bootstrap'
+import ListGroup from 'react-bootstrap/ListGroup'
 import React from 'react';
-import DOMPurify from "dompurify";
+//import DOMPurify from "dompurify";
 
 const PORT = 1337;
 const REQ_STATES = {
@@ -136,7 +137,7 @@ function creategame(){
 
             <Nav variant="pills">
                 <Nav.Item>
-                    <Nav.Link href="/home">Home</Nav.Link>
+                    <Nav.Link href="/">Home</Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
                     <Nav.Link href="/howtoplay">How To Play</Nav.Link>
@@ -150,20 +151,98 @@ function creategame(){
                     </Nav.Link>
                 </Nav.Item>
             </Nav>
+            
 
             <header className="App-header">
                 <Container>
-                    <div className= "mb-2">
-                        <h1>CREATEGAME</h1>
-                        <span>
-                            Username:
-                            <input id="UserNameField" type="text"/>
-                        </span>
-                    </div>
-                    <div className= "container">
-                        <button onClick={CreateRoom()}>Create Room</button>
-                    </div>
+                <h1>CREATE A GAME</h1>
+                
+                <Form>
+                    <Form.Group as={Row} id="nickname">
+                        <Form.Label column sm={2}>
+                        Nickname
+                        </Form.Label>
+                        <Col sm={10}>
+                        <Form.Control type="nickname" placeholder="enter a nickname!" />
+                        </Col>
+                    </Form.Group>
+
+
+                    <Form.Group as={Row} id="questionpack">
+                        <Form.Label column sm={2}>
+                        Question Pack
+                        </Form.Label>
+                        <Col sm={10}>
+                        <Tab.Container id="list-group-tabs-example" defaultActiveKey="#link1">
+                        <Row>
+                        <Col sm = "auto">
+                            <ListGroup>
+                                <ListGroup.Item  action href="#link1">
+                                Do You Know Me?
+                                </ListGroup.Item>
+                                <ListGroup.Item action href="#link2">
+                                Ice Breakers
+                                </ListGroup.Item>
+                            </ListGroup>
+                            </Col>
+                            <Col sm="auto">
+                            <Tab.Content>
+                                <Tab.Pane eventKey="#link1">
+                                Official question pack - see if you <i>really</i> know your friends!
+                                </Tab.Pane>
+                                <Tab.Pane eventKey="#link2">
+                                Great question pack to play with new friends!
+                                </Tab.Pane>
+                            </Tab.Content>
+                            </Col>
+                        </Row>
+                    </Tab.Container>
+                        </Col>
+                    </Form.Group>
+
+
+
+
+                    <fieldset>
+                        <Form.Group as={Row}>
+                        <Form.Label as="legend" column sm={2}>
+                            Rounds
+                        </Form.Label>
+                        <Col sm={10}>
+                            <Form.Check
+                            type="radio"
+                            label="1 Round"
+                            name="formHorizontalRadios"
+                            id="formHorizontalRadios1"
+                            />
+                            <Form.Check
+                            type="radio"
+                            label="5 Rounds"
+                            name="formHorizontalRadios"
+                            id="formHorizontalRadios2"
+                            />
+                            <Form.Check
+                            type="radio"
+                            label="10 Rounds"
+                            name="formHorizontalRadios"
+                            id="formHorizontalRadios3"
+                            />
+                        </Col>
+                        </Form.Group>
+                    </fieldset>
+
+
+                    
+
+                    <Form.Group as={Row}>
+                        <Col sm={{ span: 10, offset: 2 }}>
+                        <Button href= "/waitingroom" type="submit" onClick={CreateRoom()}>Create the game!</Button>
+                        </Col>
+                    </Form.Group>
+                    </Form>
                 </Container>
+                    
+                  
             </header>
         </div>
     );

@@ -7,9 +7,9 @@ import {Route, Link} from 'react-router-dom'
 import {Container, Row, Col, Button, Alert, Nav, Badge, Form} from 'react-bootstrap'
 import React from 'react';
 
-function joingame(){
+function waitingroom(){
     return (
-        <div className="joingame">
+        <div className="waitingroom">
     
         <Nav variant="pills">
             <Nav.Item>
@@ -54,5 +54,5 @@ function joingame(){
       );
     }
 
-export default joingame;
+export default waitingroom;
 
