@@ -3,6 +3,8 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import {Button, Nav, Form} from 'react-bootstrap'
 import React from 'react';
 
+// TODO: Made a "NetworkedPage" class with all of this stuff
+// to inherit from
 class JoinGamePage extends React.Component {
 
     that = this;
@@ -161,6 +163,7 @@ class JoinGamePage extends React.Component {
         return (
             <div className="joingame">
 
+                {/*TODO: consolidate the header code somewhere*/}
                 <Nav variant="pills">
                     <Nav.Item>
                         <Nav.Link href="/">Home</Nav.Link>
