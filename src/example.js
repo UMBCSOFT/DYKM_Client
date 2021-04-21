@@ -7,9 +7,9 @@ import {Route, Link} from 'react-router-dom'
 import {Container, Row, Col, Button, Alert, Nav, Badge, Form} from 'react-bootstrap'
 import React from 'react';
 
-function waitingroom(){
+function example(){
     return (
-        <div className="waitingroom">
+        <div className="example">
     
         <Nav variant="pills">
             <Nav.Item>
@@ -30,17 +30,16 @@ function waitingroom(){
     
           <header className="App-header">
           <container>
-            <div className= "players">
-              <h1>Waiting for more players to join...</h1>
-              <h5>* as players join, their names will show up here * </h5>
-              <Button href= "/example" type="submit" >go to example page</Button>
-            </div>
-            </container>
             
+              <h1>EXAMPLE PAGE</h1>
+              
+              
+            
+            </container>        
         </header>
         </div>
       );
     }
 
-export default waitingroom;
+export default example;
 

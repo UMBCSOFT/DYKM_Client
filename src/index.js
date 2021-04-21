@@ -14,6 +14,7 @@ import hostwaitingroom from './hostwaitingroom';
 import waitingroom from './waitingroom';
 import question from './question';
 import questionmatch from './questionmatch';
+import example from './example';
 
 // const rootElement = document.getElementById("root");
 //     ReactDOM.render(
@@ -38,6 +39,7 @@ if (typeof window !== 'undefined') {
             <Route path="/waitingroom" component={waitingroom} />
             <Route path="/question" component={question} />
             <Route path="/questionmatch" component={questionmatch} />
+            <Route path="/example" component={example} />
 
         </BrowserRouter>,
         document.getElementById('root')
