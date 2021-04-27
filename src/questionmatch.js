@@ -44,14 +44,30 @@ function questionmatch(){
                 <br />
                 <h4>Match each answer to a player!</h4>
 
-                <Card text = "dark" style={{ width: '30rem' }}>
-                <ListGroup variant="flush" >
-                    <ListGroup.Item>Cras justo odio
-                    </ListGroup.Item>
-                    <ListGroup.Item>Dapibus ac facilisis in</ListGroup.Item>
-                    <ListGroup.Item>Vestibulum at eros</ListGroup.Item>
+                <Card text = "dark" style={{ width: '30rem' }}> 
+                <ListGroup>
+                    <ListGroup.Item>Cras justo odio <select> 
+                      <option value="player 1"> player 1 </option>
+                        <option value="player 2"> player 2 </option>
+                          <option value="player 3"> player 3 </option> 
+                        </select>  
+                      </ListGroup.Item>
+                    <ListGroup.Item>Dapibus ac facilisis in <select> 
+                      <option value="player 1"> player 1 </option>
+                        <option value="player 2"> player 2 </option>
+                          <option value="player 3"> player 3 </option> 
+                        </select> </ListGroup.Item>
+                    <ListGroup.Item>Vestibulum at eros <select> 
+                      <option value="player 1"> player 1 </option>
+                        <option value="player 2"> player 2 </option>
+                          <option value="player 3"> player 3 </option> 
+                        </select> </ListGroup.Item>
                 </ListGroup>
                 </Card>
+
+                <Button href= "/scores" variant="primary" type="submit">
+                    Check Score!
+                </Button>
 
                 <Form inline>
                 <Form.Control
