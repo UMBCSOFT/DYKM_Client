@@ -1,10 +1,7 @@
-import logo from './logo.svg';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css'
 //import About from './about'
-import howtoplay from './howtoplay';
-import {Route, Link} from 'react-router-dom'
-import {Container, Row, Col, Button, Alert, Nav, Badge} from 'react-bootstrap'
+import {Nav} from 'react-bootstrap'
 import React from 'react';
 
 function About(){
