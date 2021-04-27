@@ -1,12 +1,7 @@
-import logo from './logo.svg';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css'
-import About from './about'
-import howtoplay from './howtoplay';
-import {Route, Link} from 'react-router-dom'
-import {Container, Row, Col, Button, Alert, Nav, Badge, Form, Tab} from 'react-bootstrap'
+import {Row, Col, Button, Nav, Form, Tab} from 'react-bootstrap'
 import ListGroup from 'react-bootstrap/ListGroup'
-import {Button, Nav, Form} from 'react-bootstrap'
 import React from 'react';
 
 // TODO: Made a "NetworkedPage" class with all of this stuff
@@ -186,119 +181,92 @@ class CreateGamePage extends React.Component {
                 <header className="App-header">
                     <div className= "mb-2">
                         <h1>CREATE GAME</h1>
-                        <div>
-                            <Form.Group controlId="nickname">
-                                <Form.Label>Nickname</Form.Label>
-                                <input type="text" placeholder="Enter a nickname!" value={this.state.name} onChange={this.handleNameChange}/>
+                        <div id={"CreateGameSettings"}>
+                            <Form.Group as={Row} id="nickname">
+                                <Form.Label column sm={2}>
+                                    Nickname
+                                </Form.Label>
+                                <Col sm={10}>
+                                    <input type="text" placeholder="Enter a nickname!" value={this.state.name} onChange={this.handleNameChange}/>
+                                </Col>
                             </Form.Group>
+
+                            <Form.Group as={Row} id="questionpack">
+                                <Form.Label column sm={2}>
+                                    Question Pack
+                                </Form.Label>
+                                <Col sm={10}>
+                                    <Tab.Container id="list-group-tabs-example" defaultActiveKey="#link1">
+                                        <Row>
+                                            <Col sm = "auto">
+                                                <ListGroup>
+                                                    <ListGroup.Item  action href="#link1">
+                                                        Do You Know Me?
+                                                    </ListGroup.Item>
+                                                    <ListGroup.Item action href="#link2">
+                                                        Ice Breakers
+                                                    </ListGroup.Item>
+                                                </ListGroup>
+                                            </Col>
+                                            <Col sm={8}>
+                                                <Tab.Content>
+                                                    <Tab.Pane eventKey="#link1">
+                                                        Official question pack - see if you <i>really</i> know your friends!
+                                                    </Tab.Pane>
+                                                    <Tab.Pane eventKey="#link2">
+                                                        Great question pack to play with new friends!
+                                                    </Tab.Pane>
+                                                </Tab.Content>
+                                            </Col>
+                                        </Row>
+                                    </Tab.Container>
+                                </Col>
+                            </Form.Group>
+
+                            <fieldset>
+                                <Form.Group as={Row}>
+                                    <Form.Label as="legend" column sm={2}>
+                                        Rounds
+                                    </Form.Label>
+                                    <Col sm={10}>
+                                        <Form.Check
+                                            type="radio"
+                                            label="1 Round"
+                                            name="formHorizontalRadios"
+                                            id="formHorizontalRadios1"
+                                        />
+                                        <Form.Check
+                                            type="radio"
+                                            label="5 Rounds"
+                                            name="formHorizontalRadios"
+                                            id="formHorizontalRadios2"
+                                        />
+                                        <Form.Check
+                                            type="radio"
+                                            label="10 Rounds"
+                                            name="formHorizontalRadios"
+                                            id="formHorizontalRadios3"
+                                        />
+                                    </Col>
+                                </Form.Group>
+                            </fieldset>
 
                             <Form.Group controlId="roomcode">
                                 <Form.Label>Secret Code</Form.Label>
                                 <Form.Text><b>{this.state.roomCode}</b></Form.Text>
                             </Form.Group>
 
-                            <Button variant="primary" type="button" onClick={() => this.CreateRoom()}>
-                                Create Game
-                            </Button>
+                            <Form.Group as={Row}>
+                                <Col sm={{ span: 10, offset: 2 }}>
+                                    <Button variant="primary" href= "/hostwaitingroom" type="submit" onClick={() => this.CreateRoom()}>Create the game!</Button>
+                                </Col>
+                            </Form.Group>
                         </div>
                     </div>
                 </header>
             </div>
         );
-    }
-            <header className="App-header">
-                <Container>
-                <h1>CREATE A GAME</h1>
-
-                <Form>
-                    <Form.Group as={Row} id="nickname">
-                        <Form.Label column sm={2}>
-                        Nickname
-                        </Form.Label>
-                        <Col sm={10}>
-                        <Form.Control type="nickname" placeholder="enter a nickname!" />
-                        </Col>
-                    </Form.Group>
-
-
-                    <Form.Group as={Row} id="questionpack">
-                        <Form.Label column sm={2}>
-                        Question Pack
-                        </Form.Label>
-                        <Col sm={10}>
-                        <Tab.Container id="list-group-tabs-example" defaultActiveKey="#link1">
-                        <Row>
-                        <Col sm = "auto">
-                            <ListGroup>
-                                <ListGroup.Item  action href="#link1">
-                                Do You Know Me?
-                                </ListGroup.Item>
-                                <ListGroup.Item action href="#link2">
-                                Ice Breakers
-                                </ListGroup.Item>
-                            </ListGroup>
-                            </Col>
-                            <Col sm={8}>
-                            <Tab.Content>
-                                <Tab.Pane eventKey="#link1">
-                                Official question pack - see if you <i>really</i> know your friends!
-                                </Tab.Pane>
-                                <Tab.Pane eventKey="#link2">
-                                Great question pack to play with new friends!
-                                </Tab.Pane>
-                            </Tab.Content>
-                            </Col>
-                        </Row>
-                    </Tab.Container>
-                        </Col>
-                    </Form.Group>
-
-
-
-
-                    <fieldset>
-                        <Form.Group as={Row}>
-                        <Form.Label as="legend" column sm={2}>
-                            Rounds
-                        </Form.Label>
-                        <Col sm={10}>
-                            <Form.Check
-                            type="radio"
-                            label="1 Round"
-                            name="formHorizontalRadios"
-                            id="formHorizontalRadios1"
-                            />
-                            <Form.Check
-                            type="radio"
-                            label="5 Rounds"
-                            name="formHorizontalRadios"
-                            id="formHorizontalRadios2"
-                            />
-                            <Form.Check
-                            type="radio"
-                            label="10 Rounds"
-                            name="formHorizontalRadios"
-                            id="formHorizontalRadios3"
-                            />
-                        </Col>
-                        </Form.Group>
-                    </fieldset>
-
-
-
-                    <Form.Group as={Row}>
-                        <Col sm={{ span: 10, offset: 2 }}>
-                        <Button href= "/hostwaitingroom" type="submit" onClick={CreateRoom()}>Create the game!</Button>
-                        </Col>
-                    </Form.Group>
-                    </Form>
-                </Container>
-
-
-            </header>
-        </div>
-    );
+    };
 }
-
 export default CreateGamePage;
 

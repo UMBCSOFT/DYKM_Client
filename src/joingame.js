@@ -198,19 +198,14 @@ class JoinGamePage extends React.Component {
                             <Button variant="primary" type="button" onClick={() => this.CreateRoom()}>
                                 Join Game
                             </Button>
+
+                            <Button href= "/waitingroom" variant="primary" type="submit">
+                                Enter Room
+                            </Button>
                         </Form>
                     </div>
                 </header>
             </div>
-        );
-                <Button href= "/waitingroom" variant="primary" type="submit">
-                    Enter Room
-                </Button>
-            </Form>
-            </div>
-          </container>
-        </header>
-        </div>
       );
     }
 }
