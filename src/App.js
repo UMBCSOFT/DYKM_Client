@@ -3,7 +3,7 @@ import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css'
 import {Button, Nav} from 'react-bootstrap'
 //import React from 'react';
-
+import { Link } from 'react-router-dom';
 
 function App() {
   return (
@@ -41,6 +41,7 @@ function App() {
  
         <div className="mb-2">
           <Button href="/creategame" variant="primary" size="lg" block> Create Game </Button>{' '}
+
         </div>
         <div className="mb-2">
           <Button href="/joingame" variant="primary" size="lg" block> Join Game </Button>{' '}

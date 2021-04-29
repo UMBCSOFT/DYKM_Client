@@ -3,6 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import {Row, Col, Button, Nav, Form, Tab} from 'react-bootstrap'
 import ListGroup from 'react-bootstrap/ListGroup'
 import React from 'react';
+import {DYKM_Websocket} from  "./websocket";
 
 // TODO: Made a "NetworkedPage" class with all of this stuff
 // to inherit from
@@ -98,9 +99,9 @@ class CreateGamePage extends React.Component {
         console.log("Sent post");
     }
 
-    SetUserName(socket) {
+    SetUserName() {
         if (this.state.name.length > 0) {
-            socket.send("CHANGENICK ".concat(this.state.name));
+            this.socket.send("CHANGENICK ".concat(this.state.name));
         }
     }
 
@@ -116,7 +117,7 @@ class CreateGamePage extends React.Component {
         }
 
         if(e.data.toString().startsWith("WELCOME ")) {
-            this.SetUserName(this.socket);
+            this.SetUserName();
         }
     };
 
@@ -131,7 +132,7 @@ class CreateGamePage extends React.Component {
             this.socket.close();
         }
         //<input id="WebsocketValue" type="text" value="ws://localhost:4567"/>
-        this.socket = new WebSocket(url);
+        this.socket = new DYKM_Websocket(url);
 
         this.socket.onmessage = (e) => this.RespondToHeartbeats(e);
 

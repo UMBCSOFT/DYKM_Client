@@ -15,6 +15,8 @@ import questionmatch from './questionmatch';
 import example from './example';
 import CreateGamePage from './creategame';
 import JoinGamePage from "./joingame";
+import Frame from 'react-frame-component';
+import './shared_websocket.js';
 
 // const rootElement = document.getElementById("root");
 //     ReactDOM.render(
@@ -26,21 +28,24 @@ import JoinGamePage from "./joingame";
 //       </BrowserRouter>,
 //       rootElement
 //     );
+const initialContent = `<!DOCTYPE html><html><head>${document.head.innerHTML}</head><body><div></div></body></html>`;
 
 if (typeof window !== 'undefined') {
     ReactDOM.render(
-        <BrowserRouter>
-            <Route exact path="/" component={App} />
-            <Route path="/about" component={About} />
-            <Route path="/howtoplay" component={howtoplay} />
-            <Route path="/creategame" component={CreateGamePage} />
-            <Route path="/joingame" component={JoinGamePage} />
-            <Route path="/hostwaitingroom" component={hostwaitingroom} />
-            <Route path="/waitingroom" component={waitingroom} />
-            <Route path="/question" component={question} />
-            <Route path="/questionmatch" component={questionmatch} />
-            <Route path="/example" component={example} />
-        </BrowserRouter>,
+        <Frame initialContent={initialContent} frameBorder="0" id={"Frame"}>
+            <BrowserRouter>
+                <Route exact path="/" component={App} />
+                <Route path="/about" component={About} />
+                <Route path="/howtoplay" component={howtoplay} />
+                <Route path="/creategame" component={CreateGamePage} />
+                <Route path="/joingame" component={JoinGamePage} />
+                <Route path="/hostwaitingroom" component={hostwaitingroom} />
+                <Route path="/waitingroom" component={waitingroom} />
+                <Route path="/question" component={question} />
+                <Route path="/questionmatch" component={questionmatch} />
+                <Route path="/example" component={example} />
+            </BrowserRouter>
+        </Frame>,
         document.getElementById('root')
     );
 }

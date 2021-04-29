@@ -97,9 +97,9 @@ class JoinGamePage extends React.Component {
         console.log("Sent post");
     }
 
-    SetUserName(socket) {
+    SetUserName() {
         if (this.state.name.length > 0) {
-            socket.send("CHANGENICK ".concat(this.state.name));
+            this.socket.send("CHANGENICK ".concat(this.state.name));
         }
     }
 
@@ -115,7 +115,7 @@ class JoinGamePage extends React.Component {
         }
 
         if(e.data.toString().startsWith("WELCOME ")) {
-            this.SetUserName(this.socket);
+            this.SetUserName();
         }
     };
 
