@@ -62,10 +62,12 @@ function messageHandler(event) {
                 window.Post("WEBSOCKET_ONCLOSE " + stringifyEvent(e))
             };
 
-            if(window.socket.url === rest) {
-                window.socket.onopen.call(null);
+            if(window.socketurl === rest) {
+                window.Post("WEBSOCKET_ONOPEN null")
                 console.log("Sending fake onopen since this is a resume");
             }
+
+            window.socketurl = rest;
         }
     }
     else if(content.startsWith("WEBSOCKET_SEND ")) {
