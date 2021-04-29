@@ -105,11 +105,30 @@ class CreateGamePage extends React.Component {
             this.socket.send("CHANGENICK ".concat(this.state.name));
         }
     }
+
     OnOpenWebsocket(id_) {
         console.log("[open] Connection established");
         console.log(`Attempting to join room ${id_}`);
         this.socket.send("JOIN " + id_);
     }
+
+    RespondToHeartbeats(e) {
+        console.log("RespondToHeartbeats " + e);
+        if(e === undefined) return;
+        console.log(`[message] Data received from server: ${e.data}`);
+        // Respond to heartbeats
+        if(e.data === "PING") {
+            this.socket.send("PONG");
+            console.log("Received PING. Replying with PONG");
+        }
+        if(e.data === "PONG ACK") {
+            console.log("Received PONG acknowledgement");
+        }
+
+        if(e.data.toString().startsWith("WELCOME ")) {
+            this.SetUserName();
+        }
+    };
 
     ConnectToWebsocket(url, id_, username_ = "") {
         if(this.socket !== undefined) {
@@ -118,25 +137,7 @@ class CreateGamePage extends React.Component {
         //<input id="WebsocketValue" type="text" value="ws://localhost:4567"/>
         this.socket = new DYKM_Websocket(url);
 
-        let RespondToHeartbeats = function(e) {
-            console.log("RespondToHeartbeats " + e);
-            if(e === undefined) return;
-            console.log(`[message] Data received from server: ${e.data}`);
-            // Respond to heartbeats
-            if(e.data === "PING") {
-                this.socket.send("PONG");
-                console.log("Received PING. Replying with PONG");
-            }
-            if(e.data === "PONG ACK") {
-                console.log("Received PONG acknowledgement");
-            }
-
-            if(e.data.toString().startsWith("WELCOME ")) {
-                this.SetUserName();
-            }
-        };
-
-        this.socket.setOnMessage(this, RespondToHeartbeats);
+        this.socket.setOnMessage(this, this.RespondToHeartbeats);
 
         this.socket.setOnClose(this, function(event) {
             if (event.wasClean) {
