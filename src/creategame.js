@@ -100,27 +100,11 @@ class CreateGamePage extends React.Component {
     }
 
     SetUserName() {
+        console.log("Setting username");
         if (this.state.name.length > 0) {
             this.socket.send("CHANGENICK ".concat(this.state.name));
         }
     }
-
-    RespondToHeartbeats(e) {
-        console.log(`[message] Data received from server: ${e.data}`);
-        // Respond to heartbeats
-        if(e.data === "PING") {
-            this.socket.send("PONG");
-            console.log("Received PING. Replying with PONG");
-        }
-        if(e.data === "PONG ACK") {
-            console.log("Received PONG acknowledgement");
-        }
-
-        if(e.data.toString().startsWith("WELCOME ")) {
-            this.SetUserName();
-        }
-    };
-
     OnOpenWebsocket(id_) {
         console.log("[open] Connection established");
         console.log(`Attempting to join room ${id_}`);
@@ -134,9 +118,27 @@ class CreateGamePage extends React.Component {
         //<input id="WebsocketValue" type="text" value="ws://localhost:4567"/>
         this.socket = new DYKM_Websocket(url);
 
-        this.socket.onmessage = (e) => this.RespondToHeartbeats(e);
+        let RespondToHeartbeats = function(e) {
+            console.log("RespondToHeartbeats " + e);
+            if(e === undefined) return;
+            console.log(`[message] Data received from server: ${e.data}`);
+            // Respond to heartbeats
+            if(e.data === "PING") {
+                this.socket.send("PONG");
+                console.log("Received PING. Replying with PONG");
+            }
+            if(e.data === "PONG ACK") {
+                console.log("Received PONG acknowledgement");
+            }
 
-        this.socket.onclose = function(event) {
+            if(e.data.toString().startsWith("WELCOME ")) {
+                this.SetUserName();
+            }
+        };
+
+        this.socket.setOnMessage(this, RespondToHeartbeats);
+
+        this.socket.setOnClose(this, function(event) {
             if (event.wasClean) {
                 console.log(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
             } else {
@@ -144,13 +146,14 @@ class CreateGamePage extends React.Component {
                 // event.code is usually 1006 in this case
                 console.log('[close] Connection died');
             }
-        };
+        });
 
-        this.socket.onerror = function(error) {
+        this.socket.setOnError(this, function(error) {
             console.log(`[error] ${error.message}`);
-        };
+        });
 
-        this.socket.onopen = () => this.OnOpenWebsocket(id_)
+        this.socket.setOnOpen(this, () => this.OnOpenWebsocket(id_));
+        this.socket.connect(); // NOTE: We need this even though usually with a normal websocket you don't. REMEMBER THIS
     }
 
     handleNameChange(e) {

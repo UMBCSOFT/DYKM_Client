@@ -9,39 +9,79 @@
 // WEBSOCKET_ONOPEN {json serialized event}
 // WEBSOCKET_ONERROR {json serialized event}
 // WEBSOCKET_ONCLOSE {json serialized event}
-function Post(message) {
-    if(this.frame === undefined) {
-        this.frame = document.getElementById('Frame').contentWindow;
+window.Post = function(message) {
+    if(window.frame === undefined) {
+        window.frame = document.getElementById('Frame').contentWindow;
+        console.log(window.frame);
     }
-    this.frame.postMessage(message, "*");
+    window.frame.postMessage(message);
 }
-function messageHandler(event) {
-    let content = event.data;
 
+function stringifyEvent(e) {
+    const obj = {};
+    for (let k in e) {
+        obj[k] = e[k];
+    }
+    return JSON.stringify(obj, (k, v) => {
+        if (v instanceof Node) return 'Node';
+        if (v instanceof Window) return 'Window';
+        return v;
+    }, ' ');
+}
+
+function messageHandler(event) {
+    console.log(event);
+    if(event.source === window) {
+        return;
+    }
+    if(event.currentTarget !== window) {
+        return;
+    }
+    let content = event.data;
+    if(content.startsWith("WEBSOCKET_ONMESSAGE")
+        || content.startsWith("WEBSOCKET_ONOPEN")
+        || content.startsWith("WEBSOCKET_ONERROR")
+        || content.startsWith("WEBSOCKET_ONCLOSE")) {
+        return; // These are outgoing messages only. For whatever reason the parent window is getting these messages when we send them to the child???? Idk
+    }
     if(content.startsWith("WEBSOCKET_CONNECT ")) {
         let rest = content.substring("WEBSOCKET_CONNECT ".length);
-        if(this.socket === undefined) {
-            this.socket = new WebSocket(rest);
-            this.onmessage = (e)=>Post("WEBSOCKET_ONMESSAGE " + JSON.stringify(e));
-            this.onopen    = (e)=>Post("WEBSOCKET_ONOPEN " + JSON.stringify(e));
-            this.onerror   = (e)=>Post("WEBSOCKET_ONERROR " + JSON.stringify(e));
-            this.onclose   = (e)=>{
-                this.socket = undefined;
-                Post("WEBSOCKET_ONCLOSE " + JSON.stringify(e))
+        if(window.socket === undefined) {
+            window.socket = new WebSocket(rest);
+            window.socket.onmessage = (e)=>{
+                window.Post("WEBSOCKET_ONMESSAGE " + stringifyEvent(e));
+            }
+            window.socket.onopen    = (e)=>{
+                window.Post("WEBSOCKET_ONOPEN " + stringifyEvent(e))
             };
+            window.socket.onerror   = (e)=>{
+                window.Post("WEBSOCKET_ONERROR " + stringifyEvent(e))
+            };
+            window.socket.onclose   = (e)=>{
+                window.socket = undefined;
+                window.Post("WEBSOCKET_ONCLOSE " + stringifyEvent(e))
+            };
+
+            if(window.socket.url === rest) {
+                window.socket.onopen.call(null);
+                console.log("Sending fake onopen since this is a resume");
+            }
         }
     }
     else if(content.startsWith("WEBSOCKET_SEND ")) {
-        let rest = content.substring("WEBOSCKET_CONNECT ".length);
-        if(this.socket !== undefined) {
-            this.socket.send(rest);
+        console.log(content)
+        let rest = content.substring("WEBSOCKET_SEND ".length);
+        if(window.socket !== undefined) {
+            window.socket.send(rest);
         }
     }
     else if(content.startsWith("WEBSOCKET_CLOSE")) {
-        if(this.socket !== undefined) {
-            this.socket.close();
+        if(window.socket !== undefined) {
+            window.socket.close();
         }
     }
-    console.log(content);
+    else {
+        console.log("UNHANDLED " + content);
+    }
 }
 window.addEventListener("message", messageHandler, false);

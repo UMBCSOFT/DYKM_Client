@@ -1,58 +1,99 @@
 class DYKM_Websocket {
     constructor(url) {
-        window.postMessage("WEBSOCKET_CONNECT " + url, "*");
+        this.url = url;
+    }
+    _Post(msg) {
+        window.parent.postMessage(msg, "*");
+    }
 
-        this.onmessage = null;
-        this.onclose = null;
-        this.onerror = null;
-        this.onopen = null;
-        window.addEventListener("message", this._messageHandler, false);
+    connect() {
+        window.addEventListener("message", (e)=>{
+            this._messageHandler(e, this);
+        }, false);
+        this._Post("WEBSOCKET_CONNECT " + this.url);
     }
 
     send(message) {
-        window.postMessage("WEBSOCKET_SEND " + message, "*");
+        console.log("Sending message from child to parent " + message);
+        this._Post("WEBSOCKET_SEND " + message);
+    }
+
+    set onmessage(pls) {
+        throw new Error("Do not use socket.onmessage = func, use setOnMessage(this, func)");
+    }
+    set onerror(pls) {
+        throw new Error("Do not use socket.onerror = func, use setOnError(this, func)");
+    }
+    set onopen(pls) {
+        throw new Error("Do not use socket.onopen = func, use setOnOpen(this, func)");
+    }
+    set onclose(pls) {
+        throw new Error("Do not use socket.onclose = func, use setOnClose(this, func)");
+    }
+
+    setOnMessage(context, func) {
+        this._onmessage = func.bind(context);
+    }
+
+    setOnError(context, func) {
+        this._onerror = func.bind(context);
+    }
+
+    setOnOpen(context, func) {
+        this._onopen = func.bind(context);
+    }
+
+    setOnClose(context, func) {
+        this._onclose = func.bind(context);
     }
 
     close() {
-        window.postMessage("WEBSOCKET_CLOSE", "*");
+        this._Post("WEBSOCKET_CLOSE");
     }
 
-    _messageHandler(event) {
+    _messageHandler(event, socket) {
+        if(event.source === window) {
+            return;
+        }
+        if(event.target !== window) {
+            return;
+        }
         let content = event.data;
         if(content.startsWith("WEBSOCKET_ONMESSAGE ")) {
             let json = content.substring("WEBSOCKET_ONMESSAGE ".length);
             let event = JSON.parse(json);
-            if(this.onmessage) {
-                this.onmessage.call(event);
+            console.log(json);
+            console.log(event);
+            console.log(socket._onmessage);
+            if(socket._onmessage) {
+                socket._onmessage(event);
             }
         }
         else if(content.startsWith("WEBSOCKET_ONOPEN ")) {
+            console.log("Received WEBSOCKET_ONOPEN " + socket._onopen)
             let json = content.substring("WEBSOCKET_ONOPEN ".length);
             let event = JSON.parse(json);
-            if(this.onopen) {
-                this.onopen.call(event);
+            if(socket._onopen) {
+                socket._onopen(event);
             }
         }
         else if(content.startsWith("WEBSOCKET_ONERROR ")) {
             let json = content.substring("WEBSOCKET_ONERROR ".length);
             let event = JSON.parse(json);
-            if(this.onerror) {
-                this.onerror.call(event);
+            if(socket._onerror) {
+                socket._onerror(event);
             }
         }
         else if(content.startsWith("WEBSOCKET_ONCLOSE ")) {
             let json = content.substring("WEBSOCKET_ONCLOSE ".length);
             let event = JSON.parse(json);
-            if(this.onclose) {
-                this.onclose.call(event);
+            if(socket._onclose) {
+                socket._onclose(event);
             }
         }
         else{
             console.log("Unhandled DYKM Websocket event `" + content + "`")
         }
-        //event.source.postMessage(,event.origin)
-        console.log(content);
     }
 }
-
-module.exports = [DYKM_Websocket];
+export {DYKM_Websocket}
