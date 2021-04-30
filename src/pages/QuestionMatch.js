@@ -1,35 +1,12 @@
-import logo from './logo.svg';
-import './App.css';
+import '../css/App.css';
 import 'bootstrap/dist/css/bootstrap.min.css'
-import About from './about'
-import howtoplay from './howtoplay';
-import {Route, Link} from 'react-router-dom'
-import {Container, Row, Col, Button, Alert, Nav, Badge, Form, ListGroup} from 'react-bootstrap'
+import {Button, Form, ListGroup} from 'react-bootstrap'
 import Card from 'react-bootstrap/Card'
-import CardGroup from 'react-bootstrap/CardGroup'
-
 import React from 'react';
 
-function questionmatch(){
+function questionMatch(){
     return (
         <div className="questionmatch">
-    
-        <Nav variant="pills">
-            <Nav.Item>
-              <Nav.Link href="/">Home</Nav.Link>
-            </Nav.Item>
-            <Nav.Item>
-              <Nav.Link href="/howtoplay">How To Play</Nav.Link>
-            </Nav.Item>
-            <Nav.Item>
-              <Nav.Link href="/about">About</Nav.Link>
-            </Nav.Item>
-            <Nav.Item>
-              <Nav.Link eventKey="disabled" disabled>
-                Disabled
-              </Nav.Link>
-            </Nav.Item>
-          </Nav>
     
         <header className="App-header">
           <container>
@@ -92,5 +69,5 @@ function questionmatch(){
       );
     }
 
-export default questionmatch;
+export default questionMatch;
 

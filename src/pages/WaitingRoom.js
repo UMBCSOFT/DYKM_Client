@@ -1,28 +1,11 @@
-import './App.css';
+import '../css/App.css';
 import 'bootstrap/dist/css/bootstrap.min.css'
-import {Button,  Nav} from 'react-bootstrap'
+import {Button} from 'react-bootstrap'
 import React from 'react';
 
 function waitingroom(){
     return (
         <div className="waitingroom">
-    
-        <Nav variant="pills">
-            <Nav.Item>
-              <Nav.Link href="/">Home</Nav.Link>
-            </Nav.Item>
-            <Nav.Item>
-              <Nav.Link href="/howtoplay">How To Play</Nav.Link>
-            </Nav.Item>
-            <Nav.Item>
-              <Nav.Link href="/about">About</Nav.Link>
-            </Nav.Item>
-            <Nav.Item>
-              <Nav.Link eventKey="disabled" disabled>
-                Disabled
-              </Nav.Link>
-            </Nav.Item>
-          </Nav>
     
           <header className="App-header">
           <container>

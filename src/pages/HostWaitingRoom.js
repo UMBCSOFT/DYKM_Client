@@ -1,14 +1,10 @@
-import './App.css';
+import '../css/App.css';
 import 'bootstrap/dist/css/bootstrap.min.css'
-import {Button, Nav, Form} from 'react-bootstrap'
+import {Button, Form} from 'react-bootstrap'
 import React from 'react';
-import NetworkedPage from "./NetworkedPage";
+import NetworkedPage from "../utility/NetworkedPage";
 
 class HostWaitingRoomPage extends NetworkedPage {
-
-    constructor(props) {
-        super(props);
-    }
 
     componentDidMount() {
     }
@@ -21,24 +17,6 @@ class HostWaitingRoomPage extends NetworkedPage {
     render() {
         return (
             <div className="hostwaitingroom">
-
-                <Nav variant="pills">
-                    <Nav.Item>
-                        <Nav.Link href="/">Home</Nav.Link>
-                    </Nav.Item>
-                    <Nav.Item>
-                        <Nav.Link href="/howtoplay">How To Play</Nav.Link>
-                    </Nav.Item>
-                    <Nav.Item>
-                        <Nav.Link href="/about">About</Nav.Link>
-                    </Nav.Item>
-                    <Nav.Item>
-                        <Nav.Link eventKey="disabled" disabled>
-                            Disabled
-                        </Nav.Link>
-                    </Nav.Item>
-                </Nav>
-
                 <header className="App-header">
                     <container>
                         <div className= "mb-2">
@@ -58,7 +36,7 @@ class HostWaitingRoomPage extends NetworkedPage {
                             <h5>* as players join, their names will show up here * </h5>
                         </div>
 
-                        <Button type="submit" onClick={() => this.ChangePage('/question', this.state)}>Start The Game!</Button>
+                        <Button type="submit" onClick={() => this.ChangePage('/Question', this.state)}>Start The Game!</Button>
                         <Button variant="primary" href= "/hostwaitingroom" type="submit" >Create the game!</Button>
 
 
