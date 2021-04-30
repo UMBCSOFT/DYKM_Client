@@ -9,7 +9,7 @@ import React from 'react';
 
 function scores(){
     return (
-        <div className="example">
+        <div className="scores">
     
         <Nav variant="pills">
             <Nav.Item>
@@ -32,7 +32,7 @@ function scores(){
           <container>
             
               <h1>SCORE PAGE</h1>
-              
+              <h4>Scores are displayed here</h4>
               
             
             </container>        
