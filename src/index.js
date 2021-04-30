@@ -8,13 +8,13 @@ import {BrowserRouter, Route} from 'react-router-dom'
 
 import About from './about';
 import howtoplay from './howtoplay';
-import hostwaitingroom from './hostwaitingroom';
 import waitingroom from './waitingroom';
 import question from './question';
 import questionmatch from './questionmatch';
 import example from './example';
 import CreateGamePage from './creategame';
 import JoinGamePage from "./joingame";
+import HostWaitingRoomPage from "./hostwaitingroom";
 import Frame from 'react-frame-component';
 import './shared_websocket.js';
 
@@ -39,7 +39,7 @@ if (typeof window !== 'undefined') {
                 <Route path="/howtoplay" component={howtoplay} />
                 <Route path="/creategame" component={CreateGamePage} />
                 <Route path="/joingame" component={JoinGamePage} />
-                <Route path="/hostwaitingroom" component={hostwaitingroom} />
+                <Route path="/hostwaitingroom" component={HostWaitingRoomPage} />
                 <Route path="/waitingroom" component={waitingroom} />
                 <Route path="/question" component={question} />
                 <Route path="/questionmatch" component={questionmatch} />
