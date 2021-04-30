@@ -1,11 +1,10 @@
-import '../css/style.css'
-import '../css/App.css';
+import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css'
-import {Row, Col, Button, Form, Tab} from 'react-bootstrap'
+import {Row, Col, Button, Nav, Form, Tab} from 'react-bootstrap'
 import ListGroup from 'react-bootstrap/ListGroup'
 import React from 'react';
-import { Redirect } from "react-router-dom";
-import NetworkedPage from '../utility/NetworkedPage'
+import { Redirect, Link } from "react-router-dom";
+import NetworkedPage from './NetworkedPage'
 
 // TODO: Made a "NetworkedPage" class with all of this stuff
 // to inherit from
@@ -38,7 +37,7 @@ class CreateGamePage extends NetworkedPage {
 
     render() {
         if (this.state.redirect) {
-            console.log("Roomcode in creategame: \n" + this.state.roomCode.toString());
+            console.log("Roomcode in creategame: " + '\n' + this.state.roomCode);
             return (
                 <Redirect to={{
                     pathname: "/hostwaitingroom",
@@ -52,10 +51,29 @@ class CreateGamePage extends NetworkedPage {
         else {
             return (
                 <div className="creategame">
+
+                    {/*TODO: consolidate the header code somewhere*/}
+                    <Nav variant="pills">
+                        <Nav.Item>
+                            <Nav.Link href="/">Home</Nav.Link>
+                        </Nav.Item>
+                        <Nav.Item>
+                            <Nav.Link href="/howtoplay">How To Play</Nav.Link>
+                        </Nav.Item>
+                        <Nav.Item>
+                            <Nav.Link href="/about">About</Nav.Link>
+                        </Nav.Item>
+                        <Nav.Item>
+                            <Nav.Link eventKey="disabled" disabled>
+                                Disabled
+                            </Nav.Link>
+                        </Nav.Item>
+                    </Nav>
+
                     <header className="App-header">
-                        <div className= "mb-2 GameSettings">
+                        <div className= "mb-2">
                             <h1>CREATE GAME</h1>
-                            <div>
+                            <div id={"CreateGameSettings"}>
                                 <Form.Group as={Row} id="nickname">
                                     <Form.Label column sm={2}>
                                         Nickname
@@ -70,7 +88,7 @@ class CreateGamePage extends NetworkedPage {
                                         Question Pack
                                     </Form.Label>
                                     <Col sm={10}>
-                                        <Tab.Container id="game-type" defaultActiveKey="#link1">
+                                        <Tab.Container id="list-group-tabs-example" defaultActiveKey="#link1">
                                             <Row>
                                                 <Col sm = "auto">
                                                     <ListGroup>

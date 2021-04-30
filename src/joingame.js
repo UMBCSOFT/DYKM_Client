@@ -1,9 +1,11 @@
-import '../css/App.css';
+import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css'
-import {Button, Form} from 'react-bootstrap'
+import {Button, Nav, Form} from 'react-bootstrap'
 import React from 'react';
-import NetworkedPage from '../utility/NetworkedPage'
+import NetworkedPage from './NetworkedPage'
 
+// TODO: Made a "NetworkedPage" class with all of this stuff
+// to inherit from
 class JoinGamePage extends NetworkedPage {
 
     constructor(props) {
@@ -23,8 +25,27 @@ class JoinGamePage extends NetworkedPage {
     render() {
         return (
             <div className="joingame">
+
+                {/*TODO: consolidate the header code somewhere*/}
+                <Nav variant="pills">
+                    <Nav.Item>
+                        <Nav.Link href="/">Home</Nav.Link>
+                    </Nav.Item>
+                    <Nav.Item>
+                        <Nav.Link href="/howtoplay">How To Play</Nav.Link>
+                    </Nav.Item>
+                    <Nav.Item>
+                        <Nav.Link href="/about">About</Nav.Link>
+                    </Nav.Item>
+                    <Nav.Item>
+                        <Nav.Link eventKey="disabled" disabled>
+                            Disabled
+                        </Nav.Link>
+                    </Nav.Item>
+                </Nav>
+
                 <header className="App-header">
-                    <div className="mb-2 GameSettings">
+                    <div className="mb-2">
                         <h1>JOIN A GAME</h1>
                         <Form>
                             <Form.Group controlId="nickname">
