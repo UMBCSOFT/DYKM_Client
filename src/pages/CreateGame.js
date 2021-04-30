@@ -38,7 +38,7 @@ class CreateGamePage extends NetworkedPage {
 
     render() {
         if (this.state.redirect) {
-            console.log("Roomcode in creategame: \n" + this.state.roomCode.toString());
+            console.log("Roomcode in creategame: \n" + this.state.roomCode);
             return (
                 <Redirect to={{
                     pathname: "/hostwaitingroom",

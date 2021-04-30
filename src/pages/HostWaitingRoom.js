@@ -10,7 +10,7 @@ class HostWaitingRoomPage extends NetworkedPage {
     }
 
     StartGame() {
-
+        console.log("Start game?");
     }
 
 
@@ -36,7 +36,7 @@ class HostWaitingRoomPage extends NetworkedPage {
                             <h5>* as players join, their names will show up here * </h5>
                         </div>
 
-                        <Button type="submit" onClick={() => this.ChangePage('/Question', this.state)}>Start The Game!</Button>
+                        <Button type="submit" onClick={() => this.StartGame()}>Start The Game!</Button>
                         <Button variant="primary" href= "/hostwaitingroom" type="submit" >Create the game!</Button>
 
 
