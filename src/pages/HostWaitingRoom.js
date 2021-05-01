@@ -32,7 +32,7 @@ class HostWaitingRoomPage extends NetworkedPage {
         if (e.data.startsWith(transitionToGameMessage)) {
             this.question = e.data.substr(transitionToGameMessage.length);
             this.setState({redirect: true});
-            console.log("Got question transition. Question is " + this.question);
+            console.log("Got Question transition. Question is " + this.question);
         }
     }
 
@@ -40,12 +40,12 @@ class HostWaitingRoomPage extends NetworkedPage {
         if (this.state.redirect) {
             return (
                 <Redirect to={{
-                    pathname: "/question",
+                    pathname: "/Question",
                     state: {
                         id: this.state.id,
                         roomCode: this.state.roomCode,
                         name: this.state.name,
-                        question: this.question,
+                        question: this.question
                     }
                 }}/>
             );

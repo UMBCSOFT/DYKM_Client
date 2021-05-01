@@ -21,7 +21,7 @@ export const Content = () => {
             <Route path="/creategame" component={CreateGamePage} />
             <Route path="/joingame" component={JoinGamePage} />
             <Route path="/hostwaitingroom" component={HostWaitingRoomPage} />
-            <Route path="/question"><Question/></Route>
+            <Route path="/question" component={Question} />
             <Route path="/questionMatch"><QuestionMatch/></Route>
             <Route path="/scores"><Scores/></Route>
         </Switch>

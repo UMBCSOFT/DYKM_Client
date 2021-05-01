@@ -8,7 +8,7 @@ import NetworkedPage from "../utility/NetworkedPage";
 
 const now = 60;
 
-class question extends NetworkedPage {
+class Question extends NetworkedPage {
 
     constructor() {
         super();
@@ -53,5 +53,5 @@ class question extends NetworkedPage {
 
 }
 
-export default question;
+export default Question;
 
