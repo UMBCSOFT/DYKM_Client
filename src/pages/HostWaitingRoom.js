@@ -35,7 +35,7 @@ class HostWaitingRoomPage extends NetworkedPage {
         if (e.data.startsWith(transitionToGameMessage)) {
             this.question = e.data.substr(transitionToGameMessage.length);
             this.setState({redirect: true});
-            console.log("Got Question transition. Question is " + this.question);
+            console.log("Got Question transition HOST WAITING ROOM. Question is " + this.question);
         }
 
         const playerUpdateMessage = "PLAYERUPDATE ";
@@ -78,7 +78,7 @@ class HostWaitingRoomPage extends NetworkedPage {
 
                         <div className="players">
                             <h1>Waiting for players to join...</h1>
-                            <h5>* as players join, their names will show up here * </h5>
+                            {this.playerElements.length === 0 && <h5>* as players join, their names will show up here * </h5>}
                             {this.playerElements}
                         </div>
 

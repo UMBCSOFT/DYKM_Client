@@ -61,10 +61,6 @@ class JoinGamePage extends NetworkedPage {
                                 <Button variant="primary" type="button" onClick={() => this.JoinRoom(this.state.roomCode)}>
                                     Join Game
                                 </Button>
-
-                                <Button href= "/waitingroom" variant="primary" type="submit">
-                                    Enter Room
-                                </Button>
                             </Form>
                         </div>
                     </header>
