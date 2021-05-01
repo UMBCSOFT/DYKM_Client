@@ -62,7 +62,7 @@ class NetworkedPage extends React.Component {
         httpRequest.open("GET", url);
         httpRequest.send();
         console.log("Sent GET to url: ".concat(url));
-        this.state.roomCode = id;
+        this.setState( { roomCode: id });
     };
 
     CreateRoomHTTPCallback(Http) {
