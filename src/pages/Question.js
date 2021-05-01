@@ -14,6 +14,14 @@ class Question extends NetworkedPage {
         super();
     }
 
+    componentDidMount() {
+        this.ConnectToWebsocket(
+            this.props.location.state.url,
+            this.props.location.state.id,
+            this.props.location.state.name
+        );
+    }
+
     render() {
         return (
             <div className="question">
