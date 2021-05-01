@@ -9,7 +9,8 @@ class HostWaitingRoomPage extends NetworkedPage {
 
     constructor() {
         super();
-        this.question = null;
+        this.question = null
+        this.playerElements = [];
     }
 
     componentDidMount() {
@@ -28,11 +29,20 @@ class HostWaitingRoomPage extends NetworkedPage {
     RespondToSocketMessages(e) {
         super.RespondToSocketMessages(e);
 
+        console.log(e.data);
+
         const transitionToGameMessage = "TRANSITION QUESTION ";
         if (e.data.startsWith(transitionToGameMessage)) {
             this.question = e.data.substr(transitionToGameMessage.length);
             this.setState({redirect: true});
-            console.log("Got Question transition. Question is " + this.question);
+            console.log("Got Question transition HOST WAITING ROOM. Question is " + this.question);
+        }
+
+        const playerUpdateMessage = "PLAYERUPDATE ";
+        if (e.data.startsWith(playerUpdateMessage)) {
+            let playerNames = e.data.substr(playerUpdateMessage.length).split(";"); // TODO: people can put ; in their name and break this
+            this.playerElements = playerNames.map(x=><h5>{x}</h5>);
+            this.forceUpdate();
         }
     }
 
@@ -42,10 +52,11 @@ class HostWaitingRoomPage extends NetworkedPage {
                 <Redirect to={{
                     pathname: "/Question",
                     state: {
-                        id: this.state.id,
+                        id: this.props.location.state.id,
                         roomCode: this.state.roomCode,
-                        name: this.state.name,
-                        question: this.question
+                        name: this.props.location.state.name,
+                        url: this.props.location.state.url,
+                        question: this.question,
                     }
                 }}/>
             );
@@ -67,7 +78,8 @@ class HostWaitingRoomPage extends NetworkedPage {
 
                         <div className="players">
                             <h1>Waiting for players to join...</h1>
-                            <h5>* as players join, their names will show up here * </h5>
+                            {this.playerElements.length === 0 && <h5>* as players join, their names will show up here * </h5>}
+                            {this.playerElements}
                         </div>
 
                         <Button type="submit" onClick={() => this.StartGame()}>Start The Game!</Button>

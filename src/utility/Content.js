@@ -17,7 +17,7 @@ export const Content = () => {
             <Route exact path="/"><Home/></Route>
             <Route path="/about"><About/></Route>
             <Route path="/howToPlay"><HowToPlay/></Route>
-            <Route path="/waitingroom"><WaitingRoom/></Route>
+            <Route path="/waitingroom" component={WaitingRoom}/>
             <Route path="/creategame" component={CreateGamePage} />
             <Route path="/joingame" component={JoinGamePage} />
             <Route path="/hostwaitingroom" component={HostWaitingRoomPage} />
