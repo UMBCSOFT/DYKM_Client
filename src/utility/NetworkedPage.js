@@ -62,6 +62,7 @@ class NetworkedPage extends React.Component {
         httpRequest.open("GET", url);
         httpRequest.send();
         console.log("Sent GET to url: ".concat(url));
+        this.state.roomCode = id;
     };
 
     CreateRoomHTTPCallback(Http) {
@@ -101,11 +102,11 @@ class NetworkedPage extends React.Component {
             console.log("Received PONG acknowledgement");
         }
 
-        if(e.data.toString().startsWith("WELCOME ")) {
+        if(e.data.startsWith("WELCOME ")) {
             this.SetUserName();
         }
 
-        if(e.data.toString().startsWith("ID ")) {
+        if(e.data.startsWith("ID ")) {
             this.setState({ id: e.data.toString().substr("ID  ".length)});
         }
     };
@@ -127,6 +128,7 @@ class NetworkedPage extends React.Component {
         if(this.socket !== undefined) {
             this.socket.close();
         }
+        this.url = url;
         //<input id="WebsocketValue" type="text" value="ws://localhost:4567"/>
         this.socket = new DYKM_Websocket(url);
 

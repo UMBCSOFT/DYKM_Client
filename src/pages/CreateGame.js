@@ -30,7 +30,9 @@ class CreateGamePage extends NetworkedPage {
 
     RespondToSocketMessages(e) {
         if (e.data.toString().startsWith("WELCOME ")) {
+            console.log(this.state.roomCode)
             this.setState({ redirect: true})
+
             //this.ChangePage('/hostwaitingroom');
         }
         super.RespondToSocketMessages(e);
@@ -44,7 +46,9 @@ class CreateGamePage extends NetworkedPage {
                     pathname: "/hostwaitingroom",
                     state: {
                         id: this.state.id,
-                        roomCode: this.state.roomCode
+                        roomCode: this.state.roomCode,
+                        name: this.state.name,
+                        url: this.url,
                     }
                 }} />
             )
