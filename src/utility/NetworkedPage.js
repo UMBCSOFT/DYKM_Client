@@ -37,14 +37,16 @@ class NetworkedPage extends React.Component {
                 else {
                     this.ConnectToWebsocket(Http.responseText, id);
                 }
+                return true;
             }
             else {
                 console.log("ERROR ".concat(Http.status, ": ") + Http.responseText);
+                return false;
             }
         }
     }
 
-    JoinRoom(id_) {
+    JoinRoom(id_, callback) {
         let id;
         if (id_) {
             id = id_;
@@ -58,7 +60,11 @@ class NetworkedPage extends React.Component {
         const username = this.state.name;
 
         console.log("Joining room with url: ".concat('\n', url));
-        httpRequest.onreadystatechange = () => this.HTTPOnReadyStateChangeHandler(httpRequest, id, username)
+        httpRequest.onreadystatechange = () => {
+            let success = this.HTTPOnReadyStateChangeHandler(httpRequest, id, username)
+            if(callback)
+                callback(success);
+        }
         httpRequest.open("GET", url);
         httpRequest.send();
         console.log("Sent GET to url: ".concat(url));

@@ -22,8 +22,9 @@ class JoinGamePage extends NetworkedPage {
     };
 
     JoinRoom(id_) {
-        super.JoinRoom(id_);
-        this.setState({ redirect: true });
+        super.JoinRoom(id_, (success) => {
+            if(success) this.setState({ redirect: true })
+        });
     }
 
     render() {
