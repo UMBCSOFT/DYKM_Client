@@ -11,6 +11,7 @@ import NetworkedPage from '../utility/NetworkedPage'
 // to inherit from
 class CreateGamePage extends NetworkedPage {
 
+    numRounds = 1;
     constructor(props) {
         super(props);
         this.CreateRoom = this.CreateRoom.bind(this);
@@ -30,12 +31,15 @@ class CreateGamePage extends NetworkedPage {
 
     RespondToSocketMessages(e) {
         if (e.data.toString().startsWith("WELCOME ")) {
-            console.log(this.state.roomCode)
-            this.setState({ redirect: true})
-
-            //this.ChangePage('/hostwaitingroom');
+            console.log(this.state.roomCode);
+            this.setState({ redirect: true});
+            this.socket.send("SETNUMROUNDS " + this.numRounds);
         }
         super.RespondToSocketMessages(e);
+    }
+    radioOnChange(e){
+        let value = parseInt(e.target.getAttribute("numValue"));
+        this.numRounds = value;
     }
 
     render() {
@@ -110,20 +114,27 @@ class CreateGamePage extends NetworkedPage {
                                             <Form.Check
                                                 type="radio"
                                                 label="1 Round"
+                                                defaultChecked={true}
+                                                onChange={(e)=>this.radioOnChange(e)}
                                                 name="formHorizontalRadios"
                                                 id="formHorizontalRadios1"
+                                                numValue={1}
                                             />
                                             <Form.Check
                                                 type="radio"
                                                 label="5 Rounds"
+                                                onChange={(e)=>this.radioOnChange(e)}
                                                 name="formHorizontalRadios"
                                                 id="formHorizontalRadios2"
+                                                numValue={5}
                                             />
                                             <Form.Check
                                                 type="radio"
                                                 label="10 Rounds"
+                                                onChange={(e)=>this.radioOnChange(e)}
                                                 name="formHorizontalRadios"
                                                 id="formHorizontalRadios3"
+                                                numValue={10}
                                             />
                                         </Col>
                                     </Form.Group>
