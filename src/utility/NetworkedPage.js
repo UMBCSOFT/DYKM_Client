@@ -83,7 +83,12 @@ class NetworkedPage extends React.Component {
             // }
             console.log(Http.responseText);
             console.log("Join room ID: ".concat(json["id"]));
-            this.JoinRoom(json["id"]);
+            if(json["id"] === undefined) {
+                alert("Unable to generate room code for this game room.");
+            }
+            else {
+                this.JoinRoom(json["id"]);
+            }
         }
         else {
             console.log("state: " + this.readyState.toString());
