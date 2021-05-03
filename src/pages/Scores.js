@@ -3,10 +3,13 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import React from 'react';
 import NetworkedPage from "../utility/NetworkedPage";
 import {Redirect} from "react-router-dom";
+import ButtonOrWait from "../Component/ButtonOrWait";
 
 class Scores extends NetworkedPage {
     constructor() {
         super();
+        this.HandleClick = this.HandleClick.bind(this);
+        this.clickedSubmit = false;
     }
 
     componentWillMount() {
@@ -25,35 +28,40 @@ class Scores extends NetworkedPage {
     };
 
     IsLastRound() {
-        return this.socket.send("IS LAST ROUND");
+        return false//TODO: replace with this.socket.send("IS LAST ROUND");
+    }
+
+    HandleClick() {
+        this.clickedSubmit = true;
+        this.setState( { redirect: true });
     }
 
     render() {
         if (this.state.redirect) {
             if (this.IsLastRound()) {
-                console.log("Transition to next round");
-                return (
-                    <Redirect to={{
-                        pathname: "/question",
-                        state: {
-                            id: this.state.id,
-                            roomCode: this.state.roomCode,
-                            name: this.state.name,
-                            url: this.url,
-                        }
-                    }}/>
-                );
-            } else {
                 console.log("Transition to end screen");
                 return (
                     //TODO: Make end game screen
                     <Redirect to={{
                         pathname: "/",
                         state: {
-                            id: this.state.id,
-                            roomCode: this.state.roomCode,
-                            name: this.state.name,
-                            url: this.url,
+                            id: this.props.location.state.id,
+                            roomCode: this.props.location.state.roomCode,
+                            name: this.props.location.state.name,
+                            url: this.props.location.state.url
+                        }
+                    }}/>
+                );
+            } else {
+                console.log("Transition to next round");
+                return (
+                    <Redirect to={{
+                        pathname: "/question",
+                        state: {
+                            id: this.props.location.state.id,
+                            roomCode: this.props.location.state.roomCode,
+                            name: this.props.location.state.name,
+                            url: this.props.location.state.url
                         }
                     }}/>
                 );
@@ -64,6 +72,7 @@ class Scores extends NetworkedPage {
                     <header className="App-header">
                         <h1>SCORE PAGE</h1>
                         {this.ScoreContent(this.props)}
+                        <ButtonOrWait clicked={this.clickedSubmit} Callback={this.HandleClick}/>
                     </header>
                 </div>
             );

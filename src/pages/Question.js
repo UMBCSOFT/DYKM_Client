@@ -73,7 +73,7 @@ class Question extends NetworkedPage {
                                     <input type="text" placeholder="Type your answer here!" onChange={this.HandleAnswerChange}/>
                                 </Form.Control>
                                 <br/>
-                                <ButtonOrWait answer={this.answer} Callback={this.SubmitQuestion}/>
+                                <ButtonOrWait clicked={this.answer} Callback={this.SubmitQuestion}/>
                             </Form.Group>
                         </div>
                     </header>
