@@ -12,6 +12,7 @@ import NetworkedPage from '../utility/NetworkedPage'
 class CreateGamePage extends NetworkedPage {
 
     numRounds = 1;
+    gamePack = "doyouknowme";
     constructor(props) {
         super(props);
         this.CreateRoom = this.CreateRoom.bind(this);
@@ -35,14 +36,20 @@ class CreateGamePage extends NetworkedPage {
     RespondToSocketMessages(e) {
         if (e.data.toString().startsWith("WELCOME ")) {
             console.log(this.state.roomCode);
-            this.setState({ redirect: true});
             this.socket.send("SETNUMROUNDS " + this.numRounds);
+            this.socket.send("SETGAMEPACK " + this.gamePack);
+            this.setState({ redirect: true});
         }
         super.RespondToSocketMessages(e);
     }
     radioOnChange(e){
-        let value = parseInt(e.target.getAttribute("numValue"));
+        let value = parseInt(e.target.getAttribute("numvalue"));
         this.numRounds = value;
+    }
+
+    onPackSelect(e) {
+        this.gamePack = e.substr(1); // Cut off the #
+        console.log("Changed game pack to " + this.gamePack);
     }
 
     render() {
@@ -81,14 +88,14 @@ class CreateGamePage extends NetworkedPage {
                                         Question Pack
                                     </Form.Label>
                                     <Col sm={10}>
-                                        <Tab.Container id="game-type" defaultActiveKey="#link1">
+                                        <Tab.Container id="game-type" defaultActiveKey="#doyouknowme">
                                             <Row>
                                                 <Col sm = "auto">
-                                                    <ListGroup>
-                                                        <ListGroup.Item  action href="#link1">
+                                                    <ListGroup onSelect={(e)=>this.onPackSelect(e)}>
+                                                        <ListGroup.Item action href="#doyouknowme">
                                                             Do You Know Me?
                                                         </ListGroup.Item>
-                                                        <ListGroup.Item action href="#link2">
+                                                        <ListGroup.Item action href="#icebreakers">
                                                             Ice Breakers
                                                         </ListGroup.Item>
                                                     </ListGroup>
@@ -121,7 +128,7 @@ class CreateGamePage extends NetworkedPage {
                                                 onChange={(e)=>this.radioOnChange(e)}
                                                 name="formHorizontalRadios"
                                                 id="formHorizontalRadios1"
-                                                numValue={1}
+                                                numvalue={1}
                                             />
                                             <Form.Check
                                                 type="radio"
@@ -129,7 +136,7 @@ class CreateGamePage extends NetworkedPage {
                                                 onChange={(e)=>this.radioOnChange(e)}
                                                 name="formHorizontalRadios"
                                                 id="formHorizontalRadios2"
-                                                numValue={5}
+                                                numvalue={5}
                                             />
                                             <Form.Check
                                                 type="radio"
@@ -137,7 +144,7 @@ class CreateGamePage extends NetworkedPage {
                                                 onChange={(e)=>this.radioOnChange(e)}
                                                 name="formHorizontalRadios"
                                                 id="formHorizontalRadios3"
-                                                numValue={10}
+                                                numvalue={10}
                                             />
                                         </Col>
                                     </Form.Group>
