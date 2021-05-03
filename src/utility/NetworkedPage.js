@@ -65,6 +65,9 @@ class NetworkedPage extends React.Component {
             if(callback)
                 callback(success);
         }
+        httpRequest.onerror = () => {
+            alert("Unable to join server room");
+        }
         httpRequest.open("GET", url);
         httpRequest.send();
         console.log("Sent GET to url: ".concat(url));

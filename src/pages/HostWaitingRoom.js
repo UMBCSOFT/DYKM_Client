@@ -20,10 +20,15 @@ class HostWaitingRoomPage extends NetworkedPage {
             this.props.location.state.name
         );
     }
-
+    wasAbleToTransition = false;
     StartGame() {
         console.log("Start game?");
         this.socket.send("START GAME");
+        setTimeout(()=>{
+            if(!this.wasAbleToTransition) {
+                alert("Unable to transition into the game");
+            }
+        }, 5000);
     }
 
     RespondToSocketMessages(e) {
@@ -33,6 +38,7 @@ class HostWaitingRoomPage extends NetworkedPage {
 
         const transitionToGameMessage = "TRANSITION QUESTION ";
         if (e.data.startsWith(transitionToGameMessage)) {
+            this.wasAbleToTransition = true;
             this.question = e.data.substr(transitionToGameMessage.length);
             this.setState({redirect: true});
             console.log("Got Question transition HOST WAITING ROOM. Question is " + this.question);
