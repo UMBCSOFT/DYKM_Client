@@ -1,15 +1,15 @@
 import {Route, Switch} from "react-router-dom";
 import About from "../pages/About";
 import HowToPlay from "../pages/HowToPlay";
-import CreateGamePage from "../pages/CreateGame";
-import JoinGamePage from "../pages/JoinGame";
+import CreateGame from "../pages/CreateGame";
+import JoinGame from "../pages/JoinGame";
 import React from "react";
-import HostWaitingRoomPage from "../pages/HostWaitingRoom";
-import QuestionMatch from "../pages/QuestionMatch";
+import HostWaitingRoom from "../pages/HostWaitingRoom";
 import Question from "../pages/Question";
 import WaitingRoom from "../pages/WaitingRoom";
-import Scores from "../pages/Scores"
 import {Home} from "../pages/Home";
+import Scores from "../pages/Scores";
+import QuestionMatch from "../pages/QuestionMatch";
 
 export const Content = () => {
     return (
@@ -18,12 +18,12 @@ export const Content = () => {
             <Route path="/about"><About/></Route>
             <Route path="/howToPlay"><HowToPlay/></Route>
             <Route path="/waitingroom" component={WaitingRoom}/>
-            <Route path="/creategame" component={CreateGamePage} />
-            <Route path="/joingame" component={JoinGamePage} />
-            <Route path="/hostwaitingroom" component={HostWaitingRoomPage} />
+            <Route path="/creategame" component={CreateGame} />
+            <Route path="/joingame" component={JoinGame} />
+            <Route path="/hostwaitingroom" component={HostWaitingRoom} />
             <Route path="/question" component={Question} />
-            <Route path="/questionMatch"><QuestionMatch/></Route>
-            <Route path="/scores"><Scores/></Route>
+            <Route path="/questionmatch" component={QuestionMatch} />
+            <Route path="/scores" component={Scores} />
         </Switch>
     );
 };

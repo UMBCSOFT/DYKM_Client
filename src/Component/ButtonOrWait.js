@@ -6,8 +6,8 @@ function ButtonOrWait(props) {
         return (<h2>Waiting for other players...</h2>);
     } else {
         return (
-            <Button href="/questionMatch" variant="primary" type="submit" onClick={() => {
-                props.SubmitQuestion()
+            <Button variant="primary" type="submit" onClick={() => {
+                props.Callback()
             }}>
                 Submit your answer!
             </Button>

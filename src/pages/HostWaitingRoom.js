@@ -5,7 +5,7 @@ import React from 'react';
 import NetworkedPage from "../utility/NetworkedPage";
 import {Redirect} from "react-router-dom";
 
-class HostWaitingRoomPage extends NetworkedPage {
+class HostWaitingRoom extends NetworkedPage {
 
     constructor() {
         super();
@@ -20,6 +20,7 @@ class HostWaitingRoomPage extends NetworkedPage {
             this.props.location.state.name
         );
     }
+
     wasAbleToTransition = false;
     StartGame() {
         console.log("Start game?");
@@ -96,5 +97,5 @@ class HostWaitingRoomPage extends NetworkedPage {
     }
 }
 
-export default HostWaitingRoomPage;
+export default HostWaitingRoom;
 

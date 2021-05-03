@@ -121,7 +121,7 @@ class NetworkedPage extends React.Component {
         }
 
         if(e.data.startsWith("ID ")) {
-            this.setState({ id: e.data.toString().substr("ID  ".length)});
+            this.setState({ id: e.data.substr("ID  ".length)});
         }
     };
 

@@ -9,13 +9,15 @@ import NetworkedPage from '../utility/NetworkedPage'
 
 // TODO: Made a "NetworkedPage" class with all of this stuff
 // to inherit from
-class CreateGamePage extends NetworkedPage {
+class CreateGame extends NetworkedPage {
 
     numRounds = 1;
     gamePack = "doyouknowme";
     constructor(props) {
         super(props);
         this.CreateRoom = this.CreateRoom.bind(this);
+        this.radioOnChange = this.radioOnChange.bind(this);
+        this.onPackSelect = this.onPackSelect.bind(this);
     };
 
     CreateRoom() {
@@ -33,15 +35,76 @@ class CreateGamePage extends NetworkedPage {
         console.log("Sent post");
     }
 
+    JoinRoom(id_, callback) {
+        let id;
+        if (id_) {
+            id = id_;
+        }
+        else {
+            id = this.state.roomCode;
+        }
+
+        const httpRequest = new XMLHttpRequest();
+        const url = "http://localhost:".concat(this.PORT, "/room/get/", id);
+        const username = this.state.name;
+
+        console.log("Joining room with url: ".concat('\n', url));
+        httpRequest.onreadystatechange = () => {
+            let success = this.HTTPOnReadyStateChangeHandler(httpRequest, id, username)
+            if(callback)
+                callback(success);
+        }
+        httpRequest.onerror = () => {
+            alert("Unable to join server room");
+        }
+        httpRequest.open("GET", url);
+        httpRequest.send();
+        console.log("Sent GET to url: ".concat(url));
+        this.setState( { roomCode: id });
+    };
+
+    CreateRoomHTTPCallback(Http) {
+        console.log("Sending post");
+        if (Http.readyState === 4 && Http.status === 200) {
+            let json = JSON.parse(Http.responseText);
+            this.setState( {roomCode: json["id]"]}, () => {
+                this.render();
+            });
+            // if (typeof(window) !== 'undefined') {
+            //     document.getElementById("JoinRoomField").value = json["id"];
+            // }
+            console.log(Http.responseText);
+            console.log("Join room ID: ".concat(json["id"]));
+            if(json["id"] === undefined) {
+                alert("Unable to generate room code for this game room.");
+            }
+            else {
+                this.JoinRoom(json["id"]);
+            }
+        }
+        else {
+            console.log("state: " + this.readyState.toString());
+        }
+    };
+
     RespondToSocketMessages(e) {
         if (e.data.toString().startsWith("WELCOME ")) {
             console.log(this.state.roomCode);
             this.socket.send("SETNUMROUNDS " + this.numRounds);
             this.socket.send("SETGAMEPACK " + this.gamePack);
+        }
+        if (e.data.toString().startsWith("ID ")) {
+            this.setState({ id: e.data.substr("ID  ".length)});
             this.setState({ redirect: true});
         }
         super.RespondToSocketMessages(e);
     }
+
+    handleNameChange(e) {
+        this.setState({name: e.target.value})
+        super.handleNameChange(e);
+    }
+
     radioOnChange(e){
         let value = parseInt(e.target.getAttribute("numvalue"));
         this.numRounds = value;
@@ -169,5 +232,5 @@ class CreateGamePage extends NetworkedPage {
         }
     }
 };
-export default CreateGamePage;
+export default CreateGame;
 

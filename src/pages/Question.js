@@ -15,6 +15,7 @@ class Question extends NetworkedPage {
     constructor() {
         super();
         this.SubmitQuestion = this.SubmitQuestion.bind(this);
+        this.HandleAnswerChange = this.HandleAnswerChange.bind(this);
         this.answer = null;
     }
 
@@ -28,7 +29,12 @@ class Question extends NetworkedPage {
 
     SubmitQuestion() {
         this.socket.send("ANSWER " + this.answer);
-        this.setState({});
+        //TODO use interval to wait for server to tell client that other players are done
+        this.setState({ redirect: true });
+    }
+
+    HandleAnswerChange(e) {
+        this.answer = e.target.value;
     }
 
     render() {
@@ -38,13 +44,13 @@ class Question extends NetworkedPage {
                 <Redirect to={{
                     pathname: "/questionmatch",
                     state: {
-                        id: this.state.id,
-                        roomCode: this.state.roomCode,
-                        name: this.state.name,
-                        url: this.url,
+                        id: this.props.location.state.id,
+                        roomCode: this.props.location.state.roomCode,
+                        name: this.props.location.state.name,
+                        url: this.props.location.state.url
                     }
                 }} />
-            )
+            );
         } else {
             return (
                 <div className="question">
@@ -64,10 +70,10 @@ class Question extends NetworkedPage {
                                 <br/>
                                 <Form.Control as="text">
                                     {/*TODO add text box and listener, send question w/ WS*/}
-                                    <input type="text" placeholder="Type your answer here!" onChange={this.handleNameChange}/>
+                                    <input type="text" placeholder="Type your answer here!" onChange={this.HandleAnswerChange}/>
                                 </Form.Control>
                                 <br/>
-                                <ButtonOrWait answer={this.answer} SubmitQuestion={this.SubmitQuestion}/>
+                                <ButtonOrWait answer={this.answer} Callback={this.SubmitQuestion}/>
                             </Form.Group>
                         </div>
                     </header>

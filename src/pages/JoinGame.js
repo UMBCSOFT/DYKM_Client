@@ -5,7 +5,7 @@ import React from 'react';
 import NetworkedPage from '../utility/NetworkedPage'
 import {Redirect} from "react-router-dom";
 
-class JoinGamePage extends NetworkedPage {
+class JoinGame extends NetworkedPage {
 
     constructor(props) {
         super(props);
@@ -70,5 +70,5 @@ class JoinGamePage extends NetworkedPage {
     }
 }
 
-export default JoinGamePage;
+export default JoinGame;
 
