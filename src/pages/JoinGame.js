@@ -10,6 +10,7 @@ class JoinGame extends NetworkedPage {
     constructor(props) {
         super(props);
         this.handleCodeChange = this.handleCodeChange.bind(this);
+        this.handleNameChange = this.handleNameChange.bind(this);
         this.socket = undefined;
     };
 
@@ -22,9 +23,29 @@ class JoinGame extends NetworkedPage {
     };
 
     JoinRoom(id_) {
-        super.JoinRoom(id_, (success) => {
+        super.JoinRoom(id_, (success, id__) => {
             if(success) this.setState({ redirect: true })
+            this.setState({ id: id__ });
         });
+    }
+
+    CreateRoomHTTPCallback(Http) {
+        super.CreateRoomHTTPCallback(Http, (id_) => {
+            this.setState({ id: id_ });
+        })
+    };
+
+    RespondToSocketMessages(e) {
+        if (e.data.toString().startsWith("WELCOME ")) {
+            console.log(this.state.roomCode);
+            this.socket.send("SETNUMROUNDS " + this.numRounds);
+            this.socket.send("SETGAMEPACK " + this.gamePack);
+        }
+        if (e.data.toString().startsWith("ID ")) {
+            this.setState({ id: e.data.substr("ID  ".length)});
+            this.setState({ redirect: true});
+        }
+        super.RespondToSocketMessages(e);
     }
 
     render() {

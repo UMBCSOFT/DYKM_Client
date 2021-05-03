@@ -63,7 +63,7 @@ class NetworkedPage extends React.Component {
         httpRequest.onreadystatechange = () => {
             let success = this.HTTPOnReadyStateChangeHandler(httpRequest, id, username)
             if(callback)
-                callback(success);
+                callback(success, id);
         }
         httpRequest.onerror = () => {
             alert("Unable to join server room");
@@ -104,7 +104,7 @@ class NetworkedPage extends React.Component {
         }
     }
 
-    RespondToSocketMessages(e) {
+    RespondToSocketMessages(e, callback) {
         if(e === undefined) return;
         console.log(`[message] Data received from server: ${e.data}`);
         // Respond to heartbeats
