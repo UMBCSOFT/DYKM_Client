@@ -136,11 +136,7 @@ class NetworkedPage extends React.Component {
     }
 
     ConnectToWebsocket(url, id_, username_ = "") {
-        if(this.socket !== undefined) {
-            this.socket.close();
-        }
         this.url = url;
-        //<input id="WebsocketValue" type="text" value="ws://localhost:4567"/>
         this.socket = new DYKM_Websocket(url);
 
         this.socket.setOnMessage(this, this.RespondToSocketMessages);
@@ -156,6 +152,7 @@ class NetworkedPage extends React.Component {
         });
 
         this.socket.setOnError(this, function(error) {
+            alert("Unable to connect to server room");
             console.log(`[error] ${error.message}`);
         });
 
