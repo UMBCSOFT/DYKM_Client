@@ -1,8 +1,8 @@
 import '../css/App.css';
 import 'bootstrap/dist/css/bootstrap.min.css'
-import {Button} from 'react-bootstrap'
 import React from 'react';
 import NetworkedPage from "../utility/NetworkedPage";
+import {Redirect} from "react-router-dom";
 
 class WaitingRoom extends NetworkedPage {
 
@@ -41,22 +41,38 @@ class WaitingRoom extends NetworkedPage {
     }
 
     render() {
-        return (
-            <div className="waitingroom">
+        if (this.state.redirect) {
+            return (
+                <Redirect to={{
+                    pathname: "/Question",
+                    state: {
+                        id: this.props.location.state.id,
+                        roomCode: this.state.roomCode,
+                        name: this.props.location.state.name,
+                        url: this.props.location.state.url,
+                        question: this.question,
+                    }
+                }}/>
+            );
+        }
+        else {
+            return (
+                <div className="waitingroom">
 
-                <header className="App-header">
-                    <container>
-                        <div className="players">
-                            <h1>Waiting for more players to join...</h1>
-                            {this.playerElements.length === 0 && <h5>* as players join, their names will show up here * </h5>}
-                            {this.playerElements}
-                            <Button href="/example" type="submit">go to example page</Button>
-                        </div>
-                    </container>
+                    <header className="App-header">
+                        <container>
+                            <div className="players">
+                                <h1>Waiting for more players to join...</h1>
+                                {this.playerElements.length === 0 &&
+                                <h5>* as players join, their names will show up here * </h5>}
+                                {this.playerElements}
+                            </div>
+                        </container>
 
-                </header>
-            </div>
-        );
+                    </header>
+                </div>
+            );
+        }
     }
 }
 

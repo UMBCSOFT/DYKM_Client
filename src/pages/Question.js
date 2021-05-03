@@ -66,8 +66,8 @@ class Question extends NetworkedPage {
                                     {/*TODO add text box and listener, send question w/ WS*/}
                                     <input type="text" placeholder="Type your answer here!" onChange={this.handleNameChange}/>
                                 </Form.Control>
-                                <br/>;
-                                <ButtonOrWait answer={this.answer} SubmitQuestion={this.SubmitQuestion}/>;
+                                <br/>
+                                <ButtonOrWait answer={this.answer} SubmitQuestion={this.SubmitQuestion}/>
                             </Form.Group>
                         </div>
                     </header>
