@@ -23,6 +23,9 @@ class CreateGamePage extends NetworkedPage {
         const url = "http://localhost:".concat(this.PORT, "/room/create");
         console.log("URL: ".concat(url));
         Http.addEventListener('load', () => this.CreateRoomHTTPCallback(Http));
+        Http.onerror = function () {
+            alert("Unable to create a game on the game server");
+        }
         Http.open("POST", url);
         console.log("Opened POST request")
         Http.send();
