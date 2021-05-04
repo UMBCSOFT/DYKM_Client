@@ -36,9 +36,9 @@ class CreateGame extends NetworkedPage {
         console.log("Sent post");
     }
 
-    JoinRoom(id_) {
-        super.JoinRoom(id_, (success, id__) => {
-            this.setState({ id: id__ });
+    JoinRoom(roomCode) {
+        super.JoinRoom(roomCode, (success, roomCode_) => {
+            this.setState({ id: roomCode_ });
         })
     };
 
