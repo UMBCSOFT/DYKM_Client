@@ -85,6 +85,7 @@ class Question extends NetworkedPage {
         }
         return 0;
     }
+
     GetTimerPercent() {
         if(this.state.timerStart && this.state.timerEnd) {
             let elapsed = this.state.timerEnd - new Date().getTime();

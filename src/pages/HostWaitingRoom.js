@@ -66,7 +66,7 @@ class HostWaitingRoom extends NetworkedPage {
                         roomCode: this.state.roomCode,
                         name: this.props.location.state.name,
                         url: this.props.location.state.url,
-                        question: this.question,
+                        question: this.question
                     }
                 }}/>
             );

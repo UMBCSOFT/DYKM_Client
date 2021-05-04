@@ -6,6 +6,7 @@ import React from 'react';
 import {Redirect} from "react-router-dom";
 import NetworkedPage from "../utility/NetworkedPage";
 import ProgressBar from "react-bootstrap/ProgressBar";
+import ButtonOrWait from "../Component/ButtonOrWait";
 
 class QuestionMatch extends NetworkedPage {
 
@@ -77,8 +78,7 @@ class QuestionMatch extends NetworkedPage {
         return 100;
     }
 
-    HandleSubmit(e) {
-        e.preventDefault();
+    HandleSubmit() {
         this.doneAnswering = true;
         this.socket.send("DONEMATCHING "); // TODO: Append a semicolon separated list of player numbers. Everyone shares the same player/answer pair list so we can just send indices until we get ids implemented
     }
@@ -161,8 +161,7 @@ class QuestionMatch extends NetworkedPage {
                             </Card>
 
                             <ProgressBar now={this.state.timerPercent} label={`${this.state.timerSeconds} secs left!`}/>
-                            {!this.doneAnswering && <Button answer={this.answer} onClick={(e)=>this.HandleSubmit(e)}>Submit Guesses</Button>}
-                            {this.doneAnswering && <h2>Please wait until everyone has answered to see the results....</h2>}
+                            <ButtonOrWait label={"Submit Answer"} switchToWait={this.doneAnswering} callback={()=>this.HandleSubmit()}/>
                         </div>
                     </header>
                 </div>

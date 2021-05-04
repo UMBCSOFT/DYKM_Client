@@ -11,6 +11,8 @@ class Scores extends NetworkedPage {
         this.HandleClick = this.HandleClick.bind(this);
         this.clickedSubmit = false;
         this.isLastRound = false;
+        this.wasAbleToTransition = null;
+        this.question = null;
     }
 
     componentWillMount() {
@@ -42,16 +44,18 @@ class Scores extends NetworkedPage {
         }
         const transitionToGameMessage = "TRANSITION QUESTION ";
         if (e.data.startsWith(transitionToGameMessage)) {
-            console.log("Everyone's ready. Transitioning to next round");
             this.wasAbleToTransition = true;
+            this.question = e.data.substr(transitionToGameMessage.length);
             this.setState({redirect: true});
+            console.log("Got Question transition SCORES. Question is " + this.question);
         }
         super.RespondToSocketMessages(e, callback);
     }
 
     HandleClick() {
         this.clickedSubmit = true;
-        this.send("READYNEXTROUND")
+        this.forceUpdate();
+        this.socket.send("READYNEXTROUND")
     }
 
     render() {
@@ -80,7 +84,8 @@ class Scores extends NetworkedPage {
                             id: this.props.location.state.id,
                             roomCode: this.props.location.state.roomCode,
                             name: this.props.location.state.name,
-                            url: this.props.location.state.url
+                            url: this.props.location.state.url,
+                            question: this.question
                         }
                     }}/>
                 );
@@ -91,7 +96,7 @@ class Scores extends NetworkedPage {
                     <header className="App-header">
                         <h1>SCORE PAGE</h1>
                         {this.ScoreContent(this.props)}
-                        <ButtonOrWait label={"Ready?"} clicked={this.clickedSubmit} callback={this.HandleClick}/>
+                        <ButtonOrWait label={"Ready?"} switchToWait={this.clickedSubmit} callback={()=>this.HandleClick()}/>
                     </header>
                 </div>
             );
