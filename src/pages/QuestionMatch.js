@@ -20,6 +20,8 @@ class QuestionMatch extends NetworkedPage {
             this.props.location.state.id,
             this.props.location.state.name
         );
+        this.socket.send("REQUESTTIMER");
+        requestAnimationFrame(()=>this.TimerHandler());
     }
 
     RespondToSocketMessages(e) {
@@ -27,17 +29,45 @@ class QuestionMatch extends NetworkedPage {
 
         console.log(e.data);
 
-        /*const transitionToGameMessage = "TRANSITION QUESTION ";
-        if (e.data.startsWith(transitionToGameMessage)) {
-            this.question = e.data.substr(transitionToGameMessage.length);
-            this.setState({redirect: true});
-            console.log("Got Question transition WAITING ROOM. Question is " + this.question);
-        }*/
+        const timerMessage = "TIMER ";
+        if (e.data.startsWith(timerMessage)) {
+            let timer = e.data.substr(timerMessage.length);
+            console.log("Got timer data " + timer);
+            let startAndEnd = timer.split(";").map(x=>parseInt(x));
+            this.setState({
+                timerStart: startAndEnd[0],
+                timerEnd: startAndEnd[1]
+            });
+        }
+    }
+
+    TimerHandler() {
+        this.setState({
+            timerSeconds: this.GetTimerSeconds(),
+            timerPercent: this.GetTimerPercent()
+        })
+        requestAnimationFrame(()=>this.TimerHandler()); // We're using requestAnimationFrame so this runs at the apps framerate
+    }
+
+    GetTimerSeconds() {
+        if(this.state.timerStart && this.state.timerEnd) {
+            return Math.max(Math.floor((this.state.timerEnd - new Date().getTime())/1000), 0);
+        }
+        return 0;
+    }
+    GetTimerPercent() {
+        if(this.state.timerStart && this.state.timerEnd) {
+            let elapsed = this.state.timerEnd - new Date().getTime();
+            let percent = elapsed / (this.state.timerEnd - this.state.timerStart);
+            return Math.min(Math.max(percent * 100, 0), 100);
+        }
+        return 100;
     }
 
     HandleSubmit(e) {
         e.preventDefault();
-        this.setState({ redirect: true} );
+        this.doneAnswering = true;
+        //this.setState({ redirect: true} ); // TODO: Send server the guess and wait for a reply to transition
     }
 
     render(){
@@ -109,8 +139,9 @@ class QuestionMatch extends NetworkedPage {
                                 </ListGroup>
                             </Card>
 
-                            <div>Please wait until everyone has answered to see the results...</div>
-                            <ProgressBar now={80} label={`${60} secs left!`}/>
+                            <ProgressBar now={this.state.timerPercent} label={`${this.state.timerSeconds} secs left!`}/>
+                            {!this.doneAnswering && <Button answer={this.answer} onClick={(e)=>this.HandleSubmit(e)}>Submit Guesses</Button>}
+                            {this.doneAnswering && <h2>Please wait until everyone has answered to see the results....</h2>}
                         </div>
                     </header>
                 </div>
