@@ -6,9 +6,6 @@ import ProgressBar from 'react-bootstrap/ProgressBar'
 import React from 'react';
 import NetworkedPage from "../utility/NetworkedPage";
 import {Redirect} from "react-router-dom";
-import ButtonOrWait from "../Component/ButtonOrWait";
-
-const now = 60;
 
 class Question extends NetworkedPage {
 
@@ -27,7 +24,10 @@ class Question extends NetworkedPage {
             this.props.location.state.name
         );
         this.socket.send("REQUESTTIMER");
-        requestAnimationFrame(()=>this.TimerHandler());
+        this.setState({
+            timerSeconds: this.GetTimerSeconds(),
+            timerPercent: this.GetTimerPercent()
+        })
     }
 
     RespondToSocketMessages(e) {
@@ -53,6 +53,7 @@ class Question extends NetworkedPage {
                 timerStart: startAndEnd[0],
                 timerEnd: startAndEnd[1]
             });
+            requestAnimationFrame(()=>this.TimerHandler());
         }
     }
 
@@ -61,7 +62,8 @@ class Question extends NetworkedPage {
             timerSeconds: this.GetTimerSeconds(),
             timerPercent: this.GetTimerPercent()
         })
-        requestAnimationFrame(()=>this.TimerHandler()); // We're using requestAnimationFrame so this runs at the apps framerate
+        if(this.state.timerEnd - new Date().getTime() > 0)
+            requestAnimationFrame(()=>this.TimerHandler()); // We're using requestAnimationFrame so this runs at the apps framerate
     }
 
     SubmitQuestion() {
