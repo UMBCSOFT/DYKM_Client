@@ -29,23 +29,29 @@ class Scores extends NetworkedPage {
     };
 
     IsLastRound() {
-        this.socket.send("IS LAST ROUND");
+        this.socket.send("ISLASTROUND");
     }
 
     RespondToSocketMessages(e, callback) {
-        if (e.data.startsWith("IS LAST ROUND ")) {
+        if (e.data.startsWith("ISLASTROUND ")) {
             const response = e.data.substr("IS LAST ROUND ".length);
             this.isLastRound = (response === "TRUE");
             if (this.isLastRound) {
                 this.forceUpdate();
             }
         }
+        const transitionToGameMessage = "TRANSITION QUESTION ";
+        if (e.data.startsWith(transitionToGameMessage)) {
+            this.wasAbleToTransition = true;
+            this.setState({redirect: true});
+            console.log("Got Question transition HOST WAITING ROOM. Question is " + this.question);
+        }
         super.RespondToSocketMessages(e, callback);
     }
 
     HandleClick() {
         this.clickedSubmit = true;
-        this.setState( { redirect: true });
+        this.send("SCORES READY")
     }
 
     render() {
