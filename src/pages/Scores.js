@@ -72,7 +72,7 @@ class Scores extends NetworkedPage {
                     <header className="App-header">
                         <h1>SCORE PAGE</h1>
                         {this.ScoreContent(this.props)}
-                        <ButtonOrWait clicked={this.clickedSubmit} Callback={this.HandleClick}/>
+                        <ButtonOrWait label={"Ready?"} clicked={this.clickedSubmit} callback={this.HandleClick}/>
                     </header>
                 </div>
             );

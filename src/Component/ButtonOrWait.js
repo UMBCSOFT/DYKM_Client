@@ -7,9 +7,9 @@ function ButtonOrWait(props) {
     } else {
         return (
             <Button variant="primary" type="submit" onClick={() => {
-                props.Callback()
+                props.callback()
             }}>
-                Submit your answer!
+                {props.label}
             </Button>
         );
     }

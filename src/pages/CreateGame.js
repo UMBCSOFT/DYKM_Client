@@ -35,17 +35,18 @@ class CreateGame extends NetworkedPage {
         console.log("Sent post");
     }
 
+    CreateRoomHTTPCallback(Http) {
+        super.CreateRoomHTTPCallback(Http, (roomCode_) => {
+            this.setState({ roomCode: roomCode_ });
+            this.JoinRoom(roomCode_);
+        });
+    }
+
     JoinRoom(roomCode) {
         super.JoinRoom(roomCode, (success, roomCode_) => {
             this.setState({ roomCode: roomCode_ });
         })
     };
-
-CreateRoomHTTPCallback(Http) {
-    super.CreateRoomHTTPCallback(Http, (id_) => {
-        this.setState({ id: id_ });
-    })
-};
 
     RespondToSocketMessages(e) {
         if (e.data.toString().startsWith("WELCOME ")) {
@@ -53,9 +54,10 @@ CreateRoomHTTPCallback(Http) {
             this.socket.send("SETNUMROUNDS " + this.numRounds);
             this.socket.send("SETGAMEPACK " + this.gamePack);
         }
-        if (e.data.toString().startsWith("ID ")) {
+        else if (e.data.toString().startsWith("ID ")) {
             this.setState({ id: e.data.substr("ID  ".length)});
             this.setState({ redirect: true});
+            this.socket.send("ID RECEIVED");
         }
         super.RespondToSocketMessages(e);
     }

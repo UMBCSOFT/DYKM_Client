@@ -74,12 +74,12 @@ class NetworkedPage extends React.Component {
         this.setState( { roomCode: roomCode });
     };
 
-    CreateRoomHTTPCallback(Http) {
+    CreateRoomHTTPCallback(Http, callback) {
         console.log("Sending post");
         if (Http.readyState === 4 && Http.status === 200) {
             let json = JSON.parse(Http.responseText);
-            this.setState( {roomCode: json["id]"]}, () => {
-                this.render();
+            this.setState( {roomCode: json["id"]}, () => {
+                callback(json["id"]);
             });
             // if (typeof(window) !== 'undefined') {
             //     document.getElementById("JoinRoomField").value = json["id"];
@@ -132,13 +132,13 @@ class NetworkedPage extends React.Component {
         });
     };
 
-    OnOpenWebsocket(id_) {
+    OnOpenWebsocket(roomCode_) {
         console.log("[open] Connection established");
-        console.log(`Attempting to join room ${id_}`);
-        this.socket.send("JOIN " + id_);
+        console.log(`Attempting to join room ${roomCode_}`);
+        this.socket.send("JOIN " + roomCode_);
     }
 
-    ConnectToWebsocket(url, id_, username_ = "") {
+    ConnectToWebsocket(url, roomCode_, username_ = "") {
         this.url = url;
         this.socket = new DYKM_Websocket(url);
 
@@ -159,7 +159,7 @@ class NetworkedPage extends React.Component {
             console.log(`[error] ${error.message}`);
         });
 
-        this.socket.setOnOpen(this, () => this.OnOpenWebsocket(id_));
+        this.socket.setOnOpen(this, () => this.OnOpenWebsocket(roomCode_));
         this.socket.connect(); // NOTE: We need this even though usually with a normal websocket you don't. REMEMBER THIS
     }
 

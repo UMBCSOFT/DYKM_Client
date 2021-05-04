@@ -11,12 +11,13 @@ import ButtonOrWait from "../Component/ButtonOrWait";
 const now = 60;
 
 class Question extends NetworkedPage {
-    doneAnswering = false;
+
     constructor() {
         super();
         this.SubmitQuestion = this.SubmitQuestion.bind(this);
         this.HandleAnswerChange = this.HandleAnswerChange.bind(this);
         this.answer = null;
+        this.doneAnswering = false;
     }
 
     componentDidMount() {
@@ -129,8 +130,7 @@ class Question extends NetworkedPage {
                                     <input type="text" placeholder="Type your answer here!" onChange={this.HandleAnswerChange}/>
                                 </Form.Control>
                                 <br/>
-                                {!this.doneAnswering && <Button answer={this.answer} onClick={()=>this.SubmitQuestion()}>Submit Answer</Button>}
-                                {this.doneAnswering && <h2>Waiting for other players...</h2>}
+                                <ButtonOrWait label={"Submit Answer"} switchToWait={this.doneAnswering} callback={()=>this.SubmitQuestion()}/>
                             </Form.Group>
                         </div>
                     </header>
