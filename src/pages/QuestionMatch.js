@@ -5,6 +5,7 @@ import Card from 'react-bootstrap/Card';
 import React from 'react';
 import {Redirect} from "react-router-dom";
 import NetworkedPage from "../utility/NetworkedPage";
+import ProgressBar from "react-bootstrap/ProgressBar";
 
 class QuestionMatch extends NetworkedPage {
 
@@ -21,12 +22,35 @@ class QuestionMatch extends NetworkedPage {
         );
     }
 
+    RespondToSocketMessages(e) {
+        super.RespondToSocketMessages(e);
+
+        console.log(e.data);
+
+        /*const transitionToGameMessage = "TRANSITION QUESTION ";
+        if (e.data.startsWith(transitionToGameMessage)) {
+            this.question = e.data.substr(transitionToGameMessage.length);
+            this.setState({redirect: true});
+            console.log("Got Question transition WAITING ROOM. Question is " + this.question);
+        }*/
+    }
+
     HandleSubmit(e) {
         e.preventDefault();
         this.setState({ redirect: true} );
     }
 
     render(){
+        let rawAnswers = this.props.location.state.playerAnswers
+
+        // Split by semicolons, remove the trailing "" and then combine into consecutive pairs
+        let split = rawAnswers.split(";")
+        split.pop(); // Get rid of the trailing "" since there's a semicolon at the end
+        let even = split.filter((x,i)=>i%2===0);
+        let odd  = split.filter((x,i)=>i%2===1);
+        this.playerAnswers = even.map((x,i)=>[x, odd[i]]);
+
+        console.log("Player Answers: " + this.playerAnswers);
         if (this.state.redirect) {
             console.log("Transition to Scores");
             return (
@@ -37,10 +61,33 @@ class QuestionMatch extends NetworkedPage {
                         roomCode: this.props.location.state.roomCode,
                         name: this.props.location.state.name,
                         url: this.props.location.state.url,
+                        question: this.props.location.state.question,
                     }
                 }} />
             )
-        } else {
+        } else
+        {
+            let allPlayers = this.playerAnswers.map(x=>x[0]).map(x=><option value={x}> {x}</option>);
+            let options = [];
+            for(let pair of this.playerAnswers) {
+                /* This is what this code generates
+                Pair[0] is the player name and pair[1] is their answer
+                <ListGroup.Item>
+                    Cras justo odio
+                    <select>
+                        <option value="player 1"> player 1 </option>
+                        <option value="player 2"> player 2 </option>
+                        <option value="player 3"> player 3 </option>
+                    </select>
+                </ListGroup.Item>
+                */
+                options.push(<ListGroup.Item>
+                    {pair[1]}
+                    <select>
+                        {allPlayers}
+                    </select>
+                </ListGroup.Item>);
+            }
             return (
                 <div className="questionmatch">
 
@@ -50,7 +97,7 @@ class QuestionMatch extends NetworkedPage {
 
                             <br />
                             <Card border="primary" bg="light" text = "dark">
-                                <Card.Body>* question will be generated here *</Card.Body>
+                                <Card.Body>{this.props.location.state.question}</Card.Body>
                             </Card>
 
                             <br />
@@ -58,43 +105,12 @@ class QuestionMatch extends NetworkedPage {
 
                             <Card text = "dark" style={{ width: '30rem' }}>
                                 <ListGroup>
-                                    <ListGroup.Item>Cras justo odio <select>
-                                        <option value="player 1"> player 1 </option>
-                                        <option value="player 2"> player 2 </option>
-                                        <option value="player 3"> player 3 </option>
-                                    </select>
-                                    </ListGroup.Item>
-                                    <ListGroup.Item>Dapibus ac facilisis in <select>
-                                        <option value="player 1"> player 1 </option>
-                                        <option value="player 2"> player 2 </option>
-                                        <option value="player 3"> player 3 </option>
-                                    </select> </ListGroup.Item>
-                                    <ListGroup.Item>Vestibulum at eros <select>
-                                        <option value="player 1"> player 1 </option>
-                                        <option value="player 2"> player 2 </option>
-                                        <option value="player 3"> player 3 </option>
-                                    </select> </ListGroup.Item>
+                                    {options}
                                 </ListGroup>
                             </Card>
 
-                            <Button variant="primary" type="submit" onClick={(e) => this.HandleSubmit(e)}>See the results!</Button>
-
-                            <Form inline>
-                                <Form.Control
-                                    as="select"
-                                    className="my-1 mr-sm-2"
-                                    id="inlineFormCustomSelectPref"
-                                    custom
-                                >
-                                    <option value="0">Choose...</option>
-                                    <option value="1">player 1</option>
-                                    <option value="2">player 2</option>
-                                    <option value="3">player 3</option>
-                                </Form.Control>
-
-                            </Form>
-
-
+                            <div>Please wait until everyone has answered to see the results...</div>
+                            <ProgressBar now={80} label={`${60} secs left!`}/>
                         </div>
                     </header>
                 </div>

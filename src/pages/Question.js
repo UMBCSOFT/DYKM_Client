@@ -27,10 +27,23 @@ class Question extends NetworkedPage {
         );
     }
 
+    RespondToSocketMessages(e) {
+        super.RespondToSocketMessages(e);
+
+        console.log(e.data);
+
+        const transitionToGameMessage = "TRANSITION QUESTIONMATCH ";
+        if (e.data.startsWith(transitionToGameMessage)) {
+            let pairs = e.data.substr(transitionToGameMessage.length);
+            console.log("Server told us to transition to QUESTIONMATCH. Transitioning...");
+            console.log("Pairs: ", pairs);
+            this.setState({redirect: true, pairs: pairs});
+        }
+    }
+
     SubmitQuestion() {
         this.socket.send("ANSWER " + this.answer);
         //TODO use interval to wait for server to tell client that other players are done
-        this.setState({ redirect: true });
     }
 
     HandleAnswerChange(e) {
@@ -40,6 +53,7 @@ class Question extends NetworkedPage {
     render() {
         if (this.state.redirect) {
             console.log("Transition to Match");
+            console.log("Pairs before transition: ", this.state.pairs);
             return (
                 <Redirect to={{
                     pathname: "/questionmatch",
@@ -47,7 +61,9 @@ class Question extends NetworkedPage {
                         id: this.props.location.state.id,
                         roomCode: this.props.location.state.roomCode,
                         name: this.props.location.state.name,
-                        url: this.props.location.state.url
+                        url: this.props.location.state.url,
+                        question: this.props.location.state.question,
+                        playerAnswers: this.state.pairs,
                     }
                 }} />
             );
