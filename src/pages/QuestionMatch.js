@@ -33,7 +33,6 @@ class QuestionMatch extends NetworkedPage {
 
         if (e.data.startsWith(transitionToGameMessage)) {
             console.log("Transitioning to score screen");
-            // TODO: Reply with what our final matches are here, even if we haven't changed any we'll just send default values
             this.setState({redirect: true});
             return;
         }
