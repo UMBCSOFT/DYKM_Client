@@ -21,7 +21,10 @@ class QuestionMatch extends NetworkedPage {
             this.props.location.state.name
         );
         this.socket.send("REQUESTTIMER");
-        requestAnimationFrame(()=>this.TimerHandler());
+        this.setState({
+            timerSeconds: this.GetTimerSeconds(),
+            timerPercent: this.GetTimerPercent()
+        })
     }
 
     RespondToSocketMessages(e) {
@@ -46,6 +49,7 @@ class QuestionMatch extends NetworkedPage {
                 timerStart: startAndEnd[0],
                 timerEnd: startAndEnd[1]
             });
+            requestAnimationFrame(()=>this.TimerHandler());
         }
     }
 
@@ -54,7 +58,8 @@ class QuestionMatch extends NetworkedPage {
             timerSeconds: this.GetTimerSeconds(),
             timerPercent: this.GetTimerPercent()
         })
-        requestAnimationFrame(()=>this.TimerHandler()); // We're using requestAnimationFrame so this runs at the apps framerate
+        if(this.state.timerEnd - new Date().getTime() > 0)
+            requestAnimationFrame(()=>this.TimerHandler()); // We're using requestAnimationFrame so this runs at the apps framerate
     }
 
     GetTimerSeconds() {
@@ -75,21 +80,10 @@ class QuestionMatch extends NetworkedPage {
     HandleSubmit(e) {
         e.preventDefault();
         this.doneAnswering = true;
-        this.socket.send("DONEMATCHING");
-        //this.setState({ redirect: true} ); // TODO: Send server the guess and wait for a reply to transition
+        this.socket.send("DONEMATCHING ");
     }
 
     render(){
-        let rawAnswers = this.props.location.state.playerAnswers
-
-        // Split by semicolons, remove the trailing "" and then combine into consecutive pairs
-        let split = rawAnswers.split(";")
-        split.pop(); // Get rid of the trailing "" since there's a semicolon at the end
-        let even = split.filter((x,i)=>i%2===0);
-        let odd  = split.filter((x,i)=>i%2===1);
-        this.playerAnswers = even.map((x,i)=>[x, odd[i]]);
-
-        console.log("Player Answers: " + this.playerAnswers);
         if (this.state.redirect) {
             console.log("Transition to Scores");
             return (
@@ -106,26 +100,40 @@ class QuestionMatch extends NetworkedPage {
             )
         } else
         {
-            let allPlayers = this.playerAnswers.map(x=>x[0]).map(x=><option value={x}> {x}</option>);
-            let options = [];
-            for(let pair of this.playerAnswers) {
-                /* This is what this code generates
-                Pair[0] is the player name and pair[1] is their answer
-                <ListGroup.Item>
-                    Cras justo odio
-                    <select>
-                        <option value="player 1"> player 1 </option>
-                        <option value="player 2"> player 2 </option>
-                        <option value="player 3"> player 3 </option>
-                    </select>
-                </ListGroup.Item>
-                */
-                options.push(<ListGroup.Item>
-                    {pair[1]}
-                    <select>
-                        {allPlayers}
-                    </select>
-                </ListGroup.Item>);
+
+            if(this.options === undefined) {
+                let rawAnswers = this.props.location.state.playerAnswers
+
+                // Split by semicolons, remove the trailing "" and then combine into consecutive pairs
+                let split = rawAnswers.split(";")
+                split.pop(); // Get rid of the trailing "" since there's a semicolon at the end
+                let even = split.filter((x,i)=>i%2===0);
+                let odd  = split.filter((x,i)=>i%2===1);
+                this.playerAnswers = even.map((x,i)=>[x, odd[i]]);
+
+                console.log("Player Answers: " + this.playerAnswers);
+
+                let allPlayers = this.playerAnswers.map(x=>x[0]).map(x=><option value={x}> {x}</option>);
+                this.options = [];
+                for(let pair of this.playerAnswers) {
+                    /* This is what this code generates
+                    Pair[0] is the player name and pair[1] is their answer
+                    <ListGroup.Item>
+                        Cras justo odio
+                        <select>
+                            <option value="player 1"> player 1 </option>
+                            <option value="player 2"> player 2 </option>
+                            <option value="player 3"> player 3 </option>
+                        </select>
+                    </ListGroup.Item>
+                    */
+                    this.options.push(<ListGroup.Item>
+                        {pair[1]}
+                        <select>
+                            {allPlayers}
+                        </select>
+                    </ListGroup.Item>);
+                }
             }
             return (
                 <div className="questionmatch">
@@ -144,7 +152,7 @@ class QuestionMatch extends NetworkedPage {
 
                             <Card text = "dark" style={{ width: '30rem' }}>
                                 <ListGroup>
-                                    {options}
+                                    {this.options}
                                 </ListGroup>
                             </Card>
 
