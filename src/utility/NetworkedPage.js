@@ -46,24 +46,24 @@ class NetworkedPage extends React.Component {
         }
     }
 
-    JoinRoom(id_, callback) {
-        let id;
-        if (id_) {
-            id = id_;
+    JoinRoom(_roomCode, callback) {
+        let roomCode;
+        if (_roomCode) {
+            roomCode = _roomCode;
         }
         else {
-            id = this.state.roomCode;
+            roomCode = this.state.roomCode;
         }
 
         const httpRequest = new XMLHttpRequest();
-        const url = "http://localhost:".concat(this.PORT, "/room/get/", id);
+        const url = "http://localhost:".concat(this.PORT, "/room/get/", roomCode);
         const username = this.state.name;
 
         console.log("Joining room with url: ".concat('\n', url));
         httpRequest.onreadystatechange = () => {
-            let success = this.HTTPOnReadyStateChangeHandler(httpRequest, id, username)
+            let success = this.HTTPOnReadyStateChangeHandler(httpRequest, roomCode, username)
             if(callback)
-                callback(success, id);
+                callback(success, roomCode);
         }
         httpRequest.onerror = () => {
             alert("Unable to join server room");
@@ -71,7 +71,7 @@ class NetworkedPage extends React.Component {
         httpRequest.open("GET", url);
         httpRequest.send();
         console.log("Sent GET to url: ".concat(url));
-        this.setState( { roomCode: id });
+        this.setState( { roomCode: roomCode });
     };
 
     CreateRoomHTTPCallback(Http) {

@@ -35,6 +35,18 @@ class CreateGame extends NetworkedPage {
         console.log("Sent post");
     }
 
+    JoinRoom(roomCode) {
+        super.JoinRoom(roomCode, (success, roomCode_) => {
+            this.setState({ roomCode: roomCode_ });
+        })
+    };
+
+CreateRoomHTTPCallback(Http) {
+    super.CreateRoomHTTPCallback(Http, (id_) => {
+        this.setState({ id: id_ });
+    })
+};
+
     RespondToSocketMessages(e) {
         if (e.data.toString().startsWith("WELCOME ")) {
             console.log(this.state.roomCode);
