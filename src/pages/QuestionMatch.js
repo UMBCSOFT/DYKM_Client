@@ -29,6 +29,15 @@ class QuestionMatch extends NetworkedPage {
 
         console.log(e.data);
 
+        const transitionToGameMessage = "TRANSITION SCORE";
+
+        if (e.data.startsWith(transitionToGameMessage)) {
+            console.log("Transitioning to score screen");
+            // TODO: Reply with what our final matches are here, even if we haven't changed any we'll just send default values
+            this.setState({redirect: true});
+            return;
+        }
+
         const timerMessage = "TIMER ";
         if (e.data.startsWith(timerMessage)) {
             let timer = e.data.substr(timerMessage.length);
@@ -67,6 +76,7 @@ class QuestionMatch extends NetworkedPage {
     HandleSubmit(e) {
         e.preventDefault();
         this.doneAnswering = true;
+        this.socket.send("DONEMATCHING");
         //this.setState({ redirect: true} ); // TODO: Send server the guess and wait for a reply to transition
     }
 
