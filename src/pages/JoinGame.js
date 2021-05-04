@@ -36,6 +36,7 @@ class JoinGame extends NetworkedPage {
     };
 
     RespondToSocketMessages(e) {
+        if(this.socket === undefined) return;
         if (e.data.toString().startsWith("WELCOME ")) {
             console.log(this.state.roomCode);
             this.socket.send("SETNUMROUNDS " + this.numRounds);
@@ -50,6 +51,7 @@ class JoinGame extends NetworkedPage {
 
     render() {
         if (this.state.redirect) {
+            this.CloseNetworkedPage();
             console.log("Roomcode in joingame: \n" + this.state.roomCode);
             return (
                 <Redirect to={{

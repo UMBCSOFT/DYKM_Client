@@ -1,6 +1,6 @@
 import '../css/App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {Button, ListGroup} from 'react-bootstrap';
+import {ListGroup} from 'react-bootstrap';
 import Card from 'react-bootstrap/Card';
 import React from 'react';
 import {Redirect} from "react-router-dom";
@@ -29,6 +29,7 @@ class QuestionMatch extends NetworkedPage {
     }
 
     RespondToSocketMessages(e) {
+        if(this.socket === undefined) return;
         super.RespondToSocketMessages(e);
 
         console.log(e.data);
@@ -89,6 +90,7 @@ class QuestionMatch extends NetworkedPage {
 
     render(){
         if (this.state.redirect) {
+            this.CloseNetworkedPage();
             console.log("Transition to Scores");
             return (
                 <Redirect to={{

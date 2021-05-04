@@ -61,6 +61,7 @@ class Scores extends NetworkedPage {
     render() {
         this.IsLastRound();
         if (this.state.redirect) {
+            this.CloseNetworkedPage();
             if (this.isLastRound) {
                 console.log("Transition to end screen");
                 return (

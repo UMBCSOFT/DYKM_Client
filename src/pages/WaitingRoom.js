@@ -21,6 +21,7 @@ class WaitingRoom extends NetworkedPage {
     }
 
     RespondToSocketMessages(e) {
+        if(this.socket === undefined) return;
         super.RespondToSocketMessages(e);
 
         console.log(e.data);
@@ -42,6 +43,7 @@ class WaitingRoom extends NetworkedPage {
 
     render() {
         if (this.state.redirect) {
+            this.CloseNetworkedPage();
             return (
                 <Redirect to={{
                     pathname: "/Question",

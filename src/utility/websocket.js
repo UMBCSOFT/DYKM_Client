@@ -32,18 +32,34 @@ class DYKM_Websocket {
     }
 
     setOnMessage(context, func) {
+        if(func === undefined) {
+            this._onmessage = undefined;
+            return;
+        }
         this._onmessage = func.bind(context);
     }
 
     setOnError(context, func) {
+        if(func === undefined) {
+            this._onerror = undefined;
+            return;
+        }
         this._onerror = func.bind(context);
     }
 
     setOnOpen(context, func) {
+        if(func === undefined) {
+            this._onopen = undefined;
+            return;
+        }
         this._onopen = func.bind(context);
     }
 
     setOnClose(context, func) {
+        if(func === undefined) {
+            this._onclose = undefined;
+            return;
+        }
         this._onclose = func.bind(context);
     }
 
