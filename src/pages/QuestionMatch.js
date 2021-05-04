@@ -80,7 +80,11 @@ class QuestionMatch extends NetworkedPage {
     HandleSubmit(e) {
         e.preventDefault();
         this.doneAnswering = true;
-        this.socket.send("DONEMATCHING ");
+        this.socket.send("DONEMATCHING "); // TODO: Append a semicolon separated list of player numbers. Everyone shares the same player/answer pair list so we can just send indices until we get ids implemented
+    }
+
+    SelectChange(e) {
+        console.log(e.target.value, e.target.getAttribute("answer"));
     }
 
     render(){
@@ -113,7 +117,7 @@ class QuestionMatch extends NetworkedPage {
 
                 console.log("Player Answers: " + this.playerAnswers);
 
-                let allPlayers = this.playerAnswers.map(x=>x[0]).map(x=><option value={x}> {x}</option>);
+                let allPlayers = this.playerAnswers.map((x,i)=><option value={i}> {x[0]}</option>);
                 this.options = [];
                 for(let pair of this.playerAnswers) {
                     /* This is what this code generates
@@ -129,7 +133,7 @@ class QuestionMatch extends NetworkedPage {
                     */
                     this.options.push(<ListGroup.Item>
                         {pair[1]}
-                        <select>
+                        <select onChange={(e)=>this.SelectChange(e)}>
                             {allPlayers}
                         </select>
                     </ListGroup.Item>);
