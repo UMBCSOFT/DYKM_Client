@@ -10,6 +10,7 @@ class Scores extends NetworkedPage {
         super();
         this.HandleClick = this.HandleClick.bind(this);
         this.clickedSubmit = false;
+        this.isLastRound = false;
     }
 
     componentWillMount() {
@@ -28,7 +29,18 @@ class Scores extends NetworkedPage {
     };
 
     IsLastRound() {
-        return false//TODO: replace with this.socket.send("IS LAST ROUND");
+        this.socket.send("IS LAST ROUND");
+    }
+
+    RespondToSocketMessages(e, callback) {
+        if (e.data.startsWith("IS LAST ROUND ")) {
+            const response = e.data.substr("IS LAST ROUND ".length);
+            this.isLastRound = (response === "TRUE");
+            if (this.isLastRound) {
+                this.forceUpdate();
+            }
+        }
+        super.RespondToSocketMessages(e, callback);
     }
 
     HandleClick() {
@@ -37,8 +49,9 @@ class Scores extends NetworkedPage {
     }
 
     render() {
+        this.IsLastRound();
         if (this.state.redirect) {
-            if (this.IsLastRound()) {
+            if (this.isLastRound) {
                 console.log("Transition to end screen");
                 return (
                     //TODO: Make end game screen
