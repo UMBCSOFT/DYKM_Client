@@ -6,9 +6,6 @@ import ProgressBar from 'react-bootstrap/ProgressBar'
 import React from 'react';
 import NetworkedPage from "../utility/NetworkedPage";
 import {Redirect} from "react-router-dom";
-import ButtonOrWait from "../Component/ButtonOrWait";
-
-const now = 60;
 
 class Question extends NetworkedPage {
     doneAnswering = false;

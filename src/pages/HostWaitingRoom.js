@@ -13,7 +13,10 @@ class HostWaitingRoom extends NetworkedPage {
         this.playerElements = [];
     }
 
-    componentDidMount() {
+    componentDidMount(){
+        if(this.socket !== undefined) {
+            this.socket.close(); // Close old connection here, not in ConnectToWebsocket because that reconnects to the existing socket for other pages
+        }
         this.ConnectToWebsocket(
             this.props.location.state.url,
             this.props.location.state.id,

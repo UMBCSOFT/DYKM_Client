@@ -6,7 +6,6 @@ import ListGroup from 'react-bootstrap/ListGroup'
 import React from 'react';
 import { Redirect } from "react-router-dom";
 import NetworkedPage from '../utility/NetworkedPage'
-import JoinGame from "./JoinGame";
 
 // TODO: Made a "NetworkedPage" class with all of this stuff
 // to inherit from
