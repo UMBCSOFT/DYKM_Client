@@ -6,6 +6,7 @@ import ProgressBar from 'react-bootstrap/ProgressBar'
 import React from 'react';
 import NetworkedPage from "../utility/NetworkedPage";
 import {Redirect} from "react-router-dom";
+import ButtonOrWait from "../Component/ButtonOrWait";
 
 class Question extends NetworkedPage {
 
