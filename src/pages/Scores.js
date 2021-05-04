@@ -42,16 +42,16 @@ class Scores extends NetworkedPage {
         }
         const transitionToGameMessage = "TRANSITION QUESTION ";
         if (e.data.startsWith(transitionToGameMessage)) {
+            console.log("Everyone's ready. Transitioning to next round");
             this.wasAbleToTransition = true;
             this.setState({redirect: true});
-            console.log("Got Question transition HOST WAITING ROOM. Question is " + this.question);
         }
         super.RespondToSocketMessages(e, callback);
     }
 
     HandleClick() {
         this.clickedSubmit = true;
-        this.send("SCORES READY")
+        this.send("READYNEXTROUND")
     }
 
     render() {
