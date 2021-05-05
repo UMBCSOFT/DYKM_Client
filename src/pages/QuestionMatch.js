@@ -1,6 +1,6 @@
 import '../css/App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {Button, ListGroup} from 'react-bootstrap';
+import {Button, Dropdown, ListGroup} from 'react-bootstrap';
 import Card from 'react-bootstrap/Card';
 import React from 'react';
 import {Redirect} from "react-router-dom";
@@ -13,6 +13,9 @@ class QuestionMatch extends NetworkedPage {
     constructor() {
         super();
         this.HandleSubmit = this.HandleSubmit.bind(this);
+        this.state = {
+            matches: []
+        }
     }
 
     componentWillMount() {
@@ -80,11 +83,26 @@ class QuestionMatch extends NetworkedPage {
 
     HandleSubmit() {
         this.doneAnswering = true;
-        this.socket.send("DONEMATCHING "); // TODO: Append a semicolon separated list of player numbers. Everyone shares the same player/answer pair list so we can just send indices until we get ids implemented
+        const playerMatches = this.CompileMatches();
+        this.socket.send("DONEMATCHING " + playerMatches); // TODO: Append a semicolon separated list of player numbers. Everyone shares the same player/answer pair list so we can just send indices until we get ids implemented
     }
 
-    SelectChange(e) {
-        console.log(e.target.value, e.target.getAttribute("answer"));
+    CompileMatches() {
+        let matchesStr = "";
+        let matchesList = [];
+        for (let m of this.state.matches) {
+            matchesStr.push(m.join(','));
+        }
+        matchesList.join(';')
+    }
+
+    SelectChange(answerAuthor, trueAnswer, chosenAnswer) {
+        console.log("Chosen answer: ", chosenAnswer);
+        let newMatches = this.state.matches;
+        newMatches.push([answerAuthor, trueAnswer, chosenAnswer]);
+        this.setState({
+            matches: newMatches
+        });
     }
 
     render(){
@@ -102,9 +120,7 @@ class QuestionMatch extends NetworkedPage {
                     }
                 }} />
             )
-        } else
-        {
-
+        } else {
             if(this.options === undefined) {
                 let rawAnswers = this.props.location.state.playerAnswers
 
@@ -133,9 +149,9 @@ class QuestionMatch extends NetworkedPage {
                     */
                     this.options.push(<ListGroup.Item>
                         {pair[1]}
-                        <select onChange={(e)=>this.SelectChange(e)}>
-                            {allPlayers}
-                        </select>
+                        <Dropdown onChange={(value)=>this.SelectChange(pair[0], pair[1], value)}>
+                            options={allPlayers}
+                        </Dropdown>
                     </ListGroup.Item>);
                 }
             }
