@@ -39,8 +39,6 @@ class JoinGame extends NetworkedPage {
         if(this.socket === undefined) return;
         if (e.data.toString().startsWith("WELCOME ")) {
             console.log(this.state.roomCode);
-            this.socket.send("SETNUMROUNDS " + this.numRounds);
-            this.socket.send("SETGAMEPACK " + this.gamePack);
         }
         if (e.data.toString().startsWith("ID ")) {
             this.setState({ id: e.data.substr("ID  ".length)});
