@@ -49,17 +49,20 @@ class CreateGame extends NetworkedPage {
     };
 
     RespondToSocketMessages(e) {
+        if(this.socket === undefined) return;
+        super.RespondToSocketMessages(e);
+
         if (e.data.toString().startsWith("WELCOME ")) {
             console.log(this.state.roomCode);
             this.socket.send("SETNUMROUNDS " + this.numRounds);
             this.socket.send("SETGAMEPACK " + this.gamePack);
         }
         else if (e.data.toString().startsWith("ID ")) {
+            this.socket.send("ID RECEIVED");
             this.setState({ id: e.data.substr("ID  ".length)});
             this.setState({ redirect: true});
-            this.socket.send("ID RECEIVED");
         }
-        super.RespondToSocketMessages(e);
+
     }
 
     handleNameChange(e) {
@@ -78,6 +81,7 @@ class CreateGame extends NetworkedPage {
 
     render() {
         if (this.state.redirect) {
+            this.CloseNetworkedPage();
             console.log("Roomcode in creategame: \n" + this.state.roomCode);
             return (
                 <Redirect to={{

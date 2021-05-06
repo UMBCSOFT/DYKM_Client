@@ -105,7 +105,7 @@ class NetworkedPage extends React.Component {
     }
 
     RespondToSocketMessages(e, callback) {
-        if(e === undefined) return;
+        if(e === undefined || this.socket === undefined) return;
         console.log(`[message] Data received from server: ${e.data}`);
         // Respond to heartbeats
         if(e.data === "PING") {
@@ -123,13 +123,6 @@ class NetworkedPage extends React.Component {
         if(e.data.startsWith("ID ")) {
             this.setState({ id: e.data.substr("ID  ".length)});
         }
-    };
-
-    ChangePage(path, data = this.state) {
-        this.props.history.push( {
-            pathname: path,
-            state: data
-        });
     };
 
     OnOpenWebsocket(roomCode_) {
@@ -161,6 +154,15 @@ class NetworkedPage extends React.Component {
 
         this.socket.setOnOpen(this, () => this.OnOpenWebsocket(roomCode_));
         this.socket.connect(); // NOTE: We need this even though usually with a normal websocket you don't. REMEMBER THIS
+    }
+
+    CloseNetworkedPage() {
+        // Shutdown any socket stuff but keep the underlying connection in websocket.js open
+        this.socket.setOnMessage(this, undefined);
+        this.socket.setOnClose(this, undefined);
+        this.socket.setOnError(this, undefined);
+        this.socket.setOnOpen(this, undefined);
+        this.socket = undefined;
     }
 
     handleNameChange(e) {

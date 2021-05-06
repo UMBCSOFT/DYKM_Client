@@ -1,6 +1,6 @@
 import '../css/App.css';
 import 'bootstrap/dist/css/bootstrap.min.css'
-import {Button, Form} from 'react-bootstrap'
+import {Form} from 'react-bootstrap'
 import Card from 'react-bootstrap/Card'
 import ProgressBar from 'react-bootstrap/ProgressBar'
 import React from 'react';
@@ -32,6 +32,7 @@ class Question extends NetworkedPage {
     }
 
     RespondToSocketMessages(e) {
+        if(this.socket === undefined) return;
         super.RespondToSocketMessages(e);
 
         console.log(e.data);
@@ -97,6 +98,7 @@ class Question extends NetworkedPage {
 
     render() {
         if (this.state.redirect) {
+            this.CloseNetworkedPage();
             console.log("Transition to Match");
             console.log("Pairs before transition: ", this.state.pairs);
             return (
