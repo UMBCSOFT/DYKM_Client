@@ -1,6 +1,6 @@
 import '../css/App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {ListGroup} from 'react-bootstrap';
+import {Col, Dropdown, ListGroup, Row} from 'react-bootstrap';
 import Card from 'react-bootstrap/Card';
 import React from 'react';
 import {Redirect} from "react-router-dom";
@@ -8,12 +8,58 @@ import NetworkedPage from "../utility/NetworkedPage";
 import ProgressBar from "react-bootstrap/ProgressBar";
 import ButtonOrWait from "../Component/ButtonOrWait";
 
+class MatchDropdown extends React.Component {
+    constructor(props) {
+        super(props);
+        this.player = props.player;
+        this.matchPairList = props.matchPairList;
+        this.callback = props.callback;
+        this.callback = this.callback.bind(this);
+    }
+
+    GetDropdown() {
+        this.playerList = [];
+        for (this.pair of this.matchPairList) {
+            this.playerList.push(
+                <Dropdown.Item onClick={this.props.callback(this.player, this.pair[0])}>
+                    {this.pair[0]}
+                </Dropdown.Item>
+            );
+        }
+        return <Dropdown>{this.playerList}</Dropdown>;
+    }
+
+    render() {
+        return(this.GetDropdown());
+    }
+}
+
+class MatchRow extends React.Component {
+    constructor(props) {
+        super(props);
+        this.player = props.player;
+        this.matchPairList = props.matchPairList;
+        this.callback = props.callback;
+    }
+
+    render() {
+        return (
+            // Row of an answer + a dropdown of all players
+            <Row>
+                <Col>{this.player}</Col>
+                <Col><MatchDropdown player={this.player} matchPairList={this.matchPairList} callback={this.callback}/></Col>
+            </Row>
+        );
+    }
+}
+
 class QuestionMatch extends NetworkedPage {
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.HandleSubmit = this.HandleSubmit.bind(this);
         this.state = {
+            matchPairList: this.ConvertMatchStrToList(),
             matches: []
         }
     }
@@ -82,25 +128,34 @@ class QuestionMatch extends NetworkedPage {
         return 100;
     }
 
+    ConvertMatchStrToList() {
+        let pairStrList = this.props.location.state.matchPairStr.split(';');
+        let pairList = [];
+        for (let pStr of pairStrList) {
+            pairList.push(pStr.split(','));
+        }
+        return pairList;
+    }
+
+    ConvertMatchesToStr() {
+        //TODO copy this into the server so the client and server have the same format
+        let matchesList = [];
+        for (let m of this.state.matches) {
+            matchesList.push(m.join(','));
+        }
+        return matchesList.join(';')
+    }
+
     HandleSubmit() {
         this.doneAnswering = true;
-        const playerMatches = this.CompileMatches();
+        const playerMatches = this.ConvertMatchesToStr();
         this.socket.send("DONEMATCHING " + playerMatches); // TODO: Append a semicolon separated list of player numbers. Everyone shares the same player/answer pair list so we can just send indices until we get ids implemented
     }
 
-    CompileMatches() {
-        let matchesStr = "";
-        let matchesList = [];
-        for (let m of this.state.matches) {
-            matchesStr.push(m.join(','));
-        }
-        matchesList.join(';')
-    }
-
-    SelectChange(answerAuthor, trueAnswer, chosenAnswer) {
-        console.log("Chosen answer: ", chosenAnswer);
+    HandleDropdownSelect(answer, answerPlayer, guessedPlayer) {
+        console.log("Chosen answer: ", guessedPlayer + "\nCorrect answer: ", answerPlayer);
         let newMatches = this.state.matches;
-        newMatches.push([answerAuthor, trueAnswer, chosenAnswer]);
+        newMatches.push([answer, answerPlayer, guessedPlayer]);
         this.setState({
             matches: newMatches
         });
@@ -124,20 +179,10 @@ class QuestionMatch extends NetworkedPage {
             )
         } else {
             if(this.options === undefined) {
-                let rawAnswers = this.props.location.state.playerAnswers
+                console.log("Player Answers: " + this.state.matchPairList);
 
-                // Split by semicolons, remove the trailing "" and then combine into consecutive pairs
-                let split = rawAnswers.split(";")
-                split.pop(); // Get rid of the trailing "" since there's a semicolon at the end
-                let even = split.filter((x,i)=>i%2===0);
-                let odd  = split.filter((x,i)=>i%2===1);
-                this.playerAnswers = even.map((x,i)=>[x, odd[i]]);
-
-                console.log("Player Answers: " + this.playerAnswers);
-
-                let allPlayers = this.playerAnswers.map((x,i)=><option value={i}> {x[0]}</option>);
                 this.options = [];
-                for(let pair of this.playerAnswers) {
+                for(let pair of this.state.matchPairList) {
                     /* This is what this code generates
                     Pair[0] is the player name and pair[1] is their answer
                     <ListGroup.Item>
@@ -149,12 +194,8 @@ class QuestionMatch extends NetworkedPage {
                         </select>
                     </ListGroup.Item>
                     */
-                    this.options.push(<ListGroup.Item>
-                        {pair[1]}
-                        <Dropdown onChange={(value)=>this.SelectChange(pair[0], pair[1], value)}>
-                            options={allPlayers}
-                        </Dropdown>
-                    </ListGroup.Item>);
+                    this.options.push(
+                        <MatchRow player={pair[0]} matchPairList={this.state.matchPairList} callback={this.HandleDropdownSelect}/>);
                 }
             }
             return (
@@ -173,9 +214,7 @@ class QuestionMatch extends NetworkedPage {
                             <h4>Match each answer to a player!</h4>
 
                             <Card text = "dark" style={{ width: '30rem' }}>
-                                <ListGroup>
-                                    {this.options}
-                                </ListGroup>
+                                {this.options}
                             </Card>
 
                             <ProgressBar now={this.state.timerPercent} label={`${this.state.timerSeconds} secs left!`}/>
