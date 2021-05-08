@@ -151,9 +151,9 @@ class QuestionMatch extends NetworkedPage {
                     */
                     this.options.push(<ListGroup.Item>
                         {pair[1]}
-                        <Dropdown onChange={(value)=>this.SelectChange(pair[0], pair[1], value)}>
-                            options={allPlayers}
-                        </Dropdown>
+                        <select onChange={(value)=>this.SelectChange(pair[0], pair[1], value)}>
+                            {allPlayers}
+                        </select>
                     </ListGroup.Item>);
                 }
             }
