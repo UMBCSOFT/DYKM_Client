@@ -40,6 +40,7 @@ class Question extends NetworkedPage {
         const transitionToGameMessage = "TRANSITION QUESTIONMATCH ";
 
         if (e.data.startsWith(transitionToGameMessage)) {
+            //TODO make format: playername,playeranswer;playername,playeranswer;...
             let pairs = e.data.substr(transitionToGameMessage.length);
             console.log("Server told us to transition to QUESTIONMATCH. Transitioning...");
             console.log("Pairs: ", pairs);
@@ -73,7 +74,6 @@ class Question extends NetworkedPage {
         console.log("Sending answer " + this.answer);
         this.doneAnswering = true;
         this.forceUpdate();
-        //TODO use interval to wait for server to tell client that other players are done
     }
 
     HandleAnswerChange(e) {
@@ -110,7 +110,7 @@ class Question extends NetworkedPage {
                         name: this.props.location.state.name,
                         url: this.props.location.state.url,
                         question: this.props.location.state.question,
-                        playerAnswers: this.state.pairs,
+                        matchPairStr: this.state.pairs,
                     }
                 }} />
             );
@@ -132,7 +132,6 @@ class Question extends NetworkedPage {
                             <Form.Group>
                                 <br/>
                                 <Form.Control as="text">
-                                    {/*TODO add text box and listener, send question w/ WS*/}
                                     <input type="text" placeholder="Type your answer here!" onChange={this.HandleAnswerChange}/>
                                 </Form.Control>
                                 <br/>

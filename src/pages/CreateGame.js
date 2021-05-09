@@ -7,8 +7,6 @@ import React from 'react';
 import { Redirect } from "react-router-dom";
 import NetworkedPage from '../utility/NetworkedPage'
 
-// TODO: Made a "NetworkedPage" class with all of this stuff
-// to inherit from
 class CreateGame extends NetworkedPage {
 
     numRounds = 1;
