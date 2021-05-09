@@ -1,6 +1,6 @@
 import '../css/App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {Col, Dropdown, ListGroup, Row} from 'react-bootstrap';
+import {Col, Dropdown, DropdownButton, ListGroup, Row} from 'react-bootstrap';
 import Card from 'react-bootstrap/Card';
 import React from 'react';
 import {Redirect} from "react-router-dom";
@@ -11,22 +11,39 @@ import ButtonOrWait from "../Component/ButtonOrWait";
 class MatchDropdown extends React.Component {
     constructor(props) {
         super(props);
-        this.player = props.player;
+        this.correctPlayer = props.pair[0];
+        this.correctPlayerAnswer = props.pair[1];
         this.matchPairList = props.matchPairList;
         this.callback = props.callback;
         this.callback = this.callback.bind(this);
+
+        this.setBtnRef = element => {
+            this.btnRef = element;
+        }
+    }
+
+    LocalHandleDropdownSelect(chosenPlayerPair) {
+        this.props.callback(this.correctPlayer, this.correctPlayerAnswer, chosenPlayerPair[0], chosenPlayerPair[1]);
+        //TODO ^
+        console.log("Yeet")
+        console.log(this.btnRef.getElementsByTagName("button")[0]);
+        this.btnRef.getElementsByTagName("button")[0].innerHTML = chosenPlayerPair[0];
     }
 
     GetDropdown() {
-        this.playerList = [];
-        for (this.pair of this.matchPairList) {
-            this.playerList.push(
-                <Dropdown.Item onClick={this.props.callback(this.player, this.pair[0])}>
-                    {this.pair[0]}
+        let playerList = [];
+        for (let chosenPlayerPair of this.matchPairList) {
+            playerList.push(
+                <Dropdown.Item onClick={() => this.LocalHandleDropdownSelect(chosenPlayerPair)}>
+                    {chosenPlayerPair[0]}
                 </Dropdown.Item>
             );
         }
-        return <Dropdown>{this.playerList}</Dropdown>;
+        return (
+            <DropdownButton title={"Guess author..."} ref={this.setBtnRef}>
+                {playerList}
+            </DropdownButton>
+        );
     }
 
     render() {
@@ -37,7 +54,7 @@ class MatchDropdown extends React.Component {
 class MatchRow extends React.Component {
     constructor(props) {
         super(props);
-        this.player = props.player;
+        this.pair = props.pair;
         this.matchPairList = props.matchPairList;
         this.callback = props.callback;
     }
@@ -46,8 +63,8 @@ class MatchRow extends React.Component {
         return (
             // Row of an answer + a dropdown of all players
             <Row>
-                <Col>{this.player}</Col>
-                <Col><MatchDropdown player={this.player} matchPairList={this.matchPairList} callback={this.callback}/></Col>
+                <Col>{this.pair[1]}</Col>
+                <Col><MatchDropdown pair={this.pair} matchPairList={this.matchPairList} callback={this.callback}/></Col>
             </Row>
         );
     }
@@ -58,9 +75,10 @@ class QuestionMatch extends NetworkedPage {
     constructor(props) {
         super(props);
         this.HandleSubmit = this.HandleSubmit.bind(this);
+        this.HandleDropdownSelect = this.HandleDropdownSelect.bind(this);
         this.state = {
-            matchPairList: this.ConvertMatchStrToList(),
-            matches: []
+            matchPairList: this.ConvertNameAnswerPairsStrToList(),
+            matches: {}
         }
     }
 
@@ -128,7 +146,7 @@ class QuestionMatch extends NetworkedPage {
         return 100;
     }
 
-    ConvertMatchStrToList() {
+    ConvertNameAnswerPairsStrToList() {
         let pairStrList = this.props.location.state.matchPairStr.split(';');
         let pairList = [];
         for (let pStr of pairStrList) {
@@ -138,10 +156,11 @@ class QuestionMatch extends NetworkedPage {
     }
 
     ConvertMatchesToStr() {
-        //TODO copy this into the server so the client and server have the same format
         let matchesList = [];
-        for (let m of this.state.matches) {
-            matchesList.push(m.join(','));
+        for (let key in this.state.matches) {
+            if (this.state.matches.hasOwnProperty(key)) {
+                matchesList.push(this.state.matches[key].join(','));
+            }
         }
         return matchesList.join(';')
     }
@@ -149,14 +168,14 @@ class QuestionMatch extends NetworkedPage {
     HandleSubmit() {
         this.doneAnswering = true;
         const playerMatches = this.ConvertMatchesToStr();
-        this.socket.send("DONEMATCHING " + playerMatches); // TODO: Append a semicolon separated list of player numbers. Everyone shares the same player/answer pair list so we can just send indices until we get ids implemented
+        this.socket.send("DONEMATCHING " + playerMatches);
     }
 
-    HandleDropdownSelect(answer, answerPlayer, guessedPlayer) {
-        console.log("Chosen answer: ", guessedPlayer + "\nCorrect answer: ", answerPlayer);
+    HandleDropdownSelect(correctPlayer, correctPlayerAnswer, guessedPlayer, guessedPlayerAnswer) {
+        console.log("Chosen player: ", guessedPlayer + "\nCorrect player: ", correctPlayer);
         let newMatches = this.state.matches;
-        newMatches.push([answer, answerPlayer, guessedPlayer]);
-        this.setState({
+        newMatches[[correctPlayer.toString(), correctPlayerAnswer.toString()].join("-->")] = [correctPlayer, correctPlayerAnswer, guessedPlayer, guessedPlayerAnswer];
+        this.setState( {
             matches: newMatches
         });
     }
@@ -195,7 +214,7 @@ class QuestionMatch extends NetworkedPage {
                     </ListGroup.Item>
                     */
                     this.options.push(
-                        <MatchRow player={pair[0]} matchPairList={this.state.matchPairList} callback={this.HandleDropdownSelect}/>);
+                        <MatchRow pair={pair} matchPairList={this.state.matchPairList} callback={this.HandleDropdownSelect}/>);
                 }
             }
             return (
