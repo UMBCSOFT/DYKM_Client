@@ -100,6 +100,7 @@ class Scores extends NetworkedPage {
             console.log("Got Question transition SCORES. Question is " + this.question);
         }
 
+        // Expecting string of: name,totalscore,roundscore;name,totalscore,roundscore;etc
         const playerScoreMessage = "PLAYERSCORES ";
         if (e.data.startsWith(playerScoreMessage)) {
             let playerScoreStr = e.data.substr(playerScoreMessage.length);
