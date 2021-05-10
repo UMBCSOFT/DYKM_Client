@@ -202,17 +202,6 @@ class QuestionMatch extends NetworkedPage {
 
                 this.options = [];
                 for(let pair of this.state.matchPairList) {
-                    /* This is what this code generates
-                    Pair[0] is the player name and pair[1] is their answer
-                    <ListGroup.Item>
-                        Cras justo odio
-                        <select>
-                            <option value="player 1"> player 1 </option>
-                            <option value="player 2"> player 2 </option>
-                            <option value="player 3"> player 3 </option>
-                        </select>
-                    </ListGroup.Item>
-                    */
                     this.options.push(
                         <MatchRow pair={pair} matchPairList={this.state.matchPairList} callback={this.HandleDropdownSelect}/>);
                 }

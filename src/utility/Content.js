@@ -10,6 +10,7 @@ import WaitingRoom from "../pages/WaitingRoom";
 import {Home} from "../pages/Home";
 import Scores from "../pages/Scores";
 import QuestionMatch from "../pages/QuestionMatch";
+import EndGame from "../pages/EndGame";
 
 export const Content = () => {
     return (
@@ -24,6 +25,7 @@ export const Content = () => {
             <Route path="/question" component={Question} />
             <Route path="/questionmatch" component={QuestionMatch} />
             <Route path="/scores" component={Scores} />
+            <Route path="/endgame" component={EndGame} />
         </Switch>
     );
 };

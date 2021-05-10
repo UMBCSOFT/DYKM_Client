@@ -98,9 +98,9 @@ class NetworkedPage extends React.Component {
         }
     };
 
-    SetUserName() {
-        if (this.state.name.length > 0) {
-            this.socket.send("CHANGENICK ".concat(this.state.name));
+    SetUserName(name) {
+        if (name) {
+            this.socket.send("CHANGENICK ".concat(name));
         }
     }
 
@@ -117,7 +117,7 @@ class NetworkedPage extends React.Component {
         }
 
         if(e.data.startsWith("WELCOME ")) {
-            this.SetUserName();
+            this.SetUserName(this.state.name);
         }
 
         if(e.data.startsWith("ID ")) {
