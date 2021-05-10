@@ -49,6 +49,7 @@ class JoinGame extends NetworkedPage {
 
     render() {
         if (this.state.redirect) {
+            this.SetUserName(this.state.name);
             this.CloseNetworkedPage();
             console.log("Roomcode in joingame: \n" + this.state.roomCode);
             return (
