@@ -4,7 +4,7 @@ import React from 'react';
 import NetworkedPage from "../utility/NetworkedPage";
 import {Redirect} from "react-router-dom";
 import ButtonOrWait from "../Component/ButtonOrWait";
-import {Row} from "react-bootstrap";
+import {Col, Row} from "react-bootstrap";
 
 class ScoreContent extends React.Component {
     constructor(props) {
