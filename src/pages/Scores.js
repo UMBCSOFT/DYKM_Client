@@ -4,6 +4,40 @@ import React from 'react';
 import NetworkedPage from "../utility/NetworkedPage";
 import {Redirect} from "react-router-dom";
 import ButtonOrWait from "../Component/ButtonOrWait";
+import {Row} from "react-bootstrap";
+
+class ScoreContent extends React.Component {
+    constructor(props) {
+        /* expects a list of players called playerList with attributes:
+        *  name
+        *  score (total score for game so far)
+        *  numCorrectMatches (score for this round only)
+         */
+        super(props);
+        this.playerList = props.playerList
+    }
+
+    GenerateScoreContent() {
+        let scoreRowList = [];
+        let orderedPlayerList = this.playerList.sort((a, b) -> a.score - b.score);
+        for (let i = 0; i < orderedPlayerList.length; i++) {
+            scoreRowList.push(
+                <Row>
+                    <Col><h1>{i + 1}. </h1></Col>
+                    <Col>{orderedPlayerList[i].name}</Col>
+                    <Col>+{orderedPlayerList[i].numCorrectMatches}</Col>
+                    <Col>{orderedPlayerList[i].score}</Col>
+                </Row>
+            )
+        }
+        return scoreRowList;
+    }
+
+    render() {
+        return (this.GenerateScoreContent());
+    }
+}
+
 
 class Scores extends NetworkedPage {
     constructor() {
@@ -13,6 +47,9 @@ class Scores extends NetworkedPage {
         this.isLastRound = false;
         this.wasAbleToTransition = null;
         this.question = null;
+        this.state = {
+            playerScoresObjList: []
+        }
     }
 
     componentWillMount() {
@@ -23,15 +60,28 @@ class Scores extends NetworkedPage {
         );
     }
 
-    ScoreContent(props) {
-        let content = null;
-        const scoreInfo = this.socket.send("GET SCORES " + props.location.state.id.toString);
-        return ("FORMATTED SCORE INFO HERE");
-        //TODO format score info
-    };
-
     IsLastRound() {
         this.socket.send("ISLASTROUND");
+    }
+
+    GetPlayerList() {
+        this.socket.send("GETPLAYERSCORES")
+    }
+
+    ConvertScoreStrToObjList(scoresStr) {
+        let playerScoresStrList = scoresStr.split(';');
+
+        let playerScoresObjList = [];
+        for (let info of playerScoresStrList) {
+            const infoList = info.split(',');
+            playerScoresObjList.push({
+                    name: infoList[0],
+                    score: infoList[1],
+                    numCorrectMatches: infoList[2]
+                }
+            );
+        }
+        return playerScoresObjList;
     }
 
     RespondToSocketMessages(e, callback) {
@@ -48,6 +98,14 @@ class Scores extends NetworkedPage {
             this.question = e.data.substr(transitionToGameMessage.length);
             this.setState({redirect: true});
             console.log("Got Question transition SCORES. Question is " + this.question);
+        }
+
+        const playerScoreMessage = "PLAYERSCORES ";
+        if (e.data.startsWith(playerScoreMessage)) {
+            let playerScoreStr = e.data.substr(playerScoreMessage.length);
+            this.setState({
+                playerScoresObjList: this.ConvertScoreStrToObjList(playerScoreStr)
+            });
         }
         super.RespondToSocketMessages(e, callback);
     }
@@ -92,11 +150,16 @@ class Scores extends NetworkedPage {
                 );
             }
         } else {
+            this.GetPlayerList();
+            let scoreContent = null;
+            if (this.state.playerScoresObjList.length > 0) {
+                scoreContent = <ScoreContent playerList={this.state.playerScoresObjList}/>;
+            }
             return (
                 <div className="scores">
                     <header className="App-header">
                         <h1>SCORE PAGE</h1>
-                        {this.ScoreContent(this.props)}
+                        {scoreContent}
                         <ButtonOrWait label={"Ready?"} switchToWait={this.clickedSubmit} callback={()=>this.HandleClick()}/>
                     </header>
                 </div>
