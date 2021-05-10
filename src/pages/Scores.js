@@ -43,10 +43,14 @@ class Scores extends NetworkedPage {
             }
         }
         const transitionToGameMessage = "TRANSITION QUESTION ";
-        if (e.data.startsWith(transitionToGameMessage)) {
+        const transitionEndGame = "TRANSITION ENDGAME";
+        if (e.data.startsWith(transitionToGameMessage) || e.data.startsWith(transitionEndGame)) {
             this.wasAbleToTransition = true;
             this.question = e.data.substr(transitionToGameMessage.length);
-            this.setState({redirect: true});
+            this.isLastRound = e.data.startsWith(transitionEndGame);
+            this.setState({
+                redirect: true,
+            });
             console.log("Got Question transition SCORES. Question is " + this.question);
         }
         super.RespondToSocketMessages(e, callback);
@@ -65,9 +69,8 @@ class Scores extends NetworkedPage {
             if (this.isLastRound) {
                 console.log("Transition to end screen");
                 return (
-                    //TODO: Make end game screen
                     <Redirect to={{
-                        pathname: "/",
+                        pathname: "/endgame",
                         state: {
                             id: this.props.location.state.id,
                             roomCode: this.props.location.state.roomCode,
