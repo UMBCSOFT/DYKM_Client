@@ -23,7 +23,7 @@ class ScoreContent extends React.Component {
         for (let i = 0; i < orderedPlayerList.length; i++) {
             scoreRowList.push(
                 <Row>
-                    <Col><h1>{i + 1}. </h1></Col>
+                    <Col>{i + 1}. </Col>
                     <Col>{orderedPlayerList[i].name}</Col>
                     <Col>+{orderedPlayerList[i].numCorrectMatches}</Col>
                     <Col>{orderedPlayerList[i].score}</Col>

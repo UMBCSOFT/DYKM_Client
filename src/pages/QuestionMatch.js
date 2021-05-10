@@ -174,7 +174,7 @@ class QuestionMatch extends NetworkedPage {
     HandleDropdownSelect(correctPlayer, correctPlayerAnswer, guessedPlayer, guessedPlayerAnswer) {
         console.log("Chosen player: ", guessedPlayer + "\nCorrect player: ", correctPlayer);
         let newMatches = this.state.matches;
-        newMatches[[correctPlayer.toString(), correctPlayerAnswer.toString()].join("-->")] = [correctPlayer, correctPlayerAnswer, guessedPlayer, guessedPlayerAnswer];
+        newMatches[[correctPlayer, correctPlayerAnswer].join("-->")] = [correctPlayer, correctPlayerAnswer, guessedPlayer, guessedPlayerAnswer];
         this.setState( {
             matches: newMatches
         });
