@@ -19,7 +19,7 @@ class ScoreContent extends React.Component {
 
     GenerateScoreContent() {
         let scoreRowList = [];
-        let orderedPlayerList = this.playerList.sort((a, b) -> a.score - b.score);
+        let orderedPlayerList = this.playerList.sort((a, b) => a.score - b.score);
         for (let i = 0; i < orderedPlayerList.length; i++) {
             scoreRowList.push(
                 <Row>
