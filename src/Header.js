@@ -13,6 +13,9 @@ const Header = (activeKey = "/") => {
             <Nav.Item>
                 <Nav.Link href="/about">About</Nav.Link>
             </Nav.Item>
+            <Nav.Item>
+                <Nav.Link href="/productpage">Product Page</Nav.Link>
+            </Nav.Item>
             {/*<Nav.Item>*/}
             {/*    <Nav.Link eventKey="disabled" disabled>*/}
             {/*        Disabled*/}

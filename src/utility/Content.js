@@ -11,6 +11,7 @@ import {Home} from "../pages/Home";
 import Scores from "../pages/Scores";
 import QuestionMatch from "../pages/QuestionMatch";
 import EndGame from "../pages/EndGame";
+import ProductPage from "../pages/ProductPage";
 
 export const Content = () => {
     return (
@@ -26,6 +27,7 @@ export const Content = () => {
             <Route path="/questionmatch" component={QuestionMatch} />
             <Route path="/scores" component={Scores} />
             <Route path="/endgame" component={EndGame} />
+            <Route path="/productpage" component={ProductPage} />
         </Switch>
     );
 };
