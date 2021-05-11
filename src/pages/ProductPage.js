@@ -11,6 +11,8 @@ import question from '../media/question.png';
 import questionmatch from '../media/gamematch.png';
 import roundend from '../media/roundend.png';
 import finalscores from '../media/finalscores.png';
+import dykm from '../media/dykm.png';
+
 
 function ProductPage(){
     return (
@@ -18,7 +20,7 @@ function ProductPage(){
             <header className="App-header">
                 <br></br>
             <div className= "mb-2">
-                <h5><i>*app logo*</i></h5>
+                <img src={dykm} alt="logo" />
 
               <h1>Do You Know Me?</h1>
 
