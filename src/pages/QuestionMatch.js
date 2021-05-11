@@ -1,6 +1,6 @@
 import '../css/App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {Col, Dropdown, DropdownButton, ListGroup, Row} from 'react-bootstrap';
+import {Col, Dropdown, DropdownButton, Row} from 'react-bootstrap';
 import Card from 'react-bootstrap/Card';
 import React from 'react';
 import {Redirect} from "react-router-dom";
