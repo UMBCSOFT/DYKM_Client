@@ -54,10 +54,9 @@ class CreateGame extends NetworkedPage {
             console.log(this.state.roomCode);
             this.socket.send("SETNUMROUNDS " + this.numRounds);
             this.socket.send("SETGAMEPACK " + this.gamePack);
-        }
-        else if (e.data.toString().startsWith("ID ")) {
-            this.socket.send("ID RECEIVED");
-            this.setState({ id: e.data.substr("ID  ".length)});
+            //this.socket.send("ID RECEIVED");
+            this.socket.send("CHANGENICK " + this.state.name);
+            this.setState({ id: e.data.substr("WELCOME ".length)});
             this.setState({ redirect: true});
         }
 

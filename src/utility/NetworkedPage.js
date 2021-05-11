@@ -98,12 +98,6 @@ class NetworkedPage extends React.Component {
         }
     };
 
-    SetUserName(name) {
-        if (name) {
-            this.socket.send("CHANGENICK ".concat(name));
-        }
-    }
-
     RespondToSocketMessages(e, callback) {
         if(e === undefined || this.socket === undefined) return;
         console.log(`[message] Data received from server: ${e.data}`);
@@ -114,14 +108,6 @@ class NetworkedPage extends React.Component {
         }
         if(e.data === "PONG ACK") {
             console.log("Received PONG acknowledgement");
-        }
-
-        if(e.data.startsWith("WELCOME ")) {
-            this.SetUserName(this.state.name);
-        }
-
-        if(e.data.startsWith("ID ")) {
-            this.setState({ id: e.data.substr("ID  ".length)});
         }
     };
 

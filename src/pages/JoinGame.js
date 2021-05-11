@@ -24,7 +24,6 @@ class JoinGame extends NetworkedPage {
 
     JoinRoom(id_) {
         super.JoinRoom(id_, (success, id__) => {
-            if(success) this.setState({ redirect: true })
             this.setState({ id: id__ });
         });
     }
@@ -38,10 +37,8 @@ class JoinGame extends NetworkedPage {
     RespondToSocketMessages(e) {
         if(this.socket === undefined) return;
         if (e.data.toString().startsWith("WELCOME ")) {
-            console.log(this.state.roomCode);
-        }
-        if (e.data.toString().startsWith("ID ")) {
-            this.setState({ id: e.data.substr("ID  ".length)});
+            console.log("MY NAME IS: ", this.state.name);
+            this.socket.send("CHANGENICK " + this.state.name);
             this.setState({ redirect: true});
         }
         super.RespondToSocketMessages(e);
@@ -49,7 +46,6 @@ class JoinGame extends NetworkedPage {
 
     render() {
         if (this.state.redirect) {
-            this.SetUserName(this.state.name);
             this.CloseNetworkedPage();
             console.log("Roomcode in joingame: \n" + this.state.roomCode);
             return (
