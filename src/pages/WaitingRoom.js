@@ -62,15 +62,12 @@ class WaitingRoom extends NetworkedPage {
                 <div className="waitingroom">
 
                     <header className="App-header">
-                        <container>
-                            <div className="players">
-                                <h1>Waiting for more players to join...</h1>
-                                {this.playerElements.length === 0 &&
-                                <h5>* as players join, their names will show up here * </h5>}
-                                {this.playerElements}
-                            </div>
-                        </container>
-
+                        <div className="players">
+                            <h1>Waiting for more players to join...</h1>
+                            {this.playerElements.length === 0 &&
+                            <h5>* as players join, their names will show up here * </h5>}
+                            {this.playerElements}
+                        </div>
                     </header>
                 </div>
             );
