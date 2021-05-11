@@ -8,7 +8,7 @@ export const Home = () => {
         alert("Warning: You are using an unsupported browser. This game is only tested with Chrome, Firefox, and Safari. You may encounter bugs because of this");
     }
     return (
-        <div className="Home">
+        <div className="Center">
             <header className="App-header">
                 <img src={logo} className="App-logo" alt="logo" />
                 <div className= "mb-2">

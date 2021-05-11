@@ -94,7 +94,7 @@ class CreateGame extends NetworkedPage {
         }
         else {
             return (
-                <div className="creategame">
+                <div className="creategame Center">
                     <header className="App-header">
                         <div className= "mb-2 GameSettings">
                             <h1>CREATE GAME</h1>

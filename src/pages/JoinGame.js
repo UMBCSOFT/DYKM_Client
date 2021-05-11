@@ -61,7 +61,7 @@ class JoinGame extends NetworkedPage {
             )
         } else {
             return (
-                <div className="joingame">
+                <div className="joingame Center">
                     <header className="App-header">
                         <div className="mb-2 GameSettings">
                             <h1>JOIN A GAME</h1>

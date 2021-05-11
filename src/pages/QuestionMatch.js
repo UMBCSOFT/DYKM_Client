@@ -95,6 +95,15 @@ class QuestionMatch extends NetworkedPage {
         })
     }
 
+    //Durstenfeld Shuffle
+    //https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
+    ShuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+    }
+
     RespondToSocketMessages(e) {
         if(this.socket === undefined) return;
         super.RespondToSocketMessages(e);
@@ -165,6 +174,7 @@ class QuestionMatch extends NetworkedPage {
         return matchesList.join(';')
     }
 
+
     HandleSubmit() {
         this.doneAnswering = true;
         const playerMatches = this.ConvertMatchesToStr();
@@ -205,6 +215,7 @@ class QuestionMatch extends NetworkedPage {
                     this.options.push(
                         <MatchRow pair={pair} matchPairList={this.state.matchPairList} callback={this.HandleDropdownSelect}/>);
                 }
+                this.ShuffleArray(this.options);
             }
             return (
                 <div className="questionmatch">

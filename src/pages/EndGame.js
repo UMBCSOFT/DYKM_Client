@@ -5,7 +5,6 @@ import NetworkedPage from "../utility/NetworkedPage";
 import GameSummaryContent from "../utility/GameSummaryContent";
 import {Button} from 'react-bootstrap';
 import {Redirect} from "react-router-dom";
-import ButtonOrWait from "../Component/ButtonOrWait";
 
 // Ty Nuha!
 class EndGame extends NetworkedPage {
