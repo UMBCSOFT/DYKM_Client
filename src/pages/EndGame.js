@@ -2,7 +2,9 @@ import '../css/App.css';
 import 'bootstrap/dist/css/bootstrap.min.css'
 import React from 'react';
 import NetworkedPage from "../utility/NetworkedPage";
-import {Button} from 'react-bootstrap'
+import {Button} from 'react-bootstrap';
+
+// Ty Nuha!
 class EndGame extends NetworkedPage {
     constructor() {
         super();
