@@ -27,7 +27,7 @@ class GameSummaryContent extends React.Component {
     render() {
         return (
             <div>
-                <ScoreContent playerList={this.playerList}/>
+                <ScoreContent displayRoundScore={false} playerList={this.playerList}/>
                 <br/>
                 <h1>Winner: {this.GetWinner().name}</h1>
                 <h2>with {this.GetWinner().score} point(s)!</h2>

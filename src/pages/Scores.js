@@ -129,7 +129,7 @@ class Scores extends NetworkedPage {
             this.GetPlayerList();
             let scoreContent = null;
             if (this.state.playerScoresObjList.length > 0) {
-                scoreContent = <ScoreContent playerList={this.state.playerScoresObjList}/>;
+                scoreContent = <ScoreContent displayRoundScore={true} playerList={this.state.playerScoresObjList}/>;
             }
             return (
                 <div className="scores">

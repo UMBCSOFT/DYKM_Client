@@ -11,6 +11,7 @@ import ButtonOrWait from "../Component/ButtonOrWait";
 class MatchDropdown extends React.Component {
     constructor(props) {
         super(props);
+        this.currectPlayer = props.currentPlayer;
         this.correctPlayer = props.pair[0];
         this.correctPlayerAnswer = props.pair[1];
         this.matchPairList = props.matchPairList;
@@ -30,6 +31,7 @@ class MatchDropdown extends React.Component {
     GetDropdown() {
         let playerList = [];
         for (let chosenPlayerPair of this.matchPairList) {
+            if (chosenPlayerPair[0] === this.currectPlayer) continue;
             playerList.push(
                 <Dropdown.Item key={chosenPlayerPair} onClick={() => this.LocalHandleDropdownSelect(chosenPlayerPair)}>
                     {chosenPlayerPair[0]}
@@ -51,6 +53,7 @@ class MatchDropdown extends React.Component {
 class MatchRow extends React.Component {
     constructor(props) {
         super(props);
+        this.currentPlayer = props.currentPlayer;
         this.pair = props.pair;
         this.matchPairList = props.matchPairList;
         this.callback = props.callback;
@@ -61,7 +64,13 @@ class MatchRow extends React.Component {
             // Row of an answer + a dropdown of all players
             <Row>
                 <Col>{this.pair[1]}</Col>
-                <Col><MatchDropdown key={this.pair} pair={this.pair} matchPairList={this.matchPairList} callback={this.callback}/></Col>
+                <Col><MatchDropdown
+                    key={this.pair}
+                    currentPlayer={this.currentPlayer}
+                    pair={this.pair}
+                    matchPairList={this.matchPairList}
+                    callback={this.callback}/>
+                </Col>
             </Row>
         );
     }
@@ -156,7 +165,9 @@ class QuestionMatch extends NetworkedPage {
         let pairStrList = this.props.location.state.matchPairStr.split(';');
         let pairList = [];
         for (let pStr of pairStrList) {
-            pairList.push(pStr.split(','));
+            let matchStr = pStr.split(',');
+            if (matchStr[0] === this.props.location.state.name) continue;
+            pairList.push(matchStr);
         }
         return pairList;
     }
@@ -210,9 +221,15 @@ class QuestionMatch extends NetworkedPage {
                 // create a list with a row with a dropdown for each player's answer (except your own)
                 this.options = [];
                 for(let pair of this.state.matchPairList) {
-                    if (pair[0] === this.props.location.state.name) break;
+                    if (pair[0] === this.props.location.state.name) continue;
                     this.options.push(
-                        <MatchRow key={pair} pair={pair} matchPairList={this.state.matchPairList} callback={this.HandleDropdownSelect}/>
+                        <MatchRow
+                            key={pair}
+                            currentPlayer={this.props.location.state.name}
+                            pair={pair}
+                            matchPairList={this.state.matchPairList}
+                            callback={this.HandleDropdownSelect}
+                        />
                     );
                 }
                 this.ShuffleArray(this.options);
