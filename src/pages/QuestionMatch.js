@@ -24,9 +24,6 @@ class MatchDropdown extends React.Component {
 
     LocalHandleDropdownSelect(chosenPlayerPair) {
         this.props.callback(this.correctPlayer, this.correctPlayerAnswer, chosenPlayerPair[0], chosenPlayerPair[1]);
-        //TODO ^
-        console.log("Yeet")
-        console.log(this.btnRef.getElementsByTagName("button")[0]);
         this.btnRef.getElementsByTagName("button")[0].innerHTML = chosenPlayerPair[0];
     }
 
@@ -34,7 +31,7 @@ class MatchDropdown extends React.Component {
         let playerList = [];
         for (let chosenPlayerPair of this.matchPairList) {
             playerList.push(
-                <Dropdown.Item onClick={() => this.LocalHandleDropdownSelect(chosenPlayerPair)}>
+                <Dropdown.Item key={chosenPlayerPair} onClick={() => this.LocalHandleDropdownSelect(chosenPlayerPair)}>
                     {chosenPlayerPair[0]}
                 </Dropdown.Item>
             );
@@ -64,7 +61,7 @@ class MatchRow extends React.Component {
             // Row of an answer + a dropdown of all players
             <Row>
                 <Col>{this.pair[1]}</Col>
-                <Col><MatchDropdown pair={this.pair} matchPairList={this.matchPairList} callback={this.callback}/></Col>
+                <Col><MatchDropdown key={this.pair} pair={this.pair} matchPairList={this.matchPairList} callback={this.callback}/></Col>
             </Row>
         );
     }
@@ -82,7 +79,7 @@ class QuestionMatch extends NetworkedPage {
         }
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this.ConnectToWebsocket(
             this.props.location.state.url,
             this.props.location.state.id,
@@ -210,10 +207,13 @@ class QuestionMatch extends NetworkedPage {
             if(this.options === undefined) {
                 console.log("Player Answers: " + this.state.matchPairList);
 
+                // create a list with a row with a dropdown for each player's answer (except your own)
                 this.options = [];
                 for(let pair of this.state.matchPairList) {
+                    if (pair[0] === this.props.location.state.name) break;
                     this.options.push(
-                        <MatchRow pair={pair} matchPairList={this.state.matchPairList} callback={this.HandleDropdownSelect}/>);
+                        <MatchRow key={pair} pair={pair} matchPairList={this.state.matchPairList} callback={this.HandleDropdownSelect}/>
+                    );
                 }
                 this.ShuffleArray(this.options);
             }
@@ -232,7 +232,7 @@ class QuestionMatch extends NetworkedPage {
                             <br />
                             <h4>Match each answer to a player!</h4>
 
-                            <Card text = "dark" style={{ width: '30rem' }}>
+                            <Card text = "dark" style={{ width: '100%' }}>
                                 {this.options}
                             </Card>
 

@@ -29,7 +29,7 @@ export const Home = () => {
                     <Button href="/joingame" variant="primary" size="lg" block> Join Game </Button>{' '}
                 </div>
 
-                <p>
+                <div>
                     <h6>Team SOFT</h6>
                     <a
                         className="App-link"
@@ -39,7 +39,7 @@ export const Home = () => {
                     >
                         <h6>Repo for this project</h6>
                     </a>
-                </p>
+                </div>
             </header>
         </div>
     )

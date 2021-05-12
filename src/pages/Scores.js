@@ -19,7 +19,7 @@ class Scores extends NetworkedPage {
         }
     }
 
-    componentWillMount() {
+    UNSAFE_componentWillMount() {
         this.ConnectToWebsocket(
             this.props.location.state.url,
             this.props.location.state.id,
@@ -89,7 +89,11 @@ class Scores extends NetworkedPage {
     }
 
     render() {
-        this.IsLastRound();
+        if (this.socket) {
+            this.IsLastRound();
+        } else {
+            setTimeout(this.IsLastRound, 2000);
+        }
         if (this.state.redirect) {
             this.CloseNetworkedPage();
             if (this.isLastRound) {

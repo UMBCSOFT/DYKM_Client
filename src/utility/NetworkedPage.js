@@ -70,22 +70,15 @@ class NetworkedPage extends React.Component {
         }
         httpRequest.open("GET", url);
         httpRequest.send();
-        console.log("Sent GET to url: ".concat(url));
         this.setState( { roomCode: roomCode });
     };
 
     CreateRoomHTTPCallback(Http, callback) {
-        console.log("Sending post");
         if (Http.readyState === 4 && Http.status === 200) {
             let json = JSON.parse(Http.responseText);
             this.setState( {roomCode: json["id"]}, () => {
                 callback(json["id"]);
             });
-            // if (typeof(window) !== 'undefined') {
-            //     document.getElementById("JoinRoomField").value = json["id"];
-            // }
-            console.log(Http.responseText);
-            console.log("Join room ID: ".concat(json["id"]));
             if(json["id"] === undefined) {
                 alert("Unable to generate room code for this game room.");
             }
@@ -100,20 +93,14 @@ class NetworkedPage extends React.Component {
 
     RespondToSocketMessages(e, callback) {
         if(e === undefined || this.socket === undefined) return;
-        console.log(`[message] Data received from server: ${e.data}`);
         // Respond to heartbeats
         if(e.data === "PING") {
             this.socket.send("PONG");
-            console.log("Received PING. Replying with PONG");
-        }
-        if(e.data === "PONG ACK") {
-            console.log("Received PONG acknowledgement");
         }
     };
 
     OnOpenWebsocket(roomCode_) {
-        console.log("[open] Connection established");
-        console.log(`Attempting to join room ${roomCode_}`);
+        console.log(`[websocket open] Connection established\nAttempting to join room ${roomCode_}`);
         this.socket.send("JOIN " + roomCode_);
     }
 

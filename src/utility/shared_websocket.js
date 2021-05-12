@@ -12,7 +12,6 @@
 window.Post = function(message) {
     if(window.frame === undefined) {
         window.frame = document.getElementById('Frame').contentWindow;
-        console.log(window.frame);
     }
     window.frame.postMessage(message);
 }
@@ -30,7 +29,6 @@ function stringifyEvent(e) {
 }
 
 function messageHandler(event) {
-    console.log(event);
     if(event.source === window) {
         return;
     }

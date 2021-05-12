@@ -22,7 +22,7 @@ class EndGame extends NetworkedPage {
         }
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this.ConnectToWebsocket(
             this.props.location.state.url,
             this.props.location.state.id,

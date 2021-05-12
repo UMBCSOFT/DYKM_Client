@@ -1,7 +1,10 @@
 .game-form {
-   width:  40vw;
+    width:  40vw;
 }
 
 .GameSettings {
-   width: 90vw;
+    width: 60vw;
+    padding: 0!important;
+    margin-left: 10vw!important;
+    margin-right: 10vw!important;
 }

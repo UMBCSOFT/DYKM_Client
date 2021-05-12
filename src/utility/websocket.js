@@ -14,7 +14,7 @@ class DYKM_Websocket {
     }
 
     send(message) {
-        console.log("Sending message from child to parent " + message);
+        console.log("Sending message to server " + message);
         this._Post("WEBSOCKET_SEND " + message);
     }
 
@@ -78,15 +78,11 @@ class DYKM_Websocket {
         if(content.startsWith("WEBSOCKET_ONMESSAGE ")) {
             let json = content.substring("WEBSOCKET_ONMESSAGE ".length);
             let event = JSON.parse(json);
-            console.log(json);
-            console.log(event);
-            console.log(socket._onmessage);
             if(socket._onmessage) {
                 socket._onmessage(event);
             }
         }
         else if(content.startsWith("WEBSOCKET_ONOPEN ")) {
-            console.log("Received WEBSOCKET_ONOPEN " + socket._onopen)
             let json = content.substring("WEBSOCKET_ONOPEN ".length);
             let event = JSON.parse(json);
             if(socket._onopen) {

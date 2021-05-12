@@ -16,6 +16,7 @@ class Question extends NetworkedPage {
         this.HandleAnswerChange = this.HandleAnswerChange.bind(this);
         this.answer = null;
         this.doneAnswering = false;
+        this.animationFrameID = undefined;
     }
 
     componentDidMount() {
@@ -30,6 +31,11 @@ class Question extends NetworkedPage {
             timerPercent: this.GetTimerPercent()
         })
     }
+
+    componentWillUnmount() {
+        cancelAnimationFrame(this.animationFrameID)
+    }
+
 
     RespondToSocketMessages(e) {
         if(this.socket === undefined) return;
@@ -56,7 +62,7 @@ class Question extends NetworkedPage {
                 timerStart: startAndEnd[0],
                 timerEnd: startAndEnd[1]
             });
-            requestAnimationFrame(()=>this.TimerHandler());
+            this.animationFrameID = requestAnimationFrame(()=>this.TimerHandler());
         }
     }
 
@@ -65,8 +71,9 @@ class Question extends NetworkedPage {
             timerSeconds: this.GetTimerSeconds(),
             timerPercent: this.GetTimerPercent()
         })
-        if(this.state.timerEnd - new Date().getTime() > 0)
-            requestAnimationFrame(()=>this.TimerHandler()); // We're using requestAnimationFrame so this runs at the apps framerate
+        if(this.state.timerEnd - new Date().getTime() > 0) {
+            this.animationFrameID = requestAnimationFrame(()=>this.TimerHandler()); // We're using requestAnimationFrame so this runs at the apps framerate
+        }
     }
 
     SubmitQuestion() {
@@ -131,9 +138,7 @@ class Question extends NetworkedPage {
 
                             <Form.Group>
                                 <br/>
-                                <Form.Control as="text">
-                                    <input type="text" placeholder="Type your answer here!" onChange={this.HandleAnswerChange}/>
-                                </Form.Control>
+                                <Form.Control type="text" placeholder="Type your answer here!" onChange={this.HandleAnswerChange}/>
                                 <br/>
                                 <ButtonOrWait label={"Submit Answer"} switchToWait={this.doneAnswering} callback={()=>this.SubmitQuestion()}/>
                             </Form.Group>

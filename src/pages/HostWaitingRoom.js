@@ -52,7 +52,7 @@ class HostWaitingRoom extends NetworkedPage {
         const playerUpdateMessage = "PLAYERUPDATE ";
         if (e.data.startsWith(playerUpdateMessage)) {
             let playerNames = e.data.substr(playerUpdateMessage.length).split(";"); // TODO: people can put ; in their name and break this
-            this.playerElements = playerNames.map(x=><h5>{x}</h5>);
+            this.playerElements = playerNames.map(x=><h5 key={x}>{x}</h5>);
             this.forceUpdate();
         }
     }
