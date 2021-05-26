@@ -1,7 +1,7 @@
 import '../css/style.css'
 import '../css/App.css';
 import 'bootstrap/dist/css/bootstrap.min.css'
-import {Row, Col, Button, Form, Tab, Container} from 'react-bootstrap'
+import {Row, Col, Button, Form, Tab} from 'react-bootstrap'
 import ListGroup from 'react-bootstrap/ListGroup'
 import React from 'react';
 import { Redirect } from "react-router-dom";
@@ -21,7 +21,7 @@ class CreateGame extends NetworkedPage {
     CreateRoom() {
         console.log("CreateRoom()");
         const Http = new XMLHttpRequest();
-        const url = "http://localhost:".concat(this.PORT, "/room/create");
+        const url = this.SERVER_URL.concat(':', this.PORT, "/room/create");
         console.log("URL: ".concat(url));
         Http.addEventListener('load', () => this.CreateRoomHTTPCallback(Http));
         Http.onerror = function () {
