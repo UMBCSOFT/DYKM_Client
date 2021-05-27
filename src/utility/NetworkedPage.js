@@ -15,7 +15,8 @@ class NetworkedPage extends React.Component {
             redirect: false
         };
 
-        this.PORT = 1337;
+        this.PORT = 3401;
+        this.SERVER_URL = "http://69.140.139.33";
         this.REQ_STATES = {
             UNSET: 0,
             OPENED: 1,
@@ -56,7 +57,7 @@ class NetworkedPage extends React.Component {
         }
 
         const httpRequest = new XMLHttpRequest();
-        const url = "http://localhost:".concat(this.PORT, "/room/get/", roomCode);
+        const url = this.SERVER_URL.concat(':', this.PORT, "/room/get/", roomCode);
         const username = this.state.name;
 
         console.log("Joining room with url: ".concat('\n', url));
@@ -87,7 +88,7 @@ class NetworkedPage extends React.Component {
             }
         }
         else {
-            console.log("state: " + this.readyState.toString());
+            console.log("state: " + Http.readyState.toString());
         }
     };
 
