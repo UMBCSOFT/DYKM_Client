@@ -1,0 +1,36 @@
+{
+  "files": {
+    "main.css": "/DYNM/static/css/main.86ef1826.chunk.css",
+    "main.js": "/DYNM/static/js/main.d97be393.chunk.js",
+    "main.js.map": "/DYNM/static/js/main.d97be393.chunk.js.map",
+    "runtime-main.js": "/DYNM/static/js/runtime-main.5f90030f.js",
+    "runtime-main.js.map": "/DYNM/static/js/runtime-main.5f90030f.js.map",
+    "static/css/2.4c97ca4f.chunk.css": "/DYNM/static/css/2.4c97ca4f.chunk.css",
+    "static/js/2.40d40abd.chunk.js": "/DYNM/static/js/2.40d40abd.chunk.js",
+    "static/js/2.40d40abd.chunk.js.map": "/DYNM/static/js/2.40d40abd.chunk.js.map",
+    "static/js/3.b941ba5b.chunk.js": "/DYNM/static/js/3.b941ba5b.chunk.js",
+    "static/js/3.b941ba5b.chunk.js.map": "/DYNM/static/js/3.b941ba5b.chunk.js.map",
+    "index.html": "/DYNM/index.html",
+    "static/css/2.4c97ca4f.chunk.css.map": "/DYNM/static/css/2.4c97ca4f.chunk.css.map",
+    "static/css/main.86ef1826.chunk.css.map": "/DYNM/static/css/main.86ef1826.chunk.css.map",
+    "static/js/2.40d40abd.chunk.js.LICENSE.txt": "/DYNM/static/js/2.40d40abd.chunk.js.LICENSE.txt",
+    "static/media/creategame.9c6f4caa.png": "/DYNM/static/media/creategame.9c6f4caa.png",
+    "static/media/dykm.54ceb8c1.png": "/DYNM/static/media/dykm.54ceb8c1.png",
+    "static/media/finalscores.570fe1cd.png": "/DYNM/static/media/finalscores.570fe1cd.png",
+    "static/media/gamematch.5c6bdef9.png": "/DYNM/static/media/gamematch.5c6bdef9.png",
+    "static/media/joingame.604d9a3b.png": "/DYNM/static/media/joingame.604d9a3b.png",
+    "static/media/logo.6ce24c58.svg": "/DYNM/static/media/logo.6ce24c58.svg",
+    "static/media/mainmenu.5a6a16fe.png": "/DYNM/static/media/mainmenu.5a6a16fe.png",
+    "static/media/question.b4ce4b67.png": "/DYNM/static/media/question.b4ce4b67.png",
+    "static/media/roundend.82143212.png": "/DYNM/static/media/roundend.82143212.png",
+    "static/media/waitingroom.343b6348.png": "/DYNM/static/media/waitingroom.343b6348.png",
+    "static/media/waitingroom2.bbe6bc84.png": "/DYNM/static/media/waitingroom2.bbe6bc84.png"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.5f90030f.js",
+    "static/css/2.4c97ca4f.chunk.css",
+    "static/js/2.40d40abd.chunk.js",
+    "static/css/main.86ef1826.chunk.css",
+    "static/js/main.d97be393.chunk.js"
+  ]
+}
