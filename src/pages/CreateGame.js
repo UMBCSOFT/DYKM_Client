@@ -4,7 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import {Row, Col, Button, Form, Tab} from 'react-bootstrap'
 import ListGroup from 'react-bootstrap/ListGroup'
 import React from 'react';
-import { Redirect } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import NetworkedPage from '../utility/NetworkedPage'
 
 class CreateGame extends NetworkedPage {
@@ -82,8 +82,8 @@ class CreateGame extends NetworkedPage {
             this.CloseNetworkedPage();
             console.log("Roomcode in creategame: \n" + this.state.roomCode);
             return (
-                <Redirect to={{
-                    pathname: "/hostwaitingroom",
+                <Navigate to={{
+                    pathname: "/home/hostwaitingroom",
                     state: {
                         id: this.state.id,
                         roomCode: this.state.roomCode,
@@ -95,7 +95,7 @@ class CreateGame extends NetworkedPage {
         }
         else {
             return (
-                <div className="creategame App-header">
+                <div className="creategame App Window-page">
                     <div className="mb-2 GameSettings">
                         <h1 className="Center">CREATE GAME</h1>
                         <div id="createGameSettings">

@@ -2,7 +2,7 @@ import '../css/App.css';
 import 'bootstrap/dist/css/bootstrap.min.css'
 import React from 'react';
 import NetworkedPage from "../utility/NetworkedPage";
-import {Redirect} from "react-router-dom";
+import {Navigate} from "react-router-dom";
 import ButtonOrWait from "../Component/ButtonOrWait";
 import ScoreContent from "../utility/ScoreContent";
 
@@ -99,7 +99,7 @@ class Scores extends NetworkedPage {
             if (this.isLastRound) {
                 console.log("Transition to end screen");
                 return (
-                    <Redirect to={{
+                    <Navigate to={{
                         pathname: "/endgame",
                         state: {
                             id: this.props.location.state.id,
@@ -113,7 +113,7 @@ class Scores extends NetworkedPage {
             } else {
                 console.log("Transition to next round");
                 return (
-                    <Redirect to={{
+                    <Navigate to={{
                         pathname: "/question",
                         state: {
                             id: this.props.location.state.id,

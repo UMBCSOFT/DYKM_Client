@@ -8,13 +8,13 @@ const Header = (activeKey = "/") => {
                 <Nav.Link href="/">Home</Nav.Link>
             </Nav.Item>
             <Nav.Item>
-                <Nav.Link href="/howtoplay">How To Play</Nav.Link>
+                <Nav.Link href="/page/howtoplay">How To Play</Nav.Link>
             </Nav.Item>
             <Nav.Item>
-                <Nav.Link href="/about">About</Nav.Link>
+                <Nav.Link href="/page/about">About</Nav.Link>
             </Nav.Item>
             <Nav.Item>
-                <Nav.Link href="/productpage">Product Page</Nav.Link>
+                <Nav.Link href="/page/productpage">Product Page</Nav.Link>
             </Nav.Item>
             {/*<Nav.Item>*/}
             {/*    <Nav.Link eventKey="disabled" disabled>*/}

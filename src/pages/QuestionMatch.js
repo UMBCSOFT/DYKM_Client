@@ -3,7 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import {Col, Dropdown, DropdownButton, Row} from 'react-bootstrap';
 import Card from 'react-bootstrap/Card';
 import React from 'react';
-import {Redirect} from "react-router-dom";
+import {Navigate} from "react-router-dom";
 import NetworkedPage from "../utility/NetworkedPage";
 import ProgressBar from "react-bootstrap/ProgressBar";
 import ButtonOrWait from "../Component/ButtonOrWait";
@@ -203,7 +203,7 @@ class QuestionMatch extends NetworkedPage {
             this.CloseNetworkedPage();
             console.log("Transition to Scores");
             return (
-                <Redirect to={{
+                <Navigate to={{
                     pathname: "/scores",
                     state: {
                         id: this.props.location.state.id,

@@ -5,7 +5,7 @@ import Card from 'react-bootstrap/Card'
 import ProgressBar from 'react-bootstrap/ProgressBar'
 import React from 'react';
 import NetworkedPage from "../utility/NetworkedPage";
-import {Redirect} from "react-router-dom";
+import { Navigate } from 'react-router-dom';
 import ButtonOrWait from "../Component/ButtonOrWait";
 
 class Question extends NetworkedPage {
@@ -109,7 +109,7 @@ class Question extends NetworkedPage {
             console.log("Transition to Match");
             console.log("Pairs before transition: ", this.state.pairs);
             return (
-                <Redirect to={{
+                <Navigate to={{
                     pathname: "/questionmatch",
                     state: {
                         id: this.props.location.state.id,

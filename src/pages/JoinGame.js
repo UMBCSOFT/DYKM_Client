@@ -3,7 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import {Button, Form} from 'react-bootstrap'
 import React from 'react';
 import NetworkedPage from '../utility/NetworkedPage'
-import {Redirect} from "react-router-dom";
+import {Navigate} from "react-router-dom";
 
 class JoinGame extends NetworkedPage {
 
@@ -49,8 +49,8 @@ class JoinGame extends NetworkedPage {
             this.CloseNetworkedPage();
             console.log("Roomcode in joingame: \n" + this.state.roomCode);
             return (
-                <Redirect to={{
-                    pathname: "/waitingroom",
+                <Navigate to={{
+                    pathname: "/home/waitingroom",
                     state: {
                         id: this.state.id,
                         roomCode: this.state.roomCode,
@@ -61,27 +61,25 @@ class JoinGame extends NetworkedPage {
             )
         } else {
             return (
-                <div className="joingame Center">
-                    <header className="App-header">
-                        <div className="mb-2 GameSettings">
-                            <h1>JOIN A GAME</h1>
-                            <Form>
-                                <Form.Group controlId="nickname">
-                                    <Form.Label>Nickname</Form.Label>
-                                    <input type="name" placeholder="Enter a nickname!" value={this.state.name} onChange={this.handleNameChange}/>
-                                </Form.Group>
+                <div className="joingame Center App Window-page">
+                    <div className="mb-2 GameSettings">
+                        <h1>JOIN A GAME</h1>
+                        <Form>
+                            <Form.Group controlId="nickname">
+                                <Form.Label>Nickname</Form.Label>
+                                <input type="name" placeholder="Enter a nickname!" value={this.state.name} onChange={this.handleNameChange}/>
+                            </Form.Group>
 
-                                <Form.Group controlId="roomcode">
-                                    <Form.Label>Secret Code</Form.Label>
-                                    <input type="text" placeholder="Enter a nickname!" value={this.state.roomCode} onChange={this.handleCodeChange}/>
-                                </Form.Group>
+                            <Form.Group controlId="roomcode">
+                                <Form.Label>Secret Code</Form.Label>
+                                <input type="text" placeholder="Enter a nickname!" value={this.state.roomCode} onChange={this.handleCodeChange}/>
+                            </Form.Group>
 
-                                <Button variant="primary" type="button" onClick={() => this.JoinRoom(this.state.roomCode)}>
-                                    Join Game
-                                </Button>
-                            </Form>
-                        </div>
-                    </header>
+                            <Button variant="primary" type="button" onClick={() => this.JoinRoom(this.state.roomCode)}>
+                                Join Game
+                            </Button>
+                        </Form>
+                    </div>
                 </div>
             );
         }

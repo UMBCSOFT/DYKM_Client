@@ -3,7 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import {Button, Form} from 'react-bootstrap'
 import React from 'react';
 import NetworkedPage from "../utility/NetworkedPage";
-import {Redirect} from "react-router-dom";
+import {Navigate} from "react-router-dom";
 
 class HostWaitingRoom extends NetworkedPage {
 
@@ -61,7 +61,7 @@ class HostWaitingRoom extends NetworkedPage {
         if (this.state.redirect) {
             this.CloseNetworkedPage();
             return (
-                <Redirect to={{
+                <Navigate to={{
                     pathname: "/Question",
                     state: {
                         id: this.props.location.state.id,

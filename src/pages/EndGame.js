@@ -4,7 +4,7 @@ import React from 'react';
 import NetworkedPage from "../utility/NetworkedPage";
 import GameSummaryContent from "../utility/GameSummaryContent";
 import {Button} from 'react-bootstrap';
-import {Redirect} from "react-router-dom";
+import {Navigate} from "react-router-dom";
 
 // Ty Nuha!
 class EndGame extends NetworkedPage {
@@ -64,7 +64,7 @@ class EndGame extends NetworkedPage {
             if (this.state.playAgain) {
                 console.log("Transition to next round");
                 return (
-                    <Redirect to={{
+                    <Navigate to={{
                         pathname: "/question",
                         state: {
                             id: this.props.location.state.id,
@@ -78,7 +78,7 @@ class EndGame extends NetworkedPage {
             } else {
                 console.log("End game and return to main menu");
                 return (
-                    <Redirect to={{
+                    <Navigate to={{
                         pathname: "/",
                         state: {}
                     }}/>

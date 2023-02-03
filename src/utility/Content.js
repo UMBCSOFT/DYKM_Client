@@ -1,33 +1,36 @@
-import {Route, Switch} from "react-router-dom";
+import {Route, Routes} from "react-router-dom";
 import About from "../pages/About";
 import HowToPlay from "../pages/HowToPlay";
-import CreateGame from "../pages/CreateGame";
-import JoinGame from "../pages/JoinGame";
 import React from "react";
-import HostWaitingRoom from "../pages/HostWaitingRoom";
 import Question from "../pages/Question";
-import WaitingRoom from "../pages/WaitingRoom";
-import {Home} from "../pages/Home";
+import Home from "../pages/Home";
 import Scores from "../pages/Scores";
 import QuestionMatch from "../pages/QuestionMatch";
 import EndGame from "../pages/EndGame";
 import ProductPage from "../pages/ProductPage";
+import CreateGame from "../pages/CreateGame";
+import JoinGame from "../pages/JoinGame";
+import HostWaitingRoom from "../pages/HostWaitingRoom";
+import WaitingRoom from "../pages/WaitingRoom";
 
 export const Content = () => {
     return (
-        <Switch>
-            <Route exact path="/"><Home/></Route>
-            <Route path="/about"><About/></Route>
-            <Route path="/howToPlay"><HowToPlay/></Route>
-            <Route path="/waitingroom" component={WaitingRoom}/>
-            <Route path="/creategame" component={CreateGame} />
-            <Route path="/joingame" component={JoinGame} />
-            <Route path="/hostwaitingroom" component={HostWaitingRoom} />
-            <Route path="/question" component={Question} />
-            <Route path="/questionmatch" component={QuestionMatch} />
-            <Route path="/scores" component={Scores} />
-            <Route path="/endgame" component={EndGame} />
-            <Route path="/productpage" component={ProductPage} />
-        </Switch>
+        <Routes>
+            <Route path="home?" element={<Home/>}>
+                <Route path="waitingroom" element={<WaitingRoom/>}/>
+                <Route path="creategame" element={<CreateGame/>} />
+                <Route path="joingame" element={<JoinGame/>} />
+                <Route path="hostwaitingroom" element={<HostWaitingRoom/>} />
+            </Route>
+            <Route path="page?">
+                <Route path="about" element={<About/>}/>
+                <Route path="howToPlay" element={<HowToPlay/>}/>
+                <Route path="question" element={<Question/>} />
+                <Route path="questionmatch" element={<QuestionMatch/>} />
+                <Route path="scores" element={<Scores/>} />
+                <Route path="endgame" element={<EndGame/>} />
+                <Route path="productpage" element={<ProductPage/>} />
+            </Route>
+        </Routes>
     );
 };

@@ -2,9 +2,8 @@ import './css/App.css';
 import 'bootstrap/dist/css/bootstrap.min.css'
 import React from "react";
 import Header from "./Header";
-import {Content} from "./utility/Content";
+import {Content} from "./utility/Content.js";
 import {BrowserRouter} from "react-router-dom";
-import Frame from 'react-frame-component';
 const initialContent = `<!DOCTYPE html><html><head>${[].slice.call(document.head.getElementsByTagName("style")).map(x => x.outerHTML).join('')}</head><body><div></div></body></html>`;
 function App() {
     return (
