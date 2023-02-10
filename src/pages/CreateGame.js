@@ -1,7 +1,7 @@
 import '../css/style.css'
 import '../css/App.css';
 import 'bootstrap/dist/css/bootstrap.min.css'
-import {Row, Col, Button, Form, Tab} from 'react-bootstrap'
+import {Form, Row, Col, Button, Tab} from 'react-bootstrap'
 import ListGroup from 'react-bootstrap/ListGroup'
 import React from 'react';
 import { Navigate } from "react-router-dom";
@@ -149,37 +149,29 @@ class CreateGame extends NetworkedPage {
                             <Form.Label column sm={3}>
                                 Rounds
                             </Form.Label>
-                            <Col className="text-left">
-                                <Form.Check
-                                    type="radio"
-                                    label="1 Round"
-                                    defaultChecked={true}
-                                    onChange={(e)=>this.radioOnChange(e)}
-                                    name="formHorizontalRadios"
-                                    id="formHorizontalRadios1"
-                                    numvalue={1}
-                                />
-                                <Form.Check
-                                    type="radio"
-                                    label="5 Rounds"
-                                    onChange={(e)=>this.radioOnChange(e)}
-                                    name="formHorizontalRadios"
-                                    id="formHorizontalRadios2"
-                                    numvalue={5}
-                                />
-                                <Form.Check
-                                    type="radio"
-                                    label="10 Rounds"
-                                    onChange={(e)=>this.radioOnChange(e)}
-                                    name="formHorizontalRadios"
-                                    id="formHorizontalRadios3"
-                                    numvalue={10}
-                                />
+                            <Col className="d-flex align-items-center">
+                                <Form.Control as="select" onChange={(e)=>this.radioOnChange(e)}>
+                                    <option
+                                        value="1"
+                                    >
+                                        1 Round
+                                    </option>
+                                    <option
+                                        value="5"
+                                    >
+                                        5 Rounds
+                                    </option>
+                                    <option
+                                        value="10"
+                                    >
+                                        10 Rounds
+                                    </option>
+                                </Form.Control>
                             </Col>
                         </Form.Group>
 
-                        <Form.Group controlId="roomcode">
-                            <Form.Label column sm={3}>Secret Code</Form.Label>
+                        <Form.Group as={Row} controlId="roomcode">
+                            <Form.Label column sm={4}>Secret Code</Form.Label>
                             <Col>
                                 <Form.Text><b>{this.state.roomCode}</b></Form.Text>
                             </Col>
