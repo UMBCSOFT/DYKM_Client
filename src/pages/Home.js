@@ -11,8 +11,8 @@ const Home = () => {
     }
     return (
         <div className="App">
-            <div className="Columns Center">
-                <div className="Main">
+            <div className="Columns Center mb-5">
+                <div className="Card m-auto" id="Main">
                     <img src={logo} className="App-logo" alt="logo" />
 
                     <div className="Home-buttons">
@@ -44,7 +44,7 @@ const Home = () => {
                 </div>
                 <div className="Window"><Outlet/></div>
             </div>
-            <div className="Footer">
+            <div className="Footer text-right w-100">
                 <a
                     className="App-link"
                     href="https://github.com/UMBCSOFT"

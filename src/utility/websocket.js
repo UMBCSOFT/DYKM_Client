@@ -1,15 +1,14 @@
-class DYKM_Websocket {
-    constructor(url) {
-        this.url = url;
-    }
+class DYKM_Websocket extends WebSocket {
     _Post(msg) {
         window.parent.postMessage(msg, "*");
     }
 
     connect() {
+        console.log("websocket.js: connect()")
         window.addEventListener("message", (e)=>{
             this._messageHandler(e, this);
         }, false);
+        console.log("WEBSOCKET_CONNECT " + this.url);
         this._Post("WEBSOCKET_CONNECT " + this.url);
     }
 
@@ -48,6 +47,7 @@ class DYKM_Websocket {
     }
 
     setOnOpen(context, func) {
+        console.log(`Setting _onopen to ${func}`)
         if(func === undefined) {
             this._onopen = undefined;
             return;
@@ -107,5 +107,4 @@ class DYKM_Websocket {
             console.log("Unhandled DYKM Websocket event `" + content + "`")
         }
     }
-}
-export {DYKM_Websocket}
+} export {DYKM_Websocket}

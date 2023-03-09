@@ -4,7 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import {Form, Row, Col, Button, Tab} from 'react-bootstrap'
 import ListGroup from 'react-bootstrap/ListGroup'
 import React from 'react';
-import { Navigate } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 import NetworkedPage from '../utility/NetworkedPage'
 
 class CreateGame extends NetworkedPage {
@@ -16,6 +16,8 @@ class CreateGame extends NetworkedPage {
         this.onPackSelect = this.onPackSelect.bind(this);
         this.numRounds = 1;
         this.gamePack = "doyouknowme";
+
+        this.RespondToSocketMessages = this.RespondToSocketMessages.bind(this);
     };
 
     CreateRoom() {
@@ -34,24 +36,19 @@ class CreateGame extends NetworkedPage {
     }
 
     CreateRoomHTTPCallback(Http) {
-        super.CreateRoomHTTPCallback(Http, (roomCode_) => {
-            this.setState({ roomCode: roomCode_ });
-            this.JoinRoom(roomCode_);
+        super.CreateRoomHTTPCallback(Http, (_roomCode) => {
+            this.JoinRoom(_roomCode);
         });
     }
 
-    JoinRoom(roomCode) {
-        super.JoinRoom(roomCode, (success, roomCode_) => {
-            this.setState({ roomCode: roomCode_ });
-        })
-    };
-
     RespondToSocketMessages(e) {
-        if(this.socket === undefined) return;
         super.RespondToSocketMessages(e);
+        if(this.socket === undefined) {
+            console.log("RespondToSocketMessages: Socket undefined.")
+        }
+        console.log(`Received websocket message: ${e.data}`);
 
         if (e.data.toString().startsWith("WELCOME ")) {
-            console.log(this.state.roomCode);
             this.socket.send("SETNUMROUNDS " + this.numRounds);
             this.socket.send("SETGAMEPACK " + this.gamePack);
             //this.socket.send("ID RECEIVED");
@@ -79,34 +76,35 @@ class CreateGame extends NetworkedPage {
 
     render() {
         if (this.state.redirect) {
-            this.CloseNetworkedPage();
+            console.log("Joined created room; redirecting.");
             console.log("Roomcode in creategame: \n" + this.state.roomCode);
-            return (
-                <Navigate to={{
-                    pathname: "/home/hostwaitingroom",
-                    state: {
+            console.log("URL: "+ this.state.url);
+            console.log("State:", this.state);
+            let state = {
                         id: this.state.id,
                         roomCode: this.state.roomCode,
                         name: this.state.name,
-                        url: this.url,
-                    }
-                }} />
-            )
+                        url: this.state.url
+                    };
+            this.CloseNetworkedPage();
+            return (
+                <Navigate to="/home/hostwaitingroom" state={state}/>
+            );
         }
         else {
             return (
                 <div className="App Window-page">
-                    <div className="GameSettings Center">
-                        <h1 className="Center">CREATE GAME</h1>
-                        <Form.Group as={Row} className="mb-4" id="nickname">
-                            <Form.Label column sm={3}>Nickname</Form.Label>
-                            <Col>
+                    <div className="Card GameSettings Center w-75">
+                        <h1>CREATE GAME</h1>
+                        <Form.Group as={Row} className="w-100 mb-4" id="nickname">
+                            <Form.Label column sm={4}>Nickname</Form.Label>
+                            <Col className="d-flex align-items-center">
                                 <Form.Control type="text" placeholder="Enter a nickname!" value={this.state.name} onChange={this.handleNameChange}/>
                             </Col>
                         </Form.Group>
 
-                        <Form.Group as={Row} id="questionpack" className="mb-4">
-                            <Form.Label column sm={3}>
+                        <Form.Group as={Row} id="questionpack" className="w-100 mb-4">
+                            <Form.Label column sm={4}>
                                 Question Pack
                             </Form.Label>
                             <Col>
@@ -145,8 +143,8 @@ class CreateGame extends NetworkedPage {
                             </Col>
                         </Form.Group>
 
-                        <Form.Group as={Row} className="mb-4">
-                            <Form.Label column sm={3}>
+                        <Form.Group as={Row} className="w-100 mb-4">
+                            <Form.Label column sm={4}>
                                 Rounds
                             </Form.Label>
                             <Col className="d-flex align-items-center">
@@ -170,7 +168,7 @@ class CreateGame extends NetworkedPage {
                             </Col>
                         </Form.Group>
 
-                        <Form.Group as={Row} controlId="roomcode">
+                        <Form.Group as={Row} controlId="roomcode" className="w-100 mb-4">
                             <Form.Label column sm={4}>Secret Code</Form.Label>
                             <Col>
                                 <Form.Text><b>{this.state.roomCode}</b></Form.Text>
@@ -178,9 +176,7 @@ class CreateGame extends NetworkedPage {
                         </Form.Group>
 
                         <Form.Group as={Row}>
-                            <Col sm={{ span: 10, offset: 2 }}>
-                                <Button variant="primary" type="submit" onClick={() => this.CreateRoom()}>Create the game!</Button>
-                            </Col>
+                            <Button size="lg" variant="primary" type="submit" onClick={() => this.CreateRoom()}>Create the game!</Button>
                         </Form.Group>
                     </div>
                 </div>

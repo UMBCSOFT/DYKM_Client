@@ -3,25 +3,25 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import {Button, Form} from 'react-bootstrap'
 import React from 'react';
 import NetworkedPage from "../utility/NetworkedPage";
-import {Navigate} from "react-router-dom";
+import {Navigate, useLocation} from "react-router-dom";
 
 class HostWaitingRoom extends NetworkedPage {
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.question = null
         this.playerElements = [];
+        this.location = undefined;
     }
 
     componentDidMount(){
+        this.location = useLocation();
         if(this.socket !== undefined) {
-            this.socket.close(); // Close old connection here, not in ConnectToWebsocket because that reconnects to the existing socket for other pages
+            //this.socket.close(); // Close old connection here, not in ConnectToWebsocket because that reconnects to the existing socket for other pages
         }
-        this.ConnectToWebsocket(
-            this.props.location.state.url,
-            this.props.location.state.id,
-            this.props.location.state.name
-        );
+        console.log("State is: ");
+        console.log(this.state);
+        this.ConnectToWebsocket();
     }
 
     wasAbleToTransition = false;
@@ -85,7 +85,7 @@ class HostWaitingRoom extends NetworkedPage {
                         </div>
 
                         <div className="code">
-                            <Form.Text><h1>Secret Code: <b>{this.props.location.state.roomCode}</b></h1></Form.Text>
+                            <Form.Text><h1>Secret Code: <b>{this.state.roomCode}</b></h1></Form.Text>
                         </div>
 
                         <div className="players">

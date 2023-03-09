@@ -1,5 +1,6 @@
 :root {
     --bg-color: #282c34;
+    --offwhite: rgba(230,230,230,1);
 }
 
 .Flex {
@@ -24,9 +25,14 @@
     }
 }
 
+#Header {
+    background-color: var(--offwhite)
+}
+
 .App {
     background-color: var(--bg-color);
     min-height: 100vh;
+    max-height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -53,17 +59,11 @@
     height: 100%;
 }
 
-.Main {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    margin: auto;
-    overflow: hidden;
-    height: fit-content;
-    padding-bottom: 3rem;
+#Main {
+    padding: 0 0 3rem 0;
     width: 25%;
-    background-color: rgba(230,230,230,1);
+    min-width: 20rem;
+    background-color: var(--offwhite);
     border-radius: 20%/12.5%;
 }
 
@@ -89,25 +89,26 @@
     margin-right: auto;
 }
 
-.RoundRadioButtonCol {
+.Card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     align-items: center;
-}
-
-.RoundRadioButtonSpacing {
+    overflow: hidden;
+    height: fit-content;
     width: fit-content;
-    margin: auto;
-    align-items: left;
-    text-align: left;
-}
-
-.RoundRadioButton {
+    background-color: var(--offwhite);
+    border-radius: 5vmin;
+    padding: 3rem;
+    color: black;
 }
 
 .Footer {
-    position: absolute;
+}
+
+.Footer a {
     right: 0;
     bottom: 0;
-    margin: 1rem;
 }
 
 @keyframes App-logo-scale {

@@ -1,9 +1,9 @@
 import React from 'react'
-import {Nav} from "react-bootstrap";
+import {Nav, Row} from "react-bootstrap";
 
 const Header = (activeKey = "/") => {
     return (
-        <Nav variant="pills" defaultActiveKey={activeKey}>
+        <Nav id="Header" className="w-100 m-0 position-absolute top-0 left-0" as={Row} variant="pills" defaultActiveKey={activeKey}>
             <Nav.Item>
                 <Nav.Link href="/">Home</Nav.Link>
             </Nav.Item>

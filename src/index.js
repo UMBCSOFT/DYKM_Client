@@ -9,6 +9,7 @@ import './utility/shared_websocket.js';
 
 if (typeof window !== 'undefined') {
     ReactDOM.render(
+
         <App/>,
         document.getElementById('root')
     );

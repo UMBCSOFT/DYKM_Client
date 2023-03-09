@@ -1,6 +1,7 @@
 import '../css/App.css';
+import '../css/Pages.css';
 import 'bootstrap/dist/css/bootstrap.min.css'
-import {Button, Form} from 'react-bootstrap'
+import {Row, Col, Button, Form} from 'react-bootstrap'
 import React from 'react';
 import NetworkedPage from '../utility/NetworkedPage'
 import {Navigate} from "react-router-dom";
@@ -61,25 +62,27 @@ class JoinGame extends NetworkedPage {
             )
         } else {
             return (
-                <div className="joingame Center App Window-page">
-                    <div className="mb-2 GameSettings">
+                <div className="App Window-page">
+                    <Form id="JoinGame" className="mb-2 mx-auto w-75 Center Card">
                         <h1>JOIN A GAME</h1>
-                        <Form>
-                            <Form.Group controlId="nickname">
-                                <Form.Label>Nickname</Form.Label>
-                                <input type="name" placeholder="Enter a nickname!" value={this.state.name} onChange={this.handleNameChange}/>
-                            </Form.Group>
+                        <Form.Group className="w-100" as={Row} controlId="nickname">
+                            <Form.Label column sm={4}>Nickname</Form.Label>
+                            <Col className="d-flex align-items-center">
+                                <Form.Control type="text" placeholder="Enter a nickname!" onChange={this.handleNameChange}/>
+                            </Col>
+                        </Form.Group>
 
-                            <Form.Group controlId="roomcode">
-                                <Form.Label>Secret Code</Form.Label>
-                                <input type="text" placeholder="Enter a nickname!" value={this.state.roomCode} onChange={this.handleCodeChange}/>
-                            </Form.Group>
+                        <Form.Group className="w-100" as={Row} controlId="roomcode">
+                            <Form.Label column sm={4}>Secret Code</Form.Label>
+                            <Col className="d-flex align-items-center">
+                                <Form.Control type="text" placeholder="Enter the roomcode!" onChange={this.handleCodeChange}/>
+                            </Col>
+                        </Form.Group>
 
-                            <Button variant="primary" type="button" onClick={() => this.JoinRoom(this.state.roomCode)}>
-                                Join Game
-                            </Button>
-                        </Form>
-                    </div>
+                        <Button size="lg" variant="primary" type="button" onClick={() => this.JoinRoom(this.state.roomCode)}>
+                            Join Game
+                        </Button>
+                    </Form>
                 </div>
             );
         }
