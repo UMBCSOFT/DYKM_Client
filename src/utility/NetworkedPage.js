@@ -143,10 +143,6 @@ class NetworkedPage extends React.Component {
         }
     }
 
-    HandleWebsocketError(error) {
-        alert("Unable to connect to server room");
-        console.log(`[error] ${error.message}`);
-    }
 
     ConnectToWebsocket(_url, _roomCode, _name) {
         let reconnect = false;

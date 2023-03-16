@@ -17,10 +17,10 @@ const Home = () => {
 
                     <div className="Home-buttons">
                         <div className="mb-2">
-                            <Button href="/home/joingame" variant="primary" size="lg" block> Join Game </Button>{' '}
+                            <Button href="/joingame" variant="primary" size="lg" block> Join Game </Button>
                         </div>
                         <div className="mb-2">
-                            <Button href="/home/creategame" variant="primary" size="lg" block> Host Game </Button>{' '}
+                            <Button href="/creategame" variant="primary" size="lg" block> Host Game </Button>
 
                         </div>
                     </div>

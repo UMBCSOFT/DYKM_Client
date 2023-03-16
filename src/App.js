@@ -1,7 +1,7 @@
 import './css/App.css';
 import 'bootstrap/dist/css/bootstrap.min.css'
 import Header from "./Header";
-import {Content} from "./utility/Content.js";
+import Content from "./utility/Content.js";
 function App() {
     return (
         <div>

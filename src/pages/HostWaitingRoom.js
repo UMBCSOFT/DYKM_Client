@@ -1,105 +1,49 @@
 import '../css/App.css';
 import 'bootstrap/dist/css/bootstrap.min.css'
 import {Button, Form} from 'react-bootstrap'
-import React from 'react';
-import NetworkedPage from "../utility/NetworkedPage";
-import {Navigate, useLocation} from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import {useDYKMNetworker} from '../pages/DYKM_Networking';
+import {Navigate} from "react-router-dom";
 
-class HostWaitingRoom extends NetworkedPage {
+function HostWaitingRoom(props) {
 
-    constructor(props) {
-        super(props);
-        this.question = null
-        this.playerElements = [];
-        this.location = undefined;
-    }
+    const [playerElements, setPlayerElements] = useState([]);
+    const {StartGame, playerNames, roomCode} = useDYKMNetworker();
 
-    componentDidMount(){
-        this.location = useLocation();
-        if(this.socket !== undefined) {
-            //this.socket.close(); // Close old connection here, not in ConnectToWebsocket because that reconnects to the existing socket for other pages
+    // create player name elements from their names
+    useEffect(() => {
+        let elems = [];
+        for (let name of playerNames) {
+            elems.push(<h5 key={name}>{name}</h5>);
         }
-        console.log("State is: ");
-        console.log(this.state);
-        this.ConnectToWebsocket();
-    }
+        setPlayerElements(elems);
+    }, [playerNames]);
 
-    wasAbleToTransition = false;
-    StartGame() {
-        console.log("Start game?");
-        this.socket.send("START GAME");
-        setTimeout(()=>{
-            if(!this.wasAbleToTransition) {
-                alert("Unable to transition into the game");
-            }
-        }, 5000);
-    }
-
-    RespondToSocketMessages(e) {
-        if(this.socket === undefined) return;
-        super.RespondToSocketMessages(e);
-
-        console.log(e.data);
-
-        const transitionToGameMessage = "TRANSITION QUESTION ";
-        if (e.data.startsWith(transitionToGameMessage)) {
-            this.wasAbleToTransition = true;
-            this.question = e.data.substr(transitionToGameMessage.length);
-            this.setState({redirect: true});
-            console.log("Got Question transition HOST WAITING ROOM. Question is " + this.question);
-        }
-
-        const playerUpdateMessage = "PLAYERUPDATE ";
-        if (e.data.startsWith(playerUpdateMessage)) {
-            let playerNames = e.data.substr(playerUpdateMessage.length).split(";"); // TODO: people can put ; in their name and break this
-            this.playerElements = playerNames.map(x=><h5 key={x}>{x}</h5>);
-            this.forceUpdate();
-        }
-    }
-
-    render() {
-        if (this.state.redirect) {
-            this.CloseNetworkedPage();
-            return (
-                <Navigate to={{
-                    pathname: "/Question",
-                    state: {
-                        id: this.props.location.state.id,
-                        roomCode: this.state.roomCode,
-                        name: this.props.location.state.name,
-                        url: this.props.location.state.url,
-                        question: this.question
-                    }
-                }}/>
-            );
-        } else {
-            return (
-                <div className="hostwaitingroom">
-                    <header className="App-header">
-                        <div className="mb-2">
-                            <h1>Your Game</h1>
-                            <h5>
-                                Your game was created successfully! Share the following ✨ secret code ✨
-                                with your friends so they can join in on the fun!
-                            </h5>
-                        </div>
-
-                        <div className="code">
-                            <Form.Text><h1>Secret Code: <b>{this.state.roomCode}</b></h1></Form.Text>
-                        </div>
-
-                        <div className="players">
-                            <h1>Waiting for players to join...</h1>
-                            {this.playerElements.length === 0 && <h5>* as players join, their names will show up here * </h5>}
-                            {this.playerElements}
-                        </div>
-
-                        <Button type="submit" onClick={() => this.StartGame()}>Start The Game!</Button>
-                    </header>
+    return (
+        <div className="hostwaitingroom">
+            <header className="App-header">
+                <div className="mb-2">
+                    <h1>Your Game</h1>
+                    <h5>
+                        Your game was created successfully! Share the following ✨ secret code ✨
+                        with your friends so they can join in on the fun!
+                    </h5>
                 </div>
-            );
-        }
-    }
+
+                <div className="code">
+                    <Form.Text><h1>Secret Code: <b>{roomCode}</b></h1></Form.Text>
+                </div>
+
+                <div className="players">
+                    <h1>Waiting for players to join...</h1>
+                    {playerElements.length === 0 && <h5>* as players join, their names will show up here * </h5>}
+                    {playerElements}
+                </div>
+
+                <Button type="submit" onClick={StartGame}>Start The Game!</Button>
+            </header>
+        </div>
+    );
 }
 
 export default HostWaitingRoom;
