@@ -32,17 +32,16 @@ function DYKMProvider(props) {
     const [question, setQuestion] = useState();
     const [answer, setAnswer] = useState();
     const [pairs, setPairs] = useState();
+    const [playerNames, setPlayerNames] = useState();
+    const [name, setName] = useState();
+    const [gamePack, setGamePack] = useState();
+    const [numRounds, setNumRounds] = useState();
+    const [playerScoresObjList, setPlayerScoresObjList] = useState([]);
+    //const [timerPercent, setTimerPercent] = useState();
+    const [timerSeconds, setTimerSeconds] = useState(60);
     const [timerStart, setTimerStart] = useState();
     const [timerEnd, setTimerEnd] = useState();
-    const [playerNames, setPlayerNames] = useState();
-    const [name, _setName] = useState();
-    const [gamePack, _setGamePack] = useState();
-    const [numRounds, _setNumRounds] = useState();
-    const [playerScoresObjList, setPlayerScoresObjList] = useState([]);
-    const [timerSeconds, setTimerSeconds] = useState();
-    const [timerPercent, setTimerPercent] = useState();
-    const animationFrameID = createRef();
-    let _name, _gamePack, _numRounds;
+    let isTimerActive = false;
 
     useEffect(() => {
         console.log("Set gamestate to", gameState);
@@ -52,20 +51,26 @@ function DYKMProvider(props) {
         console.log("Socket changed to", socket);
     }, [socket])
 
-    function setName(x) {
-        _setName(x);
-        _name = x;
-    }
+    useEffect(() => {
+        if ((gameState === GameStateEnum.HostWaitingRoom
+            || gameState === GameStateEnum.WaitingRoom)
+            && isHost.current
+            && socket
+            && numRounds !== undefined
+            && gamePack !== undefined) {
+            console.log("rounds", numRounds)
+            console.log("pack", gamePack)
+            socket.send("SETNUMROUNDS " + numRounds);
+            socket.send("SETGAMEPACK " + gamePack);
+        }
+    }, [numRounds, gamePack, socket, gameState])
 
-    function setGamePack(x) {
-        _setGamePack(x);
-        _gamePack = x;
-    }
-
-    function setNumRounds(x) {
-        _setNumRounds(x);
-        _numRounds = x;
-    }
+    useEffect(() => {
+        if (!socket) return;
+        // add host name to list
+        setPlayerNames([name]);
+        socket.send("CHANGENICK " + name);
+    }, [name, socket])
 
     function GetTimerSeconds() {
         if(timerStart && timerEnd) {
@@ -76,34 +81,38 @@ function DYKMProvider(props) {
         return 0;
     }
 
-    // TODO fix this
     function GetTimerPercent() {
         if(timerStart && timerEnd) {
             let timeLeft = timerEnd - new Date().getTime();
             let percent = timeLeft / (timerEnd - timerStart);
-            return Math.min(Math.max(percent * 100, 0), 100);
+            return Math.max(percent * 100, 0);
         }
         return 100;
     }
 
     // pass setTimerSeconds, setTimerPercent, timerEnd, and animationFrameID ref
     function TimerHandler() {
-        setTimerSeconds(GetTimerSeconds);
-        setTimerPercent(GetTimerPercent);
+        setTimerSeconds(GetTimerSeconds());
+        //setTimerPercent(GetTimerPercent());
         console.log("TimerHandler:", timerStart, timerEnd, timerSeconds);
 
-        // We're using requestAnimationFrame so this runs at the apps framerate
+        /*TODO delete this We're using requestAnimationFrame so this runs at the apps framerate
         if(timerEnd - new Date().getTime() > 0) {
-            animationFrameID.current = requestAnimationFrame(TimerHandler);
-        }
+            //animationFrameID.current = requestAnimationFrame(TimerHandler);
+        }*/
     }
 
     // Keep timer in sync with server
-    useEffect(() => {
-        console.log("Updating timer animation");
-        TimerHandler();
-        return () => cancelAnimationFrame(animationFrameID.current);
-        }, [timerStart, timerEnd, animationFrameID]);
+    /*useEffect(() => {
+        if (isTimerActive) {
+            const timer =
+                timerSeconds > 0 &&
+                setInterval(() => setTimerSeconds(timerSeconds - 1), 1000);
+            return () => clearInterval(timer);
+        } else if (!isTimerActive && timerSeconds !== 0) {
+            clearInterval(timerSeconds);
+        }
+    }, [timerSeconds, isTimerActive]);*/
 
 
     // we wait for a TRANSITION QUESTION message after this
@@ -145,11 +154,25 @@ function DYKMProvider(props) {
         socket.send("READYNEXTROUND")
     }
 
-    function CreateRoom() {
+    function HandlePlayAgain() {
+        socket.send("PLAYAGAIN")
+    }
+
+    function setTimer(start, end) {
+        //setTimerPercent(0);
+        setTimerStart(start);
+        setTimerEnd(end);
+        console.log("Seconds:", (end-start)/1000);
+        setTimerSeconds((end-start)/1000);
+    }
+
+    function CreateRoom(_numRounds, _gamePack) {
         isHost.current = true;
 
         console.log("CreateRoom()");
-        fetch(CREATE_ROOM_URL, {method: "POST"})
+        const args = [`numRounds=${_numRounds}`, `gamePack="${_gamePack}"`].join('&');
+        const url = `${CREATE_ROOM_URL}?${args}`;
+        fetch(url, {method: "POST"})
             .then((response) => {
                 if (response.ok) {
                     return response.json();
@@ -212,13 +235,10 @@ function DYKMProvider(props) {
             console.log("Setting player id to " + e.data.substring(WELCOME_.length));
             setId(e.data.substring(WELCOME_.length));
 
-            socket.send("CHANGENICK " + _name);
+            console.log("Setting player name to", name);
+            socket.send("CHANGENICK " + name);
             if (isHost.current) {
-                socket.send("SETNUMROUNDS " + _numRounds);
-                socket.send("SETGAMEPACK " + _gamePack);
                 setGameState(GameStateEnum.HostWaitingRoom);
-                // add host name to list
-                setPlayerNames([_name]);
             } else {
                 setGameState(GameStateEnum.WaitingRoom);
             }
@@ -226,6 +246,12 @@ function DYKMProvider(props) {
 
         else if (e.data.startsWith("REJOINED")) {
             console.log("Reconnected!");
+        }
+
+        else if (e.data.startsWith(playerUpdateMessage)) {
+            let updateString = e.data.substr(playerUpdateMessage.length);
+            let playerNameList = updateString.split(';');
+            setPlayerNames(playerNameList);
         }
 
         else if (e.data.startsWith(transitionToGameMessage)) {
@@ -256,8 +282,7 @@ function DYKMProvider(props) {
             let timer = e.data.substr(timerMessage.length);
             console.log("Got timer data " + timer);
             let startAndEnd = timer.split(";").map(x=>parseInt(x));
-            setTimerStart(startAndEnd[0]);
-            setTimerEnd(startAndEnd[1]);
+            setTimer(startAndEnd[0], startAndEnd[1]);
         }
 
         else if (e.data.startsWith(transitionEndGame)) {
@@ -305,18 +330,18 @@ function DYKMProvider(props) {
             SubmitQuestion,
             HandleMatchSubmit,
             HandleReadyNextRound,
+            HandlePlayAgain,
             gameState,
             roomCode, setRoomCode,
             question, setAnswer,
             pairs, setPairs,
             timerStart, timerEnd,
-            timerSeconds, timerPercent,
+            timerSeconds,
             name, setName,
             gamePack, setGamePack,
             numRounds, setNumRounds,
             playerNames,
-            playerScoresObjList,
-            animationFrameID
+            playerScoresObjList
         }}>
             {props.children}
         </DYKMContext.Provider>

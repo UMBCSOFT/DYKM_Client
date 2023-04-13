@@ -10,17 +10,12 @@ function ScoresPage(props) {
 
     const {playerScoresObjList, HandleReadyNextRound} = useDYKMNetworker();
 
-    let scoreContent = null;
-    if (playerScoresObjList.length > 0) {
-        scoreContent = <ScoreContent displayRoundScore={true} playerList={playerScoresObjList}/>;
-    }
     return (
-        <div className="scores">
-            <header className="App-header">
-                <h1>SCORE PAGE</h1>
-                {scoreContent}
-                <ButtonOrWait label={"Ready?"} switchToWait={clickedSubmit} callback={()=>HandleReadyNextRound()}/>
-            </header>
+        <div className='w-50'>
+            <h1>SCORE PAGE</h1>
+            <ScoreContent displayRoundScore={true} playerList={playerScoresObjList}/>
+
+            <ButtonOrWait label={"Ready?"} switchToWait={clickedSubmit} callback={()=>HandleReadyNextRound()}/>
         </div>
     );
 }

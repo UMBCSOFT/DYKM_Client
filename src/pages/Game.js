@@ -12,6 +12,7 @@ import { useState, useEffect } from 'react';
 function Game(props) {
     const {gameState} = useDYKMNetworker();
     const [localGameState, setLocalGameState] = useState(gameState);
+    let CurPage = undefined;
     useEffect(() => {
         setLocalGameState(gameState);
         console.log("Current gamestate:", gameState);
@@ -19,25 +20,39 @@ function Game(props) {
 
     switch(localGameState) {
         case GameStateEnum.CreateGame:
-            return(<CreateGamePage/>);
+            CurPage = <CreateGamePage/>;
+            break;
         case GameStateEnum.HostWaitingRoom:
-            return(<HostWaitingRoomPage/>);
+            CurPage = <HostWaitingRoomPage/>;
+            break;
         case GameStateEnum.JoinGame:
-            return(<JoinGamePage/>);
+            CurPage = <JoinGamePage/>;
+            break;
         case GameStateEnum.WaitingRoom:
-            return(<WaitingRoomPage/>);
+            CurPage = <WaitingRoomPage/>;
+            break;
         case GameStateEnum.Question:
-            return(<QuestionPage/>);
+            CurPage = <QuestionPage/>;
+            break;
         case GameStateEnum.QuestionMatch:
-            return(<QuestionMatchPage/>);
+            CurPage = <QuestionMatchPage/>;
+            break;
         case GameStateEnum.Scores:
-            return(<ScoresPage/>);
+            CurPage = <ScoresPage/>;
+            break;
         case GameStateEnum.EndGame:
-            return(<EndGamePage/>);
+            CurPage = <EndGamePage/>;
+            break;
         default:
             console.log("HELP ME TASUKETE", gameState, localGameState);
             return(<div/>);
     }
+
+    return (
+        <div className='App'>
+            {CurPage}
+        </div>
+    )
 }
 
 export default Game;

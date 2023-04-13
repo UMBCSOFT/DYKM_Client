@@ -3,33 +3,34 @@ import '../css/App.css';
 import 'bootstrap/dist/css/bootstrap.min.css'
 import {Form, Row, Col, Button, Tab} from 'react-bootstrap'
 import ListGroup from 'react-bootstrap/ListGroup'
-import React, { useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import { useDYKMNetworker } from './DYKM_Networking';
 
 
 function CreateGamePage (props) {
     const navigate = useNavigate();
+    const [numRounds, _setNumRounds] = useState();
+    const [gamePack, _setGamePack] = useState();
 
-    const { roomCode, CreateRoom, setNumRounds, gamePack, setGamePack, name, setName} = useDYKMNetworker();
-
-    useEffect(() => {
-        setGamePack("doyouknowme");
-        setNumRounds(1);
-    })
+    const { roomCode, CreateRoom, setNumRounds, setGamePack, name, setName} = useDYKMNetworker();
 
     function handleNameChange(e) {
+        console.log("Changing name to", e.target.value)
         setName(e.target.value);
     }
 
     function radioOnChange(e){
-        let value = parseInt(e.target.getAttribute("numvalue"));
+        let value = parseInt(e.target.value);
         setNumRounds(value);
+        _setNumRounds(value);
+        console.log("Changed rounds to", e.target.value)
     }
 
     function onPackSelect(e) {
-        e.preventDefault();
-        setGamePack(e.target.href.substr(1)); // Cut off the #
+        const pack = e.target.dataset.rbEventKey;
+        setGamePack(pack.substr(1)); // Cut off the #
+        _setGamePack(pack.substr(1));
         console.log("Changed game pack to " + gamePack);
     }
 
@@ -70,7 +71,7 @@ function CreateGamePage (props) {
                                     </ListGroup>
                                 </Col>
                                 <Row>
-                                    <Tab.Content>
+                                    <Tab.Content onSelect={onPackSelect}>
                                         <Tab.Pane eventKey="#doyouknowme">
                                             Official question pack - see if you <i>really</i> know your friends!
                                         </Tab.Pane>
@@ -120,7 +121,7 @@ function CreateGamePage (props) {
                 <Form.Group as={Row}>
                     <Button size="lg" variant="primary" type="submit" onClick={() =>
                         {
-                            CreateRoom()
+                            CreateRoom(numRounds, gamePack)
                             navigate("/game");
                         }
                     }>Create the game!</Button>

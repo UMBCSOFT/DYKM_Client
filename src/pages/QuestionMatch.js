@@ -1,11 +1,13 @@
 import '../css/App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {Col, Dropdown, DropdownButton, Row, Card} from 'react-bootstrap';
+import {Col, Dropdown, DropdownButton, Row, Card, Container} from 'react-bootstrap';
 import React, { useState, useEffect } from 'react';
 import { useDYKMNetworker } from './DYKM_Networking';
-import ProgressBar from "react-bootstrap/ProgressBar";
 import ButtonOrWait from "../Component/ButtonOrWait";
+import DYKMTimer from '../utility/DYKMTimer';
+import "../css/Pages.css"
 
+//TODO combine Question and QuestionMatch pages
 
 // currentPlayer, pair[correctPlayer, theirAnswer], matchPairList, callback
 function MatchDropdown(props) {
@@ -17,11 +19,12 @@ function MatchDropdown(props) {
     for (let chosenPlayerPair of props.matchPairList) {
         if (chosenPlayerPair[0] === props.currentPlayer) continue;
         playerList.push(
-            <Dropdown.Item key={chosenPlayerPair}
-                           onClick={() => {
-                props.callback(correctPlayer, correctPlayerAnswer,
-                               chosenPlayerPair[0], chosenPlayerPair[1]);
-                setDropdownText(chosenPlayerPair[0]);}}
+            <Dropdown.Item
+                key={chosenPlayerPair}
+                onClick={() => {
+                    props.callback(correctPlayer, correctPlayerAnswer,
+                        chosenPlayerPair[0], chosenPlayerPair[1]);
+                    setDropdownText(chosenPlayerPair[0]);}}
             >
                 {chosenPlayerPair[0]}
             </Dropdown.Item>
@@ -29,7 +32,7 @@ function MatchDropdown(props) {
     }
 
     return (
-        <DropdownButton title={dropdownText}>
+        <DropdownButton align="end" title={dropdownText}>
             {playerList}
         </DropdownButton>
     );
@@ -41,12 +44,13 @@ function MatchRow(props) {
         // Row of an answer + a dropdown of all players
         <Row>
             <Col>{props.pair[1]}</Col>
-            <Col><MatchDropdown
-                key={props.pair}
-                currentPlayer={props.currentPlayer}
-                pair={props.pair}
-                matchPairList={props.matchPairList}
-                callback={props.callback}/>
+            <Col xs={2} sm={4}>
+                <MatchDropdown
+                    key={props.pair}
+                    currentPlayer={props.currentPlayer}
+                    pair={props.pair}
+                    matchPairList={props.matchPairList}
+                    callback={props.callback}/>
             </Col>
         </Row>
     );
@@ -55,17 +59,15 @@ function MatchRow(props) {
 function QuestionMatchPage() {
 
     let options;
-    let doneAnswering = false;
     const {
         name,
         question,
         pairs,
-        timerPercent,
         timerSeconds,
         HandleMatchSubmit } = useDYKMNetworker();
     const matchPairList = ConvertNameAnswerPairsStrToList(pairs);
     const [matches, setMatches] = useState({});
-
+    const [doneAnswering , setDoneAnswering] = useState(timerSeconds);
 
     //Durstenfeld Shuffle
     //https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
@@ -88,7 +90,7 @@ function QuestionMatchPage() {
     }
 
     function HandleSubmit() {
-        doneAnswering = true;
+        setDoneAnswering(true);
         HandleMatchSubmit(matches);
     }
 
@@ -120,13 +122,13 @@ function QuestionMatchPage() {
 
 
     useEffect(() => {
-        console.log("Question match page");
+        console.log("timer seconds:", timerSeconds);
     }, []);
+
     return (
         <div className="questionmatch">
-
             <header className="App-header">
-                <div className= "mb-2">
+                <div className= "mb-2 text-center">
                     <h1>Round 1</h1>
 
                     <br />
@@ -136,12 +138,17 @@ function QuestionMatchPage() {
 
                     <br />
                     <h4>Match each answer to a player!</h4>
-
-                    <Card text = "dark" style={{ width: '100%' }}>
-                        {options}
+                    <DYKMTimer
+                        className="MatchTimer"
+                        timerSeconds={timerSeconds}/>
+                    <Card
+                        className="MatchRowCard mx-auto px-4 py-2"
+                        text="dark">
+                        <Container fluid>
+                            {options}
+                        </Container>
                     </Card>
 
-                    <ProgressBar now={timerPercent} label={`${timerSeconds} secs left!`}/>
                     <ButtonOrWait label={"Submit Answer"} switchToWait={doneAnswering} callback={()=>HandleSubmit()}/>
                 </div>
             </header>

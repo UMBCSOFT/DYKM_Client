@@ -2,16 +2,16 @@ import '../css/App.css';
 import 'bootstrap/dist/css/bootstrap.min.css'
 import {Form} from 'react-bootstrap'
 import Card from 'react-bootstrap/Card'
-import ProgressBar from 'react-bootstrap/ProgressBar'
 import React, { useState, useEffect } from 'react';
 import { useDYKMNetworker } from './DYKM_Networking';
 import ButtonOrWait from "../Component/ButtonOrWait";
+import DYKMTimer from "../utility/DYKMTimer";
 
 function QuestionPage() {
 
-    let doneAnswering = false;
     const [_timerSeconds, _setTimerSeconds] = useState();
     const [_timerPercent, _setTimerPercent] = useState();
+    const [doneAnswering, setDoneAnswering] = useState(false);
 
     const {
         SubmitQuestion,
@@ -31,26 +31,25 @@ function QuestionPage() {
     }
 
     function HandleSubmitQuestion() {
-        doneAnswering = true;
+        setDoneAnswering(true);
         SubmitQuestion();
     }
+    //<ProgressBar striped now={_timerPercent} label={`${_timerSeconds} secs left!`}/>
 
     return (
         <div className="question">
             <header className="App-header">
                 <div className="prompt">
-
-                    <ProgressBar now={_timerPercent} label={`${_timerSeconds} secs left!`}/>
                     <br/>
-
-                    <h1>QUESTION</h1>
+                    <h1 className='text-center'>QUESTION</h1>
 
                     <Card border="primary" bg="light" text="dark">
                         <Card.Body>{question}</Card.Body>
                     </Card>
 
-                    <Form.Group>
+                    <Form.Group className='text-center'>
                         <br/>
+                        <DYKMTimer timerSeconds={60}/>
                         <Form.Control type="text" placeholder="Type your answer here!" onChange={HandleAnswerChange}/>
                         <br/>
                         <ButtonOrWait label={"Submit Answer"} switchToWait={doneAnswering} callback={() => HandleSubmitQuestion()}/>

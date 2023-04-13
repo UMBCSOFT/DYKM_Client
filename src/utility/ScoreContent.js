@@ -1,30 +1,30 @@
 import React from "react";
-import {Col, Row} from "react-bootstrap";
+import {Col} from "react-bootstrap";
+
 
 /* expects a list of players called playerList with attributes:
-*  name
-*  score (total score for game so far)
-*  numCorrectMatches (score for this round only)
+ *  name
+ *  score (total score for game so far)
+ *  numCorrectMatches (score for this round only)
  */
-function ScoreContent(props) {
+function ScoreContent({ displayRoundScore, playerList }) {
     let scoreRowList = [];
-    let orderedPlayerList = props.playerList.sort((a, b) => b.score - a.score);
+    let orderedPlayerList = playerList.sort((a, b) => b.score - a.score);
     let roundScore = null;
     for (let i = 0; i < orderedPlayerList.length; i++) {
-        if (props.displayRoundScore) {
-            roundScore = <Col md={"auto"}>+{orderedPlayerList[i].numCorrectMatches}</Col>
+        if (displayRoundScore) {
+            roundScore = <Col md={2}>+{orderedPlayerList[i].numCorrectMatches}</Col>
         }
         scoreRowList.push(
-            <Row>
-                <Col md={"auto"}>{i + 1}. </Col>
-                <Col md={"auto"}>{orderedPlayerList[i].name}</Col>
+            <div className="w-100 d-inline-flex justify-content-center">
+                <Col md={"auto"}>{orderedPlayerList[i].name}:</Col>
                 {roundScore}
-                <Col md={"auto"}>{orderedPlayerList[i].score}</Col>
-            </Row>
+                <Col md={1}>{orderedPlayerList[i].score}</Col>
+            </div>
         )
     }
 
-    return scoreRowList;
+    return (scoreRowList);
 }
 
 export default ScoreContent;
