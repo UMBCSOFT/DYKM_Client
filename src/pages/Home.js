@@ -3,12 +3,14 @@ import logo from "../media/logo.svg";
 import GitHubLogo from "../media/github-mark-white.svg"
 import {Button} from "react-bootstrap";
 import {Outlet} from "react-router-dom";
-import {isChrome, isFirefox, isSafari} from 'react-device-detect';
+//import {isChrome, isFirefox, isSafari, isChromium} from 'react-device-detect';
+
+const isDevMode = true;
 
 const Home = () => {
-    if(!(isChrome || isFirefox || isSafari)) {
-        alert("Warning: You are using an unsupported browser. This game is only tested with Chrome, Firefox, and Safari. You may encounter bugs because of this");
-    }
+    //if(!isDevMode && !(isChrome || isFirefox || isSafari || isChromium)) {
+        //alert("Warning: You are using an unsupported browser. This game is only tested with Chrome, Firefox, and Safari. You may encounter bugs because of this");
+    //}
     return (
         <div className="App">
             <div className="Columns Center mb-5">

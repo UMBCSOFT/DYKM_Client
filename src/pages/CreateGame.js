@@ -3,17 +3,20 @@ import '../css/App.css';
 import 'bootstrap/dist/css/bootstrap.min.css'
 import {Form, Row, Col, Button, Tab} from 'react-bootstrap'
 import ListGroup from 'react-bootstrap/ListGroup'
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import { useDYKMNetworker } from './DYKM_Networking';
 
 
-function CreateGamePage (props) {
+function CreateGamePage () {
     const navigate = useNavigate();
-    const [numRounds, _setNumRounds] = useState();
-    const [gamePack, _setGamePack] = useState();
 
-    const { roomCode, CreateRoom, setNumRounds, setGamePack, name, setName} = useDYKMNetworker();
+    const { roomCode, CreateRoom, gamePack, numRounds, setNumRounds, setGamePack, name, setName} = useDYKMNetworker();
+
+    useEffect(() => {
+        setGamePack("doyouknowme");
+        setNumRounds(1);
+    }, [])
 
     function handleNameChange(e) {
         console.log("Changing name to", e.target.value)
@@ -23,15 +26,13 @@ function CreateGamePage (props) {
     function radioOnChange(e){
         let value = parseInt(e.target.value);
         setNumRounds(value);
-        _setNumRounds(value);
         console.log("Changed rounds to", e.target.value)
     }
 
     function onPackSelect(e) {
         const pack = e.target.dataset.rbEventKey;
         setGamePack(pack.substr(1)); // Cut off the #
-        _setGamePack(pack.substr(1));
-        console.log("Changed game pack to " + gamePack);
+        console.log("Changed game pack to " + pack.substr(1));
     }
 
     return (

@@ -170,13 +170,23 @@ function DYKMProvider(props) {
         isHost.current = true;
 
         console.log("CreateRoom()");
-        const args = [`numRounds=${_numRounds}`, `gamePack="${_gamePack}"`].join('&');
-        const url = `${CREATE_ROOM_URL}?${args}`;
-        fetch(url, {method: "POST"})
+        const args = {
+            numRounds: _numRounds,
+            gamePack: _gamePack
+        }
+        const url = CREATE_ROOM_URL;
+        const body_str = JSON.stringify(args);
+        console.log(`Create room POST request data: `);
+        console.log(body_str);
+        fetch(url, {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: body_str
+        })
             .then((response) => {
-                if (response.ok) {
-                    return response.json();
-                }
+                return response.json();
             })
             .then((data) => {
                 if (data.roomCode === undefined) {
@@ -184,6 +194,8 @@ function DYKMProvider(props) {
                 } else {
                     JoinRoom(data.roomCode);
                 }
+            }).catch((e) => {
+                console.log(`Error while POST creating room: ${e}`)
             });
     }
 
