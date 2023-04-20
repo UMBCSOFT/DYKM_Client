@@ -1,5 +1,5 @@
 import React from 'react'
-import logo from "../media/logo.svg";
+import logo from "../media/logo.png";
 import GitHubLogo from "../media/github-mark-white.svg"
 import {Button} from "react-bootstrap";
 import {Outlet} from "react-router-dom";

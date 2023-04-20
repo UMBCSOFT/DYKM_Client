@@ -127,31 +127,28 @@ function QuestionMatchPage() {
 
     return (
         <div className="questionmatch">
-            <header className="App-header">
-                <div className= "mb-2 text-center">
-                    <h1>Round 1</h1>
+            <div className= "mb-2 text-center">
+                <h1>Round 1</h1>
 
-                    <br />
-                    <Card border="primary" bg="light" text = "dark">
-                        <Card.Body>{question}</Card.Body>
-                    </Card>
+                <br />
+                <Card>
+                    <Card.Body>{question}</Card.Body>
+                </Card>
 
-                    <br />
-                    <h4>Match each answer to a player!</h4>
-                    <DYKMTimer
-                        className="MatchTimer"
-                        timerSeconds={timerSeconds}/>
-                    <Card
-                        className="MatchRowCard mx-auto px-4 py-2"
-                        text="dark">
-                        <Container fluid>
-                            {options}
-                        </Container>
-                    </Card>
+                <br />
+                <h4>Match each answer to a player!</h4>
+                <DYKMTimer
+                    className="MatchTimer"
+                    timerSeconds={timerSeconds}/>
+                <Card
+                    className="MatchRowCard mx-auto px-4 py-2">
+                    <Container fluid>
+                        {options}
+                    </Container>
+                </Card>
 
-                    <ButtonOrWait label={"Submit Answer"} switchToWait={doneAnswering} callback={()=>HandleSubmit()}/>
-                </div>
-            </header>
+                <ButtonOrWait label={"Submit Answer"} switchToWait={doneAnswering} callback={()=>HandleSubmit()}/>
+            </div>
         </div>
     );
 

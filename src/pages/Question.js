@@ -38,12 +38,11 @@ function QuestionPage() {
 
     return (
         <div className="question">
-            <header className="App-header">
                 <div className="prompt">
                     <br/>
                     <h1 className='text-center'>QUESTION</h1>
 
-                    <Card border="primary" bg="light" text="dark">
+                    <Card>
                         <Card.Body>{question}</Card.Body>
                     </Card>
 
@@ -55,7 +54,6 @@ function QuestionPage() {
                         <ButtonOrWait label={"Submit Answer"} switchToWait={doneAnswering} callback={() => HandleSubmitQuestion()}/>
                     </Form.Group>
                 </div>
-            </header>
         </div>
     );
 }

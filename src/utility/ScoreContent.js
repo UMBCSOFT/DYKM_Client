@@ -1,6 +1,4 @@
-import React from "react";
-import {Col} from "react-bootstrap";
-
+import {Col, Row} from "react-bootstrap";
 
 /* expects a list of players called playerList with attributes:
  *  name
@@ -16,14 +14,13 @@ function ScoreContent({ displayRoundScore, playerList }) {
             roundScore = <Col md={2}>+{orderedPlayerList[i].numCorrectMatches}</Col>
         }
         scoreRowList.push(
-            <div className="w-100 d-inline-flex justify-content-center">
+            <Row className="ScoreRowItem">
                 <Col md={"auto"}>{orderedPlayerList[i].name}:</Col>
                 {roundScore}
                 <Col md={1}>{orderedPlayerList[i].score}</Col>
-            </div>
+            </Row>
         )
     }
-
     return (scoreRowList);
 }
 

@@ -1,17 +1,17 @@
 import '../css/App.css';
 import 'bootstrap/dist/css/bootstrap.min.css'
-import React, { useState, useEffect } from 'react';
 import { useDYKMNetworker } from './DYKM_Networking';
 import ButtonOrWait from "../Component/ButtonOrWait";
 import ScoreContent from "../utility/ScoreContent";
 
-function ScoresPage(props) {
+
+function ScoresPage() {
     let clickedSubmit = false;
 
     const {playerScoresObjList, HandleReadyNextRound} = useDYKMNetworker();
 
     return (
-        <div className='w-50'>
+        <div className='w-50 Card'>
             <h1>SCORE PAGE</h1>
             <ScoreContent displayRoundScore={true} playerList={playerScoresObjList}/>
 
