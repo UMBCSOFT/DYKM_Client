@@ -12,7 +12,7 @@ function EndGamePage() {
     // TODO: Set up play again with server. Reset scores and rounds.
     // get next round's question if playing again
     return (
-        <div className={"w-75"}>
+        <div className="w-75 Card">
             <h1>GAME SUMMARY</h1>
             <GameSummaryContent playerList={playerScoresObjList}/>
             <br/>
@@ -20,14 +20,14 @@ function EndGamePage() {
             {/*<div className={"mb-2"}>*/}
             {/*    <ButtonOrWait label={"Play Again?"} switchToWait={this.clickedSubmit} callback={()=>this.HandleClick(this.buttons.PLAY_AGAIN)}/>*/}
             {/*</div>*/}
-            <ButtonGroup vertical>
-                <Button variant="primary" type="submit" onClick={HandlePlayAgain}>
+            <div style={{display: "grid"}}>
+                <Button className="m-1" variant="primary" type="submit" onClick={HandlePlayAgain}>
                     Play Again
                 </Button>
-                <Button variant="secondary" type="submit" href="/home">
+                <Button className="m-1" variant="secondary" type="submit" href="/home">
                     Main Menu
                 </Button>
-            </ButtonGroup>
+            </div>
         </div>
     );
 }

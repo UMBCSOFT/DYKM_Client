@@ -11,13 +11,13 @@ function ScoreContent({ displayRoundScore, playerList }) {
     let roundScore = null;
     for (let i = 0; i < orderedPlayerList.length; i++) {
         if (displayRoundScore) {
-            roundScore = <Col md={2}>+{orderedPlayerList[i].numCorrectMatches}</Col>
+            roundScore = <Col>+{orderedPlayerList[i].numCorrectMatches}</Col>
         }
         scoreRowList.push(
             <Row className="ScoreRowItem">
-                <Col md={"auto"}>{orderedPlayerList[i].name}:</Col>
+                <Col>{orderedPlayerList[i].name}:</Col>
                 {roundScore}
-                <Col md={1}>{orderedPlayerList[i].score}</Col>
+                <Col>{orderedPlayerList[i].score}</Col>
             </Row>
         )
     }

@@ -11,7 +11,7 @@ function ScoresPage() {
     const {playerScoresObjList, HandleReadyNextRound} = useDYKMNetworker();
 
     return (
-        <div className='w-50 Card'>
+        <div className="w-50 Card">
             <h1>SCORE PAGE</h1>
             <ScoreContent displayRoundScore={true} playerList={playerScoresObjList}/>
 

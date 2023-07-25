@@ -2,9 +2,10 @@ import React, { useState, useEffect, createRef } from 'react';
 
 const PORT = 1337;
 const WS_PORT = 4567;
-const CREATE_ROOM_URL = "http://localhost:".concat(PORT, "/room/create");
-const GET_ROOMCODE_URL = "http://localhost:".concat(PORT, "/room/get/");
-const WS_URL = "ws://localhost:" + WS_PORT;
+const SERVER_IP = "192.168.1.57";
+const CREATE_ROOM_URL = `http://${SERVER_IP}:`.concat(PORT, "/room/create");
+const GET_ROOMCODE_URL = `http://${SERVER_IP}:`.concat(PORT, "/room/get/");
+const WS_URL = `ws://${SERVER_IP}:` + WS_PORT;
 const GameStateEnum = Object.freeze({
     CreateGame: Symbol("CreateGame"),
     HostWaitingRoom: Symbol("HostWaitingRoom"),
@@ -331,7 +332,7 @@ function DYKMProvider(props) {
 
     function HandleWebsocketError(error) {
         alert("Unable to connect to server room");
-        console.log(`[error] ${error.message}`);
+        console.log('[Websocket error]', error);
     }
 
     return (

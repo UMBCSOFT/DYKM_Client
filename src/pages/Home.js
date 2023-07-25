@@ -5,7 +5,7 @@ import {Button} from "react-bootstrap";
 import {Outlet} from "react-router-dom";
 //import {isChrome, isFirefox, isSafari, isChromium} from 'react-device-detect';
 
-const isDevMode = true;
+const isDevMode = false;
 
 const Home = () => {
     //if(!isDevMode && !(isChrome || isFirefox || isSafari || isChromium)) {
