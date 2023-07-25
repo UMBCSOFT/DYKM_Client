@@ -1,6 +1,6 @@
-import React from 'react'
+import React from 'react';
 import logo from "../media/logo.png";
-import GitHubLogo from "../media/github-mark-white.svg"
+import GitHubLogo from "../media/github-mark-white.svg";
 import {Button} from "react-bootstrap";
 import {Outlet} from "react-router-dom";
 //import {isChrome, isFirefox, isSafari, isChromium} from 'react-device-detect';
