@@ -1,16 +1,21 @@
 import '../css/App.css';
 import 'bootstrap/dist/css/bootstrap.min.css'
-import React from 'react';
+import React, { useState } from 'react';
 import GameSummaryContent from "../utility/GameSummaryContent";
 import { useDYKMNetworker } from './DYKM_Networking';
 import {Button, ButtonGroup} from 'react-bootstrap';
+import ButtonOrWait from "../Component/ButtonOrWait";
 
 // Ty Nuha!
 function EndGamePage() {
     const { HandlePlayAgain, playerScoresObjList } = useDYKMNetworker();
+    const [doneAnswering, setDoneAnswering] = useState(false);
 
-    // TODO: Set up play again with server. Reset scores and rounds.
-    // get next round's question if playing again
+    function _HandlePlayAgain() {
+        setDoneAnswering(true);
+        HandlePlayAgain();
+    }
+
     return (
         <div className="w-75 Card">
             <h1>GAME SUMMARY</h1>
@@ -20,11 +25,15 @@ function EndGamePage() {
             {/*<div className={"mb-2"}>*/}
             {/*    <ButtonOrWait label={"Play Again?"} switchToWait={this.clickedSubmit} callback={()=>this.HandleClick(this.buttons.PLAY_AGAIN)}/>*/}
             {/*</div>*/}
-            <div style={{display: "grid"}}>
-                <Button className="m-1" variant="primary" type="submit" onClick={HandlePlayAgain}>
-                    Play Again
-                </Button>
-                <Button className="m-1" variant="secondary" type="submit" href="/home">
+            <div style={{
+                display: "grid"
+                }}>
+                <ButtonOrWait
+                    className="GameButton"
+                    label={"Play Again"}
+                    switchToWait={doneAnswering}
+                    callback={_HandlePlayAgain}/>
+                <Button className="GameButton" variant="secondary" type="submit" href="/home">
                     Main Menu
                 </Button>
             </div>

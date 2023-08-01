@@ -1,4 +1,3 @@
-import '../css/style.css'
 import '../css/App.css';
 import 'bootstrap/dist/css/bootstrap.min.css'
 import {Form, Row, Col, Button, Tab} from 'react-bootstrap'

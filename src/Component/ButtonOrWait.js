@@ -1,15 +1,20 @@
 import React from 'react';
 import {Button} from "react-bootstrap";
 
-function ButtonOrWait(props) {
-    if (props.switchToWait === true) {
-        return (<h2>Waiting for other players...</h2>);
+function ButtonOrWait({ switchToWait, callback, className, label, id }) {
+    const style = {
+    };
+    if (switchToWait === true) {
+        return (<h2 id={id} style={style}>Waiting for other players...</h2>);
     } else {
         return (
-            <Button variant="primary" type="submit" onClick={() => {
-                props.callback()
-            }}>
-                {props.label}
+            <Button style={style}
+                    id={id}
+                    className={className}
+                    variant="primary"
+                    type="submit"
+                    onClick={() => {callback()}}>
+                {label}
             </Button>
         );
     }

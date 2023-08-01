@@ -107,6 +107,11 @@
     color: var(--btn-text-color)
 }
 
+.GameButton {
+    width: 8rem;
+    margin: 0.25rem auto 0.25rem auto;
+}
+
 .Footer {
     position: absolute;
     padding: 1rem;
