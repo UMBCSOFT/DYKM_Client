@@ -40,7 +40,7 @@ const Home = () => {
                             className="App-link"
                             href="stevenlaczko.com"
                         >
-                            <h6>UI Remake by Steven Laczko</h6>
+                            <h6>UI Remake and one-page rewrite by Steven Laczko</h6>
                         </a>
                     </div>
                 </div>

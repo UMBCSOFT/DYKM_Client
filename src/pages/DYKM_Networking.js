@@ -1,11 +1,10 @@
 import React, { useState, useEffect, createRef } from 'react';
 
-const PORT = 1337;
-const WS_PORT = 4567;
-const SERVER_IP = "192.168.1.57";
-const CREATE_ROOM_URL = `http://${SERVER_IP}:`.concat(PORT, "/room/create");
-const GET_ROOMCODE_URL = `http://${SERVER_IP}:`.concat(PORT, "/room/get/");
-const WS_URL = `ws://${SERVER_IP}:` + WS_PORT;
+const SERVER_URL = "stevenlaczko.com";
+const API_URL = `https://dykmapi.${SERVER_URL}`;
+const WS_URL = `wss://dykmws.${SERVER_URL}`;
+const CREATE_ROOM_URL = API_URL + "/room/create";
+//const GET_ROOMCODE_URL = API_URL + "/room/get";
 const GameStateEnum = Object.freeze({
     CreateGame: Symbol("CreateGame"),
     HostWaitingRoom: Symbol("HostWaitingRoom"),
