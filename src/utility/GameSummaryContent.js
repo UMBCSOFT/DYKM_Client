@@ -16,6 +16,7 @@ function GetWinner(playerList) {
  *  numCorrectMatches (score for this round only)
  */
 function GameSummaryContent({ playerList }) {
+    console.log("Player list: ", playerList);
     const winningPlayer = GetWinner(playerList);
     return (
         <div>
