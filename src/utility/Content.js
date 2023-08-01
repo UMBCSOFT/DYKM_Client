@@ -18,10 +18,12 @@ function Content() {
                         <Route path="creategame" element={<CreateGame/>} />
                         <Route path="joingame" element={<JoinGame/>} />
                     </Route>
-                    <Route path="about" element={<About/>}/>
-                    <Route path="howToPlay" element={<HowToPlay/>}/>
-                    <Route path="productpage" element={<ProductPage/>} />
-                    <Route path="game" element={<Game/>}/>
+                    <Route path="page?">}>
+                        <Route path="about" element={<About/>}/>
+                        <Route path="howToPlay" element={<HowToPlay/>}/>
+                        <Route path="productpage" element={<ProductPage/>} />
+                        <Route path="game" element={<Game/>}/>
+                    </Route>
                 </Routes>
             </BrowserRouter>
         </DYKMProvider>
