@@ -1,5 +1,4 @@
 import React, { useState, useEffect, createRef } from 'react';
-import {json} from "react-router-dom";
 
 const PORT = 1337;
 const WS_PORT = 4567;
@@ -62,8 +61,8 @@ function DYKMProvider(props) {
             && gamePack !== undefined) {
             console.log("rounds", numRounds)
             console.log("pack", gamePack)
-            SendMessage("SETNUMROUNDS", numRounds);
-            SendMessage("SETGAMEPACK", gamePack);
+            socket.send("SETNUMROUNDS " + numRounds);
+            socket.send("SETGAMEPACK " + gamePack);
         }
     }, [numRounds, gamePack, socket, gameState])
 
@@ -71,7 +70,7 @@ function DYKMProvider(props) {
         if (!socket) return;
         // add host name to list
         setPlayerNames([name]);
-        SendMessage("CHANGENICK", name);
+        socket.send("CHANGENICK " + name);
     }, [name, socket])
 
     function GetTimerSeconds() {
@@ -119,11 +118,37 @@ function DYKMProvider(props) {
 
     // we wait for a TRANSITION QUESTION message after this
     function StartGame() {
-        SendMessage("STARTGAME");
+        socket.send("START GAME");
+    }
+
+    function ConvertMatchesToStr(matches) {
+        let matchesList = [];
+        for (let key in matches) {
+            if (matches.hasOwnProperty(key)) {
+                matchesList.push(matches[key].join(','));
+            }
+        }
+        return matchesList.join(';')
+    }
+
+    function ConvertScoreStrToObjList(scoresStr) {
+        let playerScoresStrList = scoresStr.split(';');
+
+        let playerScoresObjList = [];
+        for (let info of playerScoresStrList) {
+            const infoList = info.split(',');
+            playerScoresObjList.push({
+                name: infoList[0],
+                score: infoList[1],
+                numCorrectMatches: infoList[2]
+            }
+            );
+        }
+        return playerScoresObjList;
     }
 
     function HandleMatchSubmit(matchesList) {
-        SendMessage("DONEMATCHING", matchesList);
+        socket.send("DONEMATCHING " + ConvertMatchesToStr(matchesList));
     }
 
     function HandleReadyNextRound() {
@@ -196,20 +221,15 @@ function DYKMProvider(props) {
         socket.addEventListener('open', onOpen);
     }
 
-    function SendMessage(type, data = undefined) {
-        let json = JSON.stringify({"type": type, "data": data});
-        socket.send(json);
-    }
-
     function RespondToSocketMessages(e) {
-        const WELCOME = "WELCOME";
-        const transitionToGameMessage = "TRANSITION QUESTION";
-        const playerUpdateMessage = "PLAYERUPDATE";
-        const transitionToQuestionMatchMessage = "TRANSITION QUESTIONMATCH";
+        const WELCOME_ = "WELCOME ";
+        const transitionToGameMessage = "TRANSITION QUESTION ";
+        const playerUpdateMessage = "PLAYERUPDATE ";
+        const transitionToQuestionMatchMessage = "TRANSITION QUESTIONMATCH ";
         const transitionToScorePageMessage = "TRANSITION SCORE";
         const transitionEndGame = "TRANSITION ENDGAME";
-        const playerScoreMessage = "PLAYERSCORES";
-        const timerMessage = "TIMER";
+        const playerScoreMessage = "PLAYERSCORES ";
+        const timerMessage = "TIMER ";
 
         if(e === undefined || socket === undefined) {
             console.log(`== RespondToSocketMessages ==\ne: ${e.data}\nsocket: ${socket}`);
@@ -223,15 +243,13 @@ function DYKMProvider(props) {
             socket.send("PONG 🏓");
         }
 
-        const jsonData = JSON.parse(e.data);
         // Joined room
-        if (jsonData["type"] === WELCOME) {
-            let id = jsonData["data"];
-            console.log("Player id to " + id);
-            setId(id);
+        else if (e.data.startsWith(WELCOME_)) {
+            console.log("Setting player id to " + e.data.substring(WELCOME_.length));
+            setId(e.data.substring(WELCOME_.length));
 
             console.log("Setting player name to", name);
-            SendMessage("CHANGENICK", name);
+            socket.send("CHANGENICK " + name);
             if (isHost.current) {
                 setGameState(GameStateEnum.HostWaitingRoom);
             } else {
@@ -239,21 +257,18 @@ function DYKMProvider(props) {
             }
         }
 
-        else if (jsonData["type"] === "REJOINED") {
+        else if (e.data.startsWith("REJOINED")) {
             console.log("Reconnected!");
         }
 
-        else if (jsonData["type"] === playerUpdateMessage) {
-            let idNicknameList = jsonData["data"];
-            let playerNameList = [];
-            for (let p of idNicknameList) {
-                playerNameList.push(p["nickname"]);
-            }
+        else if (e.data.startsWith(playerUpdateMessage)) {
+            let updateString = e.data.substr(playerUpdateMessage.length);
+            let playerNameList = updateString.split(';');
             setPlayerNames(playerNameList);
         }
 
-        else if (jsonData["type"] === transitionToGameMessage) {
-            let q = jsonData["data"];
+        else if (e.data.startsWith(transitionToGameMessage)) {
+            let q = e.data.substr(transitionToGameMessage.length);
             setQuestion(q);
             console.log("Got Question transition. Question is " + q);
             setGameState(GameStateEnum.Question);
@@ -261,51 +276,42 @@ function DYKMProvider(props) {
         }
 
 
-        else if (jsonData["type"] === transitionToQuestionMatchMessage) {
-            let pairs = jsonData["data"];
+        else if (e.data.startsWith(transitionToQuestionMatchMessage)) {
+            let pairs = e.data.substr(transitionToQuestionMatchMessage.length);
             console.log("Server told us to transition to QUESTIONMATCH. Transitioning...");
             console.log("Q/A Pairs: ", pairs);
             setPairs(pairs);
             setGameState(GameStateEnum.QuestionMatch);
-            SendMessage("REQUESTTIMER");
+            socket.send("REQUESTTIMER");
         }
 
-        else if (jsonData["type"] === transitionToScorePageMessage) {
+        else if (e.data.startsWith(transitionToScorePageMessage)) {
             //TODO server should send player scores with transition message
             setGameState(GameStateEnum.Scores);
-            SendMessage("GETPLAYERSCORES");
+            socket.send("GETPLAYERSCORES");
         }
 
-        else if (jsonData["type"] === timerMessage) {
-            let timer = jsonData["data"];
-            console.log("Got timer data", timer);
-            setTimer(timer[0], timer[1]);
+        else if (e.data.startsWith(timerMessage)) {
+            let timer = e.data.substr(timerMessage.length);
+            console.log("Got timer data " + timer);
+            let startAndEnd = timer.split(";").map(x=>parseInt(x));
+            setTimer(startAndEnd[0], startAndEnd[1]);
         }
 
-        else if (jsonData["type"] === transitionEndGame) {
+        else if (e.data.startsWith(transitionEndGame)) {
             setGameState(GameStateEnum.EndGame);
         }
 
-        /* jsonData["data"]:
-        [
-            {
-                "playerId1": id,
-                "nickname": "nickname1",
-                "score": score,
-                "numCorrectMatches": num
-            },
-            ...
-        ]
-         */
-        else if (jsonData["type"] === playerScoreMessage) {
-            let playerScores = jsonData["data"];
-            setPlayerScoresObjList(playerScores);
+        else if (e.data.startsWith(playerScoreMessage)) {
+            // Expecting string of: name,totalscore,roundscore;name,totalscore,roundscore;etc
+            let playerScoreStr = e.data.substr(playerScoreMessage.length);
+            setPlayerScoresObjList(ConvertScoreStrToObjList(playerScoreStr));
         }
     }
 
     function SubmitQuestion() {
         if (!answer) alert("answer is", answer);
-        SendMessage("ANSWER", answer);
+        socket.send("ANSWER " + answer);
         console.log("Sending answer " + answer);
     }
 
@@ -345,7 +351,6 @@ function DYKMProvider(props) {
             timerStart, timerEnd,
             timerSeconds,
             name, setName,
-            id, setId,
             gamePack, setGamePack,
             numRounds, setNumRounds,
             playerNames,

@@ -13,7 +13,7 @@ const Home = () => {
     //}
     return (
         <div className="App">
-            <div className="Columns Center">
+            <div className="Columns Center mb-5">
                 <div className="Card m-auto" id="Main">
                     <img src={logo} className="App-logo" alt="logo" />
 
