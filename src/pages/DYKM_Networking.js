@@ -3,7 +3,7 @@ import {json} from "react-router-dom";
 
 const PORT = 1337;
 const WS_PORT = 4567;
-const SERVER_IP = "192.168.1.57";
+const SERVER_IP = process.env.DEV !== "true" ? "192.168.1.57" : "localhost";
 const CREATE_ROOM_URL = `http://${SERVER_IP}:`.concat(PORT, "/room/create");
 const GET_ROOMCODE_URL = `http://${SERVER_IP}:`.concat(PORT, "/room/get/");
 const WS_URL = `ws://${SERVER_IP}:` + WS_PORT;
