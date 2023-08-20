@@ -134,3 +134,16 @@
         transform: scale(1) translateY(0);
     }
 }
+
+@media (max-width: 750px) {
+    .App {
+        min-height: unset;
+    }
+    .Window-page {
+        height: 90vh;
+        width: 100vw;
+    }
+    .Footer {
+        display: none;
+    }
+}

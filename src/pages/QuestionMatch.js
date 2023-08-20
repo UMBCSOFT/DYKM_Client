@@ -9,24 +9,26 @@ import "../css/Pages.css"
 
 //TODO combine Question and QuestionMatch pages
 
-// currentPlayer, pair[correctPlayer, theirAnswer], matchPairList, callback
-function MatchDropdown(props) {
-    let correctPlayer = props.pair[0];
-    let correctPlayerAnswer = props.pair[1];
+// pair = [correctPlayer, theirAnswer]
+// matchPairList
+function MatchDropdown({ pair, matchPairList, callback }) {
+    let correctPlayer = pair[0];
+    let correctPlayerAnswer = pair[1];
     const [dropdownText, setDropdownText] = useState("Guess author...");
 
     let playerList = [];
-    for (let chosenPlayerPair of props.matchPairList) {
-        if (chosenPlayerPair[0] === props.currentPlayer) continue;
+    for (let chosenPlayerData of matchPairList) {
         playerList.push(
             <Dropdown.Item
-                key={chosenPlayerPair}
+                key={chosenPlayerData}
                 onClick={() => {
-                    props.callback(correctPlayer, correctPlayerAnswer,
-                        chosenPlayerPair[0], chosenPlayerPair[1]);
-                    setDropdownText(chosenPlayerPair[0]);}}
+                    callback(correctPlayer, correctPlayerAnswer,
+                        chosenPlayerData.nickname, chosenPlayerData.answer);
+                    setDropdownText(chosenPlayerData.nickname);
+                    }
+                }
             >
-                {chosenPlayerPair[0]}
+                {chosenPlayerData[0]}
             </Dropdown.Item>
         );
     }
@@ -39,18 +41,17 @@ function MatchDropdown(props) {
 }
 
 // currentPlayer, pair, matchPairList, callback
-function MatchRow(props) {
+function MatchRow({key, pair, matchPairList, callback}) {
     return (
         // Row of an answer + a dropdown of all players
         <Row>
             <Col>{props.pair[1]}</Col>
             <Col xs={2} sm={4}>
                 <MatchDropdown
-                    key={props.pair}
-                    currentPlayer={props.currentPlayer}
-                    pair={props.pair}
-                    matchPairList={props.matchPairList}
-                    callback={props.callback}/>
+                    key={key}
+                    pair={pair}
+                    matchPairList={matchPairList}
+                    callback={callback}/>
             </Col>
         </Row>
     );
@@ -60,12 +61,14 @@ function QuestionMatchPage() {
 
     let options;
     const {
-        name,
+        id,
         question,
         pairs,
         timerSeconds,
         HandleMatchSubmit } = useDYKMNetworker();
-    const matchPairList = ConvertNameAnswerPairsStrToList(pairs);
+    let matchPairList = pairs.filter(function(x) {
+        return x.id !== id;
+    });
     const [matches, setMatches] = useState({});
     const [doneAnswering , setDoneAnswering] = useState(timerSeconds);
 
@@ -78,26 +81,16 @@ function QuestionMatchPage() {
         }
     }
 
-    function ConvertNameAnswerPairsStrToList(_pairs) {
-        let _pairstrList = _pairs.split(';');
-        let pairList = [];
-        for (let pStr of _pairstrList) {
-            let matchStr = pStr.split(',');
-            if (matchStr[0] === name) continue;
-            pairList.push(matchStr);
-        }
-        return pairList;
-    }
-
     function HandleSubmit() {
         setDoneAnswering(true);
-        HandleMatchSubmit(matches);
+        HandleMatchSubmit(matches.values());
     }
 
     function HandleDropdownSelect(correctPlayer, correctPlayerAnswer, guessedPlayer, guessedPlayerAnswer) {
+        //TODO delete this log, it spoils everything lol
         console.log("Chosen player: ", guessedPlayer + "\nCorrect player: ", correctPlayer);
         let newMatches = matches;
-        newMatches[[correctPlayer, correctPlayerAnswer].join("-->")] = [correctPlayer, correctPlayerAnswer, guessedPlayer, guessedPlayerAnswer];
+        newMatches[correctPlayer] = [correctPlayer, correctPlayerAnswer, guessedPlayer, guessedPlayerAnswer];
         setMatches(newMatches);
     }
 
@@ -106,11 +99,9 @@ function QuestionMatchPage() {
         // create a list with a row with a dropdown for each player's answer (except your own)
         options = [];
         for(let pair of matchPairList) {
-            if (pair[0] === name) continue;
             options.push(
                 <MatchRow
                     key={pair}
-                    currentPlayer={name}
                     pair={pair}
                     matchPairList={matchPairList}
                     callback={HandleDropdownSelect}
