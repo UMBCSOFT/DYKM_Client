@@ -152,11 +152,11 @@ function DYKMProvider(props) {
     }
 
     function HandleReadyNextRound() {
-        SendMessage("READYNEXTROUND")
+        socket.send("READYNEXTROUND")
     }
 
     function HandlePlayAgain() {
-        SendMessage("PLAYAGAIN")
+        socket.send("PLAYAGAIN")
     }
 
     function setTimer(start, end) {
